@@ -27,22 +27,4 @@ public class GDScriptBlockSetImpl extends ASTWrapperPsiElement implements GDScri
     else super.accept(visitor);
   }
 
-  @Override
-  @NotNull
-  public GDScriptBlock getBlock() {
-    return findNotNullChildByClass(GDScriptBlock.class);
-  }
-
-  @Override
-  @NotNull
-  public GDScriptParameters getParameters() {
-    return findNotNullChildByClass(GDScriptParameters.class);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getLineBreak() {
-    return findNotNullChildByType(LINE_BREAK);
-  }
-
 }

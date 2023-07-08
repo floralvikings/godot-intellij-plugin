@@ -7,13 +7,4 @@ import com.intellij.psi.PsiElement;
 
 public interface GDScriptBlockSet extends PsiElement {
 
-  @NotNull
-  GDScriptBlock getBlock();
-
-  @NotNull
-  GDScriptParameters getParameters();
-
-  @NotNull
-  PsiElement getLineBreak();
-
 }

@@ -357,17 +357,26 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // SET parameters COLON LINE_BREAK block
+  // <<indented (SET parameters COLON LINE_BREAK block)>>
   public static boolean block_set(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "block_set")) return false;
-    if (!nextTokenIs(b, SET)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, BLOCK_SET, "<block set>");
+    r = indented(b, l + 1, GDScriptParser::block_set_0_0);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // SET parameters COLON LINE_BREAK block
+  private static boolean block_set_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "block_set_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, SET);
     r = r && parameters(b, l + 1);
     r = r && consumeTokens(b, 0, COLON, LINE_BREAK);
     r = r && block(b, l + 1);
-    exit_section_(b, m, BLOCK_SET, r);
+    exit_section_(b, m, null, r);
     return r;
   }
 

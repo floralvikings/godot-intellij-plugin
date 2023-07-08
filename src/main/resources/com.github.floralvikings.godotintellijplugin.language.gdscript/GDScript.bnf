@@ -196,7 +196,7 @@ class_var_declaration ::= var_export? LINE_BREAK* AT_ONREADY? LINE_BREAK* VAR id
 )
 
 block_get ::= <<indented (GET COLON LINE_BREAK block)>>
-block_set ::= SET parameters COLON LINE_BREAK block
+block_set ::= <<indented (SET parameters COLON LINE_BREAK block)>>
 
 var_export ::= export_annotation call?
 private export_annotation ::= AT_EXPORT
