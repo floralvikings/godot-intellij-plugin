@@ -976,6 +976,187 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // ENUM id? (L_BRACE LINE_BREAK* enum_entry? LINE_BREAK* (COMMA LINE_BREAK* enum_entry LINE_BREAK*)* COMMA? LINE_BREAK* R_BRACE)?
+  public static boolean enum_declaration(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "enum_declaration")) return false;
+    if (!nextTokenIs(b, ENUM)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ENUM);
+    r = r && enum_declaration_1(b, l + 1);
+    r = r && enum_declaration_2(b, l + 1);
+    exit_section_(b, m, ENUM_DECLARATION, r);
+    return r;
+  }
+
+  // id?
+  private static boolean enum_declaration_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "enum_declaration_1")) return false;
+    id(b, l + 1);
+    return true;
+  }
+
+  // (L_BRACE LINE_BREAK* enum_entry? LINE_BREAK* (COMMA LINE_BREAK* enum_entry LINE_BREAK*)* COMMA? LINE_BREAK* R_BRACE)?
+  private static boolean enum_declaration_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "enum_declaration_2")) return false;
+    enum_declaration_2_0(b, l + 1);
+    return true;
+  }
+
+  // L_BRACE LINE_BREAK* enum_entry? LINE_BREAK* (COMMA LINE_BREAK* enum_entry LINE_BREAK*)* COMMA? LINE_BREAK* R_BRACE
+  private static boolean enum_declaration_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "enum_declaration_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, L_BRACE);
+    r = r && enum_declaration_2_0_1(b, l + 1);
+    r = r && enum_declaration_2_0_2(b, l + 1);
+    r = r && enum_declaration_2_0_3(b, l + 1);
+    r = r && enum_declaration_2_0_4(b, l + 1);
+    r = r && enum_declaration_2_0_5(b, l + 1);
+    r = r && enum_declaration_2_0_6(b, l + 1);
+    r = r && consumeToken(b, R_BRACE);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // LINE_BREAK*
+  private static boolean enum_declaration_2_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "enum_declaration_2_0_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, LINE_BREAK)) break;
+      if (!empty_element_parsed_guard_(b, "enum_declaration_2_0_1", c)) break;
+    }
+    return true;
+  }
+
+  // enum_entry?
+  private static boolean enum_declaration_2_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "enum_declaration_2_0_2")) return false;
+    enum_entry(b, l + 1);
+    return true;
+  }
+
+  // LINE_BREAK*
+  private static boolean enum_declaration_2_0_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "enum_declaration_2_0_3")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, LINE_BREAK)) break;
+      if (!empty_element_parsed_guard_(b, "enum_declaration_2_0_3", c)) break;
+    }
+    return true;
+  }
+
+  // (COMMA LINE_BREAK* enum_entry LINE_BREAK*)*
+  private static boolean enum_declaration_2_0_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "enum_declaration_2_0_4")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!enum_declaration_2_0_4_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "enum_declaration_2_0_4", c)) break;
+    }
+    return true;
+  }
+
+  // COMMA LINE_BREAK* enum_entry LINE_BREAK*
+  private static boolean enum_declaration_2_0_4_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "enum_declaration_2_0_4_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && enum_declaration_2_0_4_0_1(b, l + 1);
+    r = r && enum_entry(b, l + 1);
+    r = r && enum_declaration_2_0_4_0_3(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // LINE_BREAK*
+  private static boolean enum_declaration_2_0_4_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "enum_declaration_2_0_4_0_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, LINE_BREAK)) break;
+      if (!empty_element_parsed_guard_(b, "enum_declaration_2_0_4_0_1", c)) break;
+    }
+    return true;
+  }
+
+  // LINE_BREAK*
+  private static boolean enum_declaration_2_0_4_0_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "enum_declaration_2_0_4_0_3")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, LINE_BREAK)) break;
+      if (!empty_element_parsed_guard_(b, "enum_declaration_2_0_4_0_3", c)) break;
+    }
+    return true;
+  }
+
+  // COMMA?
+  private static boolean enum_declaration_2_0_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "enum_declaration_2_0_5")) return false;
+    consumeToken(b, COMMA);
+    return true;
+  }
+
+  // LINE_BREAK*
+  private static boolean enum_declaration_2_0_6(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "enum_declaration_2_0_6")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, LINE_BREAK)) break;
+      if (!empty_element_parsed_guard_(b, "enum_declaration_2_0_6", c)) break;
+    }
+    return true;
+  }
+
+  /* ********************************************************** */
+  // enum_declaration end_of_statement
+  static boolean enum_declaration_statement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "enum_declaration_statement")) return false;
+    if (!nextTokenIs(b, ENUM)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = enum_declaration(b, l + 1);
+    r = r && end_of_statement(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // id (EQUAL expression)?
+  public static boolean enum_entry(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "enum_entry")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, ENUM_ENTRY, "<enum entry>");
+    r = id(b, l + 1);
+    r = r && enum_entry_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // (EQUAL expression)?
+  private static boolean enum_entry_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "enum_entry_1")) return false;
+    enum_entry_1_0(b, l + 1);
+    return true;
+  }
+
+  // EQUAL expression
+  private static boolean enum_entry_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "enum_entry_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, EQUAL);
+    r = r && expression(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // AT_EXPORT
   //     | AT_EXPORT_ENUM
   //     | AT_EXPORT_FILE
@@ -1774,12 +1955,14 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // class_var_declaration_statement
   //     | class_const_declaration_statement
+  //     | enum_declaration_statement
   //     | signal_declaration_statement
   static boolean top_level_statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "top_level_statement")) return false;
     boolean r;
     r = class_var_declaration_statement(b, l + 1);
     if (!r) r = class_const_declaration_statement(b, l + 1);
+    if (!r) r = enum_declaration_statement(b, l + 1);
     if (!r) r = signal_declaration_statement(b, l + 1);
     return r;
   }

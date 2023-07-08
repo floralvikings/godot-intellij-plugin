@@ -177,6 +177,7 @@ external INDNONE ::= indNone
 
 private top_level_statement ::= (class_var_declaration_statement
     | class_const_declaration_statement
+    | enum_declaration_statement
     | signal_declaration_statement
 )
 
@@ -229,6 +230,10 @@ class_const_declaration ::= CONST id [COLON type] EQUAL expression
 private signal_declaration_statement ::= signal_declaration end_of_statement
 signal_declaration ::= SIGNAL id parameters?
 parameters ::= L_PAREN [type (COMMA type)*] R_PAREN
+
+private enum_declaration_statement ::= enum_declaration end_of_statement
+enum_declaration ::= ENUM id? (L_BRACE LINE_BREAK* enum_entry? LINE_BREAK* (COMMA LINE_BREAK* enum_entry LINE_BREAK*)* COMMA? LINE_BREAK* R_BRACE)?
+enum_entry ::= id (EQUAL expression)?
 
 block ::= <<indented <<listOf script_statement (end_of_statement (&INDNONE | &INDEQ) | &INDEQ)>>>>
 

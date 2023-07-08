@@ -20,6 +20,8 @@ public interface GDScriptTypes {
   IElementType CLASS_VAR_DECLARATION = new GDScriptElementType("CLASS_VAR_DECLARATION");
   IElementType DICTIONARY_ENTRY = new GDScriptElementType("DICTIONARY_ENTRY");
   IElementType DICTIONARY_EXPRESSION = new GDScriptElementType("DICTIONARY_EXPRESSION");
+  IElementType ENUM_DECLARATION = new GDScriptElementType("ENUM_DECLARATION");
+  IElementType ENUM_ENTRY = new GDScriptElementType("ENUM_ENTRY");
   IElementType EXPRESSION = new GDScriptElementType("EXPRESSION");
   IElementType EXPRESSION_STATEMENT = new GDScriptElementType("EXPRESSION_STATEMENT");
   IElementType EXTENDS_DECLARATION = new GDScriptElementType("EXTENDS_DECLARATION");
@@ -211,6 +213,12 @@ public interface GDScriptTypes {
       }
       else if (type == DICTIONARY_EXPRESSION) {
         return new GDScriptDictionaryExpressionImpl(node);
+      }
+      else if (type == ENUM_DECLARATION) {
+        return new GDScriptEnumDeclarationImpl(node);
+      }
+      else if (type == ENUM_ENTRY) {
+        return new GDScriptEnumEntryImpl(node);
       }
       else if (type == EXPRESSION) {
         return new GDScriptExpressionImpl(node);

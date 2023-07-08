@@ -55,6 +55,14 @@ public class GDScriptVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitEnumDeclaration(@NotNull GDScriptEnumDeclaration o) {
+    visitPsiElement(o);
+  }
+
+  public void visitEnumEntry(@NotNull GDScriptEnumEntry o) {
+    visitPsiElement(o);
+  }
+
   public void visitExpression(@NotNull GDScriptExpression o) {
     visitPsiElement(o);
   }
