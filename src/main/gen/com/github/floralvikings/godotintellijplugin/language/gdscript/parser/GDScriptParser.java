@@ -335,7 +335,7 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // <<indented (GET COLON block)>>
+  // <<indented (GET COLON LINE_BREAK block)>>
   public static boolean block_get(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "block_get")) return false;
     boolean r;
@@ -345,12 +345,12 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // GET COLON block
+  // GET COLON LINE_BREAK block
   private static boolean block_get_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "block_get_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, GET, COLON);
+    r = consumeTokens(b, 0, GET, COLON, LINE_BREAK);
     r = r && block(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -499,14 +499,14 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // class_const_declaration end_of_statement
-  public static boolean class_const_declaration_statement(PsiBuilder b, int l) {
+  static boolean class_const_declaration_statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "class_const_declaration_statement")) return false;
     if (!nextTokenIs(b, CONST)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = class_const_declaration(b, l + 1);
     r = r && end_of_statement(b, l + 1);
-    exit_section_(b, m, CLASS_CONST_DECLARATION_STATEMENT, r);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -743,13 +743,13 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // class_var_declaration end_of_statement
-  public static boolean class_var_declaration_statement(PsiBuilder b, int l) {
+  static boolean class_var_declaration_statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "class_var_declaration_statement")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, CLASS_VAR_DECLARATION_STATEMENT, "<class var declaration statement>");
+    Marker m = enter_section_(b);
     r = class_var_declaration(b, l + 1);
     r = r && end_of_statement(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -1714,14 +1714,14 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // signal_declaration end_of_statement
-  public static boolean signal_declaration_statement(PsiBuilder b, int l) {
+  static boolean signal_declaration_statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "signal_declaration_statement")) return false;
     if (!nextTokenIs(b, SIGNAL)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = signal_declaration(b, l + 1);
     r = r && end_of_statement(b, l + 1);
-    exit_section_(b, m, SIGNAL_DECLARATION_STATEMENT, r);
+    exit_section_(b, m, null, r);
     return r;
   }
 

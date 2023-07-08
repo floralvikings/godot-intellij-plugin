@@ -16,10 +16,8 @@ public interface GDScriptTypes {
   IElementType BLOCK_GET = new GDScriptElementType("BLOCK_GET");
   IElementType BLOCK_SET = new GDScriptElementType("BLOCK_SET");
   IElementType CLASS_CONST_DECLARATION = new GDScriptElementType("CLASS_CONST_DECLARATION");
-  IElementType CLASS_CONST_DECLARATION_STATEMENT = new GDScriptElementType("CLASS_CONST_DECLARATION_STATEMENT");
   IElementType CLASS_NAME_DECLARATION = new GDScriptElementType("CLASS_NAME_DECLARATION");
   IElementType CLASS_VAR_DECLARATION = new GDScriptElementType("CLASS_VAR_DECLARATION");
-  IElementType CLASS_VAR_DECLARATION_STATEMENT = new GDScriptElementType("CLASS_VAR_DECLARATION_STATEMENT");
   IElementType DICTIONARY_ENTRY = new GDScriptElementType("DICTIONARY_ENTRY");
   IElementType DICTIONARY_EXPRESSION = new GDScriptElementType("DICTIONARY_EXPRESSION");
   IElementType EXPRESSION = new GDScriptElementType("EXPRESSION");
@@ -36,7 +34,6 @@ public interface GDScriptTypes {
   IElementType SET_GET = new GDScriptElementType("SET_GET");
   IElementType SET_OR_GET = new GDScriptElementType("SET_OR_GET");
   IElementType SIGNAL_DECLARATION = new GDScriptElementType("SIGNAL_DECLARATION");
-  IElementType SIGNAL_DECLARATION_STATEMENT = new GDScriptElementType("SIGNAL_DECLARATION_STATEMENT");
   IElementType STRING = new GDScriptElementType("STRING");
   IElementType TOP_LEVEL_ANNOTATION = new GDScriptElementType("TOP_LEVEL_ANNOTATION");
   IElementType TYPE = new GDScriptElementType("TYPE");
@@ -203,17 +200,11 @@ public interface GDScriptTypes {
       else if (type == CLASS_CONST_DECLARATION) {
         return new GDScriptClassConstDeclarationImpl(node);
       }
-      else if (type == CLASS_CONST_DECLARATION_STATEMENT) {
-        return new GDScriptClassConstDeclarationStatementImpl(node);
-      }
       else if (type == CLASS_NAME_DECLARATION) {
         return new GDScriptClassNameDeclarationImpl(node);
       }
       else if (type == CLASS_VAR_DECLARATION) {
         return new GDScriptClassVarDeclarationImpl(node);
-      }
-      else if (type == CLASS_VAR_DECLARATION_STATEMENT) {
-        return new GDScriptClassVarDeclarationStatementImpl(node);
       }
       else if (type == DICTIONARY_ENTRY) {
         return new GDScriptDictionaryEntryImpl(node);
@@ -262,9 +253,6 @@ public interface GDScriptTypes {
       }
       else if (type == SIGNAL_DECLARATION) {
         return new GDScriptSignalDeclarationImpl(node);
-      }
-      else if (type == SIGNAL_DECLARATION_STATEMENT) {
-        return new GDScriptSignalDeclarationStatementImpl(node);
       }
       else if (type == STRING) {
         return new GDScriptStringImpl(node);

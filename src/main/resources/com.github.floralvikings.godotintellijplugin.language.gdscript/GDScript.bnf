@@ -185,7 +185,7 @@ top_level_annotation ::= (AT_ICON call) | AT_TOOL
 extends_declaration ::= EXTENDS nested_type end_of_statement
 class_name_declaration ::= CLASS_NAME id end_of_statement
 
-class_var_declaration_statement ::= class_var_declaration end_of_statement
+private class_var_declaration_statement ::= class_var_declaration end_of_statement
 class_var_declaration ::= var_export? LINE_BREAK* AT_ONREADY? LINE_BREAK* VAR id (
     (COLON(type(
         ((LINE_BREAK (block_get|block_set))+)
@@ -195,7 +195,7 @@ class_var_declaration ::= var_export? LINE_BREAK* AT_ONREADY? LINE_BREAK* VAR id
     | [(EQUAL | INFER) expression]
 )
 
-block_get ::= <<indented (GET COLON block)>>
+block_get ::= <<indented (GET COLON LINE_BREAK block)>>
 block_set ::= SET parameters COLON LINE_BREAK block
 
 var_export ::= export_annotation call?
@@ -223,10 +223,10 @@ set_get ::= set_or_get [COMMA set_or_get]
 // TODO Add function-style property declaration
 set_or_get ::= (SET | GET) EQUAL id
 
-class_const_declaration_statement ::= class_const_declaration end_of_statement
+private class_const_declaration_statement ::= class_const_declaration end_of_statement
 class_const_declaration ::= CONST id [COLON type] EQUAL expression
 
-signal_declaration_statement ::= signal_declaration end_of_statement
+private signal_declaration_statement ::= signal_declaration end_of_statement
 signal_declaration ::= SIGNAL id parameters?
 parameters ::= L_PAREN [type (COMMA type)*] R_PAREN
 
