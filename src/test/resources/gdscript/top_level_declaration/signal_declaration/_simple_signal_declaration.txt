@@ -1,0 +1,6 @@
+GDScript File(0,11)
+  GDScriptSignalDeclarationImpl(SIGNAL_DECLARATION)(0,11)
+    PsiElement(GDScriptTokenType.signal)('signal')(0,6)
+    PsiWhiteSpace(' ')(6,7)
+    GDScriptIdImpl(ID)(7,11)
+      PsiElement(GDScriptTokenType.IDENTIFIER)('Test')(7,11)

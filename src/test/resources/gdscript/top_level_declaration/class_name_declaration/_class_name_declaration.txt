@@ -1,0 +1,6 @@
+GDScript File(0,15)
+  GDScriptClassNameDeclarationImpl(CLASS_NAME_DECLARATION)(0,15)
+    PsiElement(GDScriptTokenType.class_name)('class_name')(0,10)
+    PsiWhiteSpace(' ')(10,11)
+    GDScriptIdImpl(ID)(11,15)
+      PsiElement(GDScriptTokenType.IDENTIFIER)('Test')(11,15)

@@ -1,0 +1,6 @@
+GDScript File(0,12)
+  GDScriptExtendsDeclarationImpl(EXTENDS_DECLARATION)(0,12)
+    PsiElement(GDScriptTokenType.extends)('extends')(0,7)
+    PsiWhiteSpace(' ')(7,8)
+    GDScriptIdImpl(ID)(8,12)
+      PsiElement(GDScriptTokenType.IDENTIFIER)('Test')(8,12)

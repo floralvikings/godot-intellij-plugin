@@ -1,0 +1,1 @@
+var test: set = _setter, get = _getter
