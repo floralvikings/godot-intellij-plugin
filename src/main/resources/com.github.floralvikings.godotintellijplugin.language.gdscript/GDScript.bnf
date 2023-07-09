@@ -180,6 +180,7 @@ private top_level_statement ::= class_var_declaration
     | signal_declaration
     | enum_declaration
     | function_declaration
+    | inner_class_declaration
 
 top_level_annotation ::= (AT_ICON call) | AT_TOOL
 
@@ -237,6 +238,8 @@ private function_declaration_parameters ::= L_PAREN LINE_BREAK* function_paramet
 private function_parameter_list ::= function_parameter? LINE_BREAK* (COMMA LINE_BREAK* function_parameter LINE_BREAK*)* COMMA?
 function_parameter ::= id (COLON type)? ((EQUAL | INFER) expression)?
 function_return_type ::= ARROW type
+
+inner_class_declaration ::= CLASS IDENTIFIER [ extends_declaration ] COLON LINE_BREAK+ [extends_declaration end_of_statement] <<indented (LINE_BREAK | (top_level_statement end_of_statement))*>>
 
 block ::= <<indented <<listOf script_statement (end_of_statement ((&INDNONE LINE_BREAK+) | &INDEQ))>>>>
 
@@ -327,7 +330,6 @@ invocation_expression ::= id? call
 private call ::= L_PAREN LINE_BREAK* expression? LINE_BREAK* (COMMA LINE_BREAK* expression LINE_BREAK*)* R_PAREN
 
 lambda_expression ::= FUNC id? L_PAREN id? (COMMA id)* R_PAREN COLON block
-//endregion
 
 key ::= expression
 type ::= array_type | nested_type

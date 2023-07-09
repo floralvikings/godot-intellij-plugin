@@ -1,5 +1,7 @@
 package com.github.floralvikings.godotintellijplugin.language.gdscript
 
+import com.github.floralvikings.godotintellijplugin.GDScriptParsingTestCase
+
 class FunctionDeclarationTest : GDScriptParsingTestCase("top_level_declaration/function_declaration") {
     fun test_function_declaration_with_parameters() = doTest(true, true)
     fun test_indented_function_declaration() = doTest(true, true);

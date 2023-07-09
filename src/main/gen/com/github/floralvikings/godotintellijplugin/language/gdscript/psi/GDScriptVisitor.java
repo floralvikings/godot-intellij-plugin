@@ -91,6 +91,10 @@ public class GDScriptVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitInnerClassDeclaration(@NotNull GDScriptInnerClassDeclaration o) {
+    visitPsiElement(o);
+  }
+
   public void visitInvocationExpression(@NotNull GDScriptInvocationExpression o) {
     visitExpression(o);
   }
