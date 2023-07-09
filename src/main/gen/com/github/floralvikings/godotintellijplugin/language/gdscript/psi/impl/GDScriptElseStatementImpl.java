@@ -11,14 +11,14 @@ import static com.github.floralvikings.godotintellijplugin.language.gdscript.psi
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.github.floralvikings.godotintellijplugin.language.gdscript.psi.*;
 
-public class GDScriptIfStatementImpl extends ASTWrapperPsiElement implements GDScriptIfStatement {
+public class GDScriptElseStatementImpl extends ASTWrapperPsiElement implements GDScriptElseStatement {
 
-  public GDScriptIfStatementImpl(@NotNull ASTNode node) {
+  public GDScriptElseStatementImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull GDScriptVisitor visitor) {
-    visitor.visitIfStatement(this);
+    visitor.visitElseStatement(this);
   }
 
   @Override
@@ -37,24 +37,6 @@ public class GDScriptIfStatementImpl extends ASTWrapperPsiElement implements GDS
   @Nullable
   public GDScriptBlock getBlock() {
     return findChildByClass(GDScriptBlock.class);
-  }
-
-  @Override
-  @NotNull
-  public List<GDScriptElifStatement> getElifStatementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GDScriptElifStatement.class);
-  }
-
-  @Override
-  @Nullable
-  public GDScriptElseStatement getElseStatement() {
-    return findChildByClass(GDScriptElseStatement.class);
-  }
-
-  @Override
-  @NotNull
-  public GDScriptExpression getExpression() {
-    return findNotNullChildByClass(GDScriptExpression.class);
   }
 
   @Override
