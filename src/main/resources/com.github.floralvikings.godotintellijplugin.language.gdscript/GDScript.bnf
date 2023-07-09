@@ -249,8 +249,12 @@ private script_statement ::= var_statement
     | while_statement
     | match_statement
     | return_statement
+    | continue_statement
+    | break_statement
     | assign_statement
     | expression_statement
+    | assert_statement
+    | await_statement
     | PASS
 
 if_statement ::= IF expression COLON statement_or_block (LINE_BREAK* elif_statement)* [LINE_BREAK* else_statement]
@@ -285,8 +289,10 @@ private inline_statement ::= script_statement end_of_statement
 private new_line_block ::= LINE_BREAK* block
 
 return_statement ::= RETURN expression
+continue_statement ::= CONTINUE
+break_statement ::= BREAK
 
-assign_statement ::= expression assign_operator expression
+assign_statement ::= expression assign_operator [AWAIT] expression
 assign_operator ::= EQUAL
     | PLUS_EQUAL
     | MINUS_EQUAL
@@ -300,9 +306,10 @@ assign_operator ::= EQUAL
     | CARET_EQUAL
     | INFER
 
-var_statement ::= VAR id (COLON type)? ((EQUAL | INFER) expression)?
-
+var_statement ::= VAR id (COLON type)? ((EQUAL | INFER) AWAIT? expression)?
 expression_statement ::= expression
+assert_statement ::= ASSERT L_PAREN expression [COMMA string] R_PAREN
+await_statement ::= AWAIT expression
 
 // region expression
 expression ::= (operand | operator)+

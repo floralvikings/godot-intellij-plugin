@@ -19,11 +19,19 @@ public class GDScriptVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitAssertStatement(@NotNull GDScriptAssertStatement o) {
+    visitPsiElement(o);
+  }
+
   public void visitAssignOperator(@NotNull GDScriptAssignOperator o) {
     visitPsiElement(o);
   }
 
   public void visitAssignStatement(@NotNull GDScriptAssignStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitAwaitStatement(@NotNull GDScriptAwaitStatement o) {
     visitPsiElement(o);
   }
 
@@ -43,6 +51,10 @@ public class GDScriptVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitBreakStatement(@NotNull GDScriptBreakStatement o) {
+    visitPsiElement(o);
+  }
+
   public void visitClassConstDeclaration(@NotNull GDScriptClassConstDeclaration o) {
     visitPsiElement(o);
   }
@@ -52,6 +64,10 @@ public class GDScriptVisitor extends PsiElementVisitor {
   }
 
   public void visitClassVarDeclaration(@NotNull GDScriptClassVarDeclaration o) {
+    visitPsiElement(o);
+  }
+
+  public void visitContinueStatement(@NotNull GDScriptContinueStatement o) {
     visitPsiElement(o);
   }
 

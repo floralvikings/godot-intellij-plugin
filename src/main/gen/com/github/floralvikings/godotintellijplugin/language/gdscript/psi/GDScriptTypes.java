@@ -11,15 +11,19 @@ public interface GDScriptTypes {
   IElementType ARRAY_ARGUMENT = new GDScriptElementType("ARRAY_ARGUMENT");
   IElementType ARRAY_EXPRESSION = new GDScriptElementType("ARRAY_EXPRESSION");
   IElementType ARRAY_PATTERN = new GDScriptElementType("ARRAY_PATTERN");
+  IElementType ASSERT_STATEMENT = new GDScriptElementType("ASSERT_STATEMENT");
   IElementType ASSIGN_OPERATOR = new GDScriptElementType("ASSIGN_OPERATOR");
   IElementType ASSIGN_STATEMENT = new GDScriptElementType("ASSIGN_STATEMENT");
+  IElementType AWAIT_STATEMENT = new GDScriptElementType("AWAIT_STATEMENT");
   IElementType BINDING_PATTERN = new GDScriptElementType("BINDING_PATTERN");
   IElementType BLOCK = new GDScriptElementType("BLOCK");
   IElementType BLOCK_GET = new GDScriptElementType("BLOCK_GET");
   IElementType BLOCK_SET = new GDScriptElementType("BLOCK_SET");
+  IElementType BREAK_STATEMENT = new GDScriptElementType("BREAK_STATEMENT");
   IElementType CLASS_CONST_DECLARATION = new GDScriptElementType("CLASS_CONST_DECLARATION");
   IElementType CLASS_NAME_DECLARATION = new GDScriptElementType("CLASS_NAME_DECLARATION");
   IElementType CLASS_VAR_DECLARATION = new GDScriptElementType("CLASS_VAR_DECLARATION");
+  IElementType CONTINUE_STATEMENT = new GDScriptElementType("CONTINUE_STATEMENT");
   IElementType DICTIONARY_ENTRY = new GDScriptElementType("DICTIONARY_ENTRY");
   IElementType DICTIONARY_EXPRESSION = new GDScriptElementType("DICTIONARY_EXPRESSION");
   IElementType DICT_PATTERN = new GDScriptElementType("DICT_PATTERN");
@@ -205,11 +209,17 @@ public interface GDScriptTypes {
       else if (type == ARRAY_PATTERN) {
         return new GDScriptArrayPatternImpl(node);
       }
+      else if (type == ASSERT_STATEMENT) {
+        return new GDScriptAssertStatementImpl(node);
+      }
       else if (type == ASSIGN_OPERATOR) {
         return new GDScriptAssignOperatorImpl(node);
       }
       else if (type == ASSIGN_STATEMENT) {
         return new GDScriptAssignStatementImpl(node);
+      }
+      else if (type == AWAIT_STATEMENT) {
+        return new GDScriptAwaitStatementImpl(node);
       }
       else if (type == BINDING_PATTERN) {
         return new GDScriptBindingPatternImpl(node);
@@ -223,6 +233,9 @@ public interface GDScriptTypes {
       else if (type == BLOCK_SET) {
         return new GDScriptBlockSetImpl(node);
       }
+      else if (type == BREAK_STATEMENT) {
+        return new GDScriptBreakStatementImpl(node);
+      }
       else if (type == CLASS_CONST_DECLARATION) {
         return new GDScriptClassConstDeclarationImpl(node);
       }
@@ -231,6 +244,9 @@ public interface GDScriptTypes {
       }
       else if (type == CLASS_VAR_DECLARATION) {
         return new GDScriptClassVarDeclarationImpl(node);
+      }
+      else if (type == CONTINUE_STATEMENT) {
+        return new GDScriptContinueStatementImpl(node);
       }
       else if (type == DICTIONARY_ENTRY) {
         return new GDScriptDictionaryEntryImpl(node);

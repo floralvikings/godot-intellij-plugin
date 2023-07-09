@@ -8,10 +8,22 @@ import com.intellij.psi.PsiElement;
 public interface GDScriptIfStatement extends PsiElement {
 
   @Nullable
+  GDScriptAssertStatement getAssertStatement();
+
+  @Nullable
   GDScriptAssignStatement getAssignStatement();
 
   @Nullable
+  GDScriptAwaitStatement getAwaitStatement();
+
+  @Nullable
   GDScriptBlock getBlock();
+
+  @Nullable
+  GDScriptBreakStatement getBreakStatement();
+
+  @Nullable
+  GDScriptContinueStatement getContinueStatement();
 
   @NotNull
   List<GDScriptElifStatement> getElifStatementList();

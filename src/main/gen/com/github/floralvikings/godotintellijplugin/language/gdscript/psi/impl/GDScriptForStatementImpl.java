@@ -29,14 +29,38 @@ public class GDScriptForStatementImpl extends ASTWrapperPsiElement implements GD
 
   @Override
   @Nullable
+  public GDScriptAssertStatement getAssertStatement() {
+    return findChildByClass(GDScriptAssertStatement.class);
+  }
+
+  @Override
+  @Nullable
   public GDScriptAssignStatement getAssignStatement() {
     return findChildByClass(GDScriptAssignStatement.class);
   }
 
   @Override
   @Nullable
+  public GDScriptAwaitStatement getAwaitStatement() {
+    return findChildByClass(GDScriptAwaitStatement.class);
+  }
+
+  @Override
+  @Nullable
   public GDScriptBlock getBlock() {
     return findChildByClass(GDScriptBlock.class);
+  }
+
+  @Override
+  @Nullable
+  public GDScriptBreakStatement getBreakStatement() {
+    return findChildByClass(GDScriptBreakStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public GDScriptContinueStatement getContinueStatement() {
+    return findChildByClass(GDScriptContinueStatement.class);
   }
 
   @Override

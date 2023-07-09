@@ -8,10 +8,22 @@ import com.intellij.psi.PsiElement;
 public interface GDScriptMatchBlock extends PsiElement {
 
   @NotNull
+  List<GDScriptAssertStatement> getAssertStatementList();
+
+  @NotNull
   List<GDScriptAssignStatement> getAssignStatementList();
 
   @NotNull
+  List<GDScriptAwaitStatement> getAwaitStatementList();
+
+  @NotNull
   List<GDScriptBlock> getBlockList();
+
+  @NotNull
+  List<GDScriptBreakStatement> getBreakStatementList();
+
+  @NotNull
+  List<GDScriptContinueStatement> getContinueStatementList();
 
   @NotNull
   List<GDScriptExpressionStatement> getExpressionStatementList();
