@@ -86,7 +86,7 @@ class GDScriptParserUtil : GeneratedParserUtilBase() {
         @JvmStatic
         fun indNone(builder: PsiBuilder?, level: Int): Boolean {
             val state = getParserState(builder!!)
-            return state!!.getTokenIndent() == -1
+            return state!!.getTokenIndent() == 0
         }
 
         @JvmStatic
