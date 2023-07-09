@@ -1,6 +1,6 @@
-package com.github.floralvikings.godotintellijplugin.language.gdscript
+package com.github.floralvikings.godotintellijplugin.language.gdscript.top_level_declaration
 
-import com.github.floralvikings.godotintellijplugin.GDScriptParsingTestCase
+import com.github.floralvikings.godotintellijplugin.language.gdscript.GDScriptParsingTestCase
 
 class ClassVarDeclarationStatementTest : GDScriptParsingTestCase("top_level_declaration/class_var_declaration") {
     fun test_annotated_class_var_declaration_statement() = doTest(true, true)

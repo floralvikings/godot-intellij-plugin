@@ -1,6 +1,6 @@
-package com.github.floralvikings.godotintellijplugin.language.gdscript
+package com.github.floralvikings.godotintellijplugin.language.gdscript.top_level_declaration
 
-import com.github.floralvikings.godotintellijplugin.GDScriptParsingTestCase
+import com.github.floralvikings.godotintellijplugin.language.gdscript.GDScriptParsingTestCase
 
 class FunctionDeclarationTest : GDScriptParsingTestCase("top_level_declaration/function_declaration") {
     fun test_function_declaration_with_parameters() = doTest(true, true)

@@ -1,4 +1,4 @@
-package com.github.floralvikings.godotintellijplugin
+package com.github.floralvikings.godotintellijplugin.language.gdscript
 
 import com.github.floralvikings.godotintellijplugin.language.gdscript.parser.GDScriptParserDefinition
 import com.intellij.testFramework.ParsingTestCase

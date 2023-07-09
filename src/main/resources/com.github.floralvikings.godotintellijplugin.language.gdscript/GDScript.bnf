@@ -244,10 +244,13 @@ inner_class_declaration ::= CLASS IDENTIFIER [ extends_declaration ] COLON LINE_
 block ::= <<indented <<listOf script_statement (end_of_statement ((&INDNONE LINE_BREAK+) | &INDEQ))>>>>
 
 private script_statement ::= var_statement
+    | if_statement
     | return_statement
     | assign_statement
     | expression_statement
     | PASS
+
+if_statement ::= IF expression COLON ((script_statement end_of_statement) | (LINE_BREAK* block))
 
 return_statement ::= RETURN expression
 

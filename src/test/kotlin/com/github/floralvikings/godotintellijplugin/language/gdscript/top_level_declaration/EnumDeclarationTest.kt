@@ -1,6 +1,6 @@
-package com.github.floralvikings.godotintellijplugin.language.gdscript
+package com.github.floralvikings.godotintellijplugin.language.gdscript.top_level_declaration
 
-import com.github.floralvikings.godotintellijplugin.GDScriptParsingTestCase
+import com.github.floralvikings.godotintellijplugin.language.gdscript.GDScriptParsingTestCase
 
 class EnumDeclarationTest : GDScriptParsingTestCase("top_level_declaration/enum_declaration") {
     fun test_inline_enum_declaration() = doTest(true, true)

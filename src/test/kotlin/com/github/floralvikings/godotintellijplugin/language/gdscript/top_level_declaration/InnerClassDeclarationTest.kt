@@ -1,6 +1,6 @@
-package com.github.floralvikings.godotintellijplugin.language.gdscript
+package com.github.floralvikings.godotintellijplugin.language.gdscript.top_level_declaration
 
-import com.github.floralvikings.godotintellijplugin.GDScriptParsingTestCase
+import com.github.floralvikings.godotintellijplugin.language.gdscript.GDScriptParsingTestCase
 
 class InnerClassDeclarationTest :
     GDScriptParsingTestCase("top_level_declaration/inner_class_declaration") {
