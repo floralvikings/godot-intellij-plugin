@@ -246,17 +246,41 @@ block ::= <<indented <<listOf script_statement (end_of_statement ((&INDNONE LINE
 private script_statement ::= var_statement
     | if_statement
     | for_statement
+    | while_statement
+    | match_statement
     | return_statement
     | assign_statement
     | expression_statement
     | PASS
 
-if_statement ::= IF expression COLON (inline_statement | new_line_block) (LINE_BREAK* elif_statement)* [LINE_BREAK* else_statement]
-elif_statement ::= ELIF expression COLON (inline_statement | new_line_block)
-else_statement ::= ELSE COLON (inline_statement | new_line_block)
+if_statement ::= IF expression COLON statement_or_block (LINE_BREAK* elif_statement)* [LINE_BREAK* else_statement]
+elif_statement ::= ELIF expression COLON statement_or_block
+else_statement ::= ELSE COLON statement_or_block
 
-for_statement ::= FOR id IN expression COLON (inline_statement | new_line_block)
+for_statement ::= FOR id IN expression COLON statement_or_block
 
+while_statement ::= WHILE expression COLON statement_or_block
+
+match_statement ::= MATCH expression COLON LINE_BREAK* <<indented match_block>>
+match_block ::= pattern_list COLON statement_or_block (LINE_BREAK* pattern_list COLON statement_or_block)*
+pattern_list ::= pattern (COMMA pattern)*
+pattern ::= string
+    | multiline_string
+    | REAL_NUMBER
+    | BINARY_NUMBER
+    | HEXADECIMAL_NUMBER
+    | UNDERSCORE
+    | NULL
+    | IDENTIFIER
+    | binding_pattern
+    | array_pattern
+    | dict_pattern
+binding_pattern ::= VAR IDENTIFIER
+array_pattern ::= L_BRACKET [pattern [(COMMA pattern)+] (COMMA DOT_DOT)?]  R_BRACKET
+dict_pattern ::= L_BRACE [key_value_pattern [(COMMA key_value_pattern)+] (COMMA DOT_DOT)?] R_BRACE
+key_value_pattern ::= string [COLON pattern]
+
+private statement_or_block ::= inline_statement | new_line_block
 private inline_statement ::= script_statement end_of_statement
 private new_line_block ::= LINE_BREAK* block
 

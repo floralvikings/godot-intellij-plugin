@@ -10,8 +10,10 @@ public interface GDScriptTypes {
 
   IElementType ARRAY_ARGUMENT = new GDScriptElementType("ARRAY_ARGUMENT");
   IElementType ARRAY_EXPRESSION = new GDScriptElementType("ARRAY_EXPRESSION");
+  IElementType ARRAY_PATTERN = new GDScriptElementType("ARRAY_PATTERN");
   IElementType ASSIGN_OPERATOR = new GDScriptElementType("ASSIGN_OPERATOR");
   IElementType ASSIGN_STATEMENT = new GDScriptElementType("ASSIGN_STATEMENT");
+  IElementType BINDING_PATTERN = new GDScriptElementType("BINDING_PATTERN");
   IElementType BLOCK = new GDScriptElementType("BLOCK");
   IElementType BLOCK_GET = new GDScriptElementType("BLOCK_GET");
   IElementType BLOCK_SET = new GDScriptElementType("BLOCK_SET");
@@ -20,6 +22,7 @@ public interface GDScriptTypes {
   IElementType CLASS_VAR_DECLARATION = new GDScriptElementType("CLASS_VAR_DECLARATION");
   IElementType DICTIONARY_ENTRY = new GDScriptElementType("DICTIONARY_ENTRY");
   IElementType DICTIONARY_EXPRESSION = new GDScriptElementType("DICTIONARY_EXPRESSION");
+  IElementType DICT_PATTERN = new GDScriptElementType("DICT_PATTERN");
   IElementType ELIF_STATEMENT = new GDScriptElementType("ELIF_STATEMENT");
   IElementType ELSE_STATEMENT = new GDScriptElementType("ELSE_STATEMENT");
   IElementType ENUM_DECLARATION = new GDScriptElementType("ENUM_DECLARATION");
@@ -36,9 +39,14 @@ public interface GDScriptTypes {
   IElementType INNER_CLASS_DECLARATION = new GDScriptElementType("INNER_CLASS_DECLARATION");
   IElementType INVOCATION_EXPRESSION = new GDScriptElementType("INVOCATION_EXPRESSION");
   IElementType KEY = new GDScriptElementType("KEY");
+  IElementType KEY_VALUE_PATTERN = new GDScriptElementType("KEY_VALUE_PATTERN");
   IElementType LAMBDA_EXPRESSION = new GDScriptElementType("LAMBDA_EXPRESSION");
   IElementType LUA_DICTIONARY_ENTRY = new GDScriptElementType("LUA_DICTIONARY_ENTRY");
   IElementType LUA_DICTIONARY_EXPRESSION = new GDScriptElementType("LUA_DICTIONARY_EXPRESSION");
+  IElementType MATCH_BLOCK = new GDScriptElementType("MATCH_BLOCK");
+  IElementType MATCH_STATEMENT = new GDScriptElementType("MATCH_STATEMENT");
+  IElementType PATTERN = new GDScriptElementType("PATTERN");
+  IElementType PATTERN_LIST = new GDScriptElementType("PATTERN_LIST");
   IElementType RETURN_STATEMENT = new GDScriptElementType("RETURN_STATEMENT");
   IElementType SET_GET = new GDScriptElementType("SET_GET");
   IElementType SET_OR_GET = new GDScriptElementType("SET_OR_GET");
@@ -49,6 +57,7 @@ public interface GDScriptTypes {
   IElementType TYPE = new GDScriptElementType("TYPE");
   IElementType VAR_EXPORT = new GDScriptElementType("VAR_EXPORT");
   IElementType VAR_STATEMENT = new GDScriptElementType("VAR_STATEMENT");
+  IElementType WHILE_STATEMENT = new GDScriptElementType("WHILE_STATEMENT");
 
   IElementType AMPERSAND = new GDScriptTokenType("&");
   IElementType AMPERSAND_AMPERSAND = new GDScriptTokenType("&&");
@@ -193,11 +202,17 @@ public interface GDScriptTypes {
       else if (type == ARRAY_EXPRESSION) {
         return new GDScriptArrayExpressionImpl(node);
       }
+      else if (type == ARRAY_PATTERN) {
+        return new GDScriptArrayPatternImpl(node);
+      }
       else if (type == ASSIGN_OPERATOR) {
         return new GDScriptAssignOperatorImpl(node);
       }
       else if (type == ASSIGN_STATEMENT) {
         return new GDScriptAssignStatementImpl(node);
+      }
+      else if (type == BINDING_PATTERN) {
+        return new GDScriptBindingPatternImpl(node);
       }
       else if (type == BLOCK) {
         return new GDScriptBlockImpl(node);
@@ -222,6 +237,9 @@ public interface GDScriptTypes {
       }
       else if (type == DICTIONARY_EXPRESSION) {
         return new GDScriptDictionaryExpressionImpl(node);
+      }
+      else if (type == DICT_PATTERN) {
+        return new GDScriptDictPatternImpl(node);
       }
       else if (type == ELIF_STATEMENT) {
         return new GDScriptElifStatementImpl(node);
@@ -271,6 +289,9 @@ public interface GDScriptTypes {
       else if (type == KEY) {
         return new GDScriptKeyImpl(node);
       }
+      else if (type == KEY_VALUE_PATTERN) {
+        return new GDScriptKeyValuePatternImpl(node);
+      }
       else if (type == LAMBDA_EXPRESSION) {
         return new GDScriptLambdaExpressionImpl(node);
       }
@@ -279,6 +300,18 @@ public interface GDScriptTypes {
       }
       else if (type == LUA_DICTIONARY_EXPRESSION) {
         return new GDScriptLuaDictionaryExpressionImpl(node);
+      }
+      else if (type == MATCH_BLOCK) {
+        return new GDScriptMatchBlockImpl(node);
+      }
+      else if (type == MATCH_STATEMENT) {
+        return new GDScriptMatchStatementImpl(node);
+      }
+      else if (type == PATTERN) {
+        return new GDScriptPatternImpl(node);
+      }
+      else if (type == PATTERN_LIST) {
+        return new GDScriptPatternListImpl(node);
       }
       else if (type == RETURN_STATEMENT) {
         return new GDScriptReturnStatementImpl(node);
@@ -309,6 +342,9 @@ public interface GDScriptTypes {
       }
       else if (type == VAR_STATEMENT) {
         return new GDScriptVarStatementImpl(node);
+      }
+      else if (type == WHILE_STATEMENT) {
+        return new GDScriptWhileStatementImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

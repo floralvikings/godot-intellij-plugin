@@ -15,11 +15,19 @@ public class GDScriptVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitArrayPattern(@NotNull GDScriptArrayPattern o) {
+    visitPsiElement(o);
+  }
+
   public void visitAssignOperator(@NotNull GDScriptAssignOperator o) {
     visitPsiElement(o);
   }
 
   public void visitAssignStatement(@NotNull GDScriptAssignStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitBindingPattern(@NotNull GDScriptBindingPattern o) {
     visitPsiElement(o);
   }
 
@@ -44,6 +52,10 @@ public class GDScriptVisitor extends PsiElementVisitor {
   }
 
   public void visitClassVarDeclaration(@NotNull GDScriptClassVarDeclaration o) {
+    visitPsiElement(o);
+  }
+
+  public void visitDictPattern(@NotNull GDScriptDictPattern o) {
     visitPsiElement(o);
   }
 
@@ -119,6 +131,10 @@ public class GDScriptVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitKeyValuePattern(@NotNull GDScriptKeyValuePattern o) {
+    visitPsiElement(o);
+  }
+
   public void visitLambdaExpression(@NotNull GDScriptLambdaExpression o) {
     visitExpression(o);
   }
@@ -129,6 +145,22 @@ public class GDScriptVisitor extends PsiElementVisitor {
 
   public void visitLuaDictionaryExpression(@NotNull GDScriptLuaDictionaryExpression o) {
     visitExpression(o);
+  }
+
+  public void visitMatchBlock(@NotNull GDScriptMatchBlock o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMatchStatement(@NotNull GDScriptMatchStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitPattern(@NotNull GDScriptPattern o) {
+    visitPsiElement(o);
+  }
+
+  public void visitPatternList(@NotNull GDScriptPatternList o) {
+    visitPsiElement(o);
   }
 
   public void visitReturnStatement(@NotNull GDScriptReturnStatement o) {
@@ -168,6 +200,10 @@ public class GDScriptVisitor extends PsiElementVisitor {
   }
 
   public void visitVarStatement(@NotNull GDScriptVarStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitWhileStatement(@NotNull GDScriptWhileStatement o) {
     visitPsiElement(o);
   }
 

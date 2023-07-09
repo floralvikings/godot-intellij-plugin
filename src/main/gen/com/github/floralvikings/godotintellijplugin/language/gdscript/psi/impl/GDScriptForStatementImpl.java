@@ -71,6 +71,12 @@ public class GDScriptForStatementImpl extends ASTWrapperPsiElement implements GD
 
   @Override
   @Nullable
+  public GDScriptMatchStatement getMatchStatement() {
+    return findChildByClass(GDScriptMatchStatement.class);
+  }
+
+  @Override
+  @Nullable
   public GDScriptReturnStatement getReturnStatement() {
     return findChildByClass(GDScriptReturnStatement.class);
   }
@@ -79,6 +85,12 @@ public class GDScriptForStatementImpl extends ASTWrapperPsiElement implements GD
   @Nullable
   public GDScriptVarStatement getVarStatement() {
     return findChildByClass(GDScriptVarStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public GDScriptWhileStatement getWhileStatement() {
+    return findChildByClass(GDScriptWhileStatement.class);
   }
 
 }

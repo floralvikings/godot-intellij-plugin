@@ -191,6 +191,89 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // L_BRACKET [pattern [(COMMA pattern)+] (COMMA DOT_DOT)?]  R_BRACKET
+  public static boolean array_pattern(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "array_pattern")) return false;
+    if (!nextTokenIs(b, L_BRACKET)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, L_BRACKET);
+    r = r && array_pattern_1(b, l + 1);
+    r = r && consumeToken(b, R_BRACKET);
+    exit_section_(b, m, ARRAY_PATTERN, r);
+    return r;
+  }
+
+  // [pattern [(COMMA pattern)+] (COMMA DOT_DOT)?]
+  private static boolean array_pattern_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "array_pattern_1")) return false;
+    array_pattern_1_0(b, l + 1);
+    return true;
+  }
+
+  // pattern [(COMMA pattern)+] (COMMA DOT_DOT)?
+  private static boolean array_pattern_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "array_pattern_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = pattern(b, l + 1);
+    r = r && array_pattern_1_0_1(b, l + 1);
+    r = r && array_pattern_1_0_2(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // [(COMMA pattern)+]
+  private static boolean array_pattern_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "array_pattern_1_0_1")) return false;
+    array_pattern_1_0_1_0(b, l + 1);
+    return true;
+  }
+
+  // (COMMA pattern)+
+  private static boolean array_pattern_1_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "array_pattern_1_0_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = array_pattern_1_0_1_0_0(b, l + 1);
+    while (r) {
+      int c = current_position_(b);
+      if (!array_pattern_1_0_1_0_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "array_pattern_1_0_1_0", c)) break;
+    }
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // COMMA pattern
+  private static boolean array_pattern_1_0_1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "array_pattern_1_0_1_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && pattern(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (COMMA DOT_DOT)?
+  private static boolean array_pattern_1_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "array_pattern_1_0_2")) return false;
+    array_pattern_1_0_2_0(b, l + 1);
+    return true;
+  }
+
+  // COMMA DOT_DOT
+  private static boolean array_pattern_1_0_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "array_pattern_1_0_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, COMMA, DOT_DOT);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // id (L_BRACKET id R_BRACKET)
   static boolean array_type(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "array_type")) return false;
@@ -257,6 +340,18 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     r = r && assign_operator(b, l + 1);
     r = r && expression(b, l + 1);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // VAR IDENTIFIER
+  public static boolean binding_pattern(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "binding_pattern")) return false;
+    if (!nextTokenIs(b, VAR)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, VAR, IDENTIFIER);
+    exit_section_(b, m, BINDING_PATTERN, r);
     return r;
   }
 
@@ -762,6 +857,89 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // L_BRACE [key_value_pattern [(COMMA key_value_pattern)+] (COMMA DOT_DOT)?] R_BRACE
+  public static boolean dict_pattern(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dict_pattern")) return false;
+    if (!nextTokenIs(b, L_BRACE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, L_BRACE);
+    r = r && dict_pattern_1(b, l + 1);
+    r = r && consumeToken(b, R_BRACE);
+    exit_section_(b, m, DICT_PATTERN, r);
+    return r;
+  }
+
+  // [key_value_pattern [(COMMA key_value_pattern)+] (COMMA DOT_DOT)?]
+  private static boolean dict_pattern_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dict_pattern_1")) return false;
+    dict_pattern_1_0(b, l + 1);
+    return true;
+  }
+
+  // key_value_pattern [(COMMA key_value_pattern)+] (COMMA DOT_DOT)?
+  private static boolean dict_pattern_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dict_pattern_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = key_value_pattern(b, l + 1);
+    r = r && dict_pattern_1_0_1(b, l + 1);
+    r = r && dict_pattern_1_0_2(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // [(COMMA key_value_pattern)+]
+  private static boolean dict_pattern_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dict_pattern_1_0_1")) return false;
+    dict_pattern_1_0_1_0(b, l + 1);
+    return true;
+  }
+
+  // (COMMA key_value_pattern)+
+  private static boolean dict_pattern_1_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dict_pattern_1_0_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = dict_pattern_1_0_1_0_0(b, l + 1);
+    while (r) {
+      int c = current_position_(b);
+      if (!dict_pattern_1_0_1_0_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "dict_pattern_1_0_1_0", c)) break;
+    }
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // COMMA key_value_pattern
+  private static boolean dict_pattern_1_0_1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dict_pattern_1_0_1_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && key_value_pattern(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (COMMA DOT_DOT)?
+  private static boolean dict_pattern_1_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dict_pattern_1_0_2")) return false;
+    dict_pattern_1_0_2_0(b, l + 1);
+    return true;
+  }
+
+  // COMMA DOT_DOT
+  private static boolean dict_pattern_1_0_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dict_pattern_1_0_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, COMMA, DOT_DOT);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // (key LINE_BREAK* (COLON LINE_BREAK* VAR? expression)?) | DOT_DOT
   public static boolean dictionary_entry(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "dictionary_entry")) return false;
@@ -947,7 +1125,7 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ELIF expression COLON (inline_statement | new_line_block)
+  // ELIF expression COLON statement_or_block
   public static boolean elif_statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "elif_statement")) return false;
     if (!nextTokenIs(b, ELIF)) return false;
@@ -956,39 +1134,21 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, ELIF);
     r = r && expression(b, l + 1);
     r = r && consumeToken(b, COLON);
-    r = r && elif_statement_3(b, l + 1);
+    r = r && statement_or_block(b, l + 1);
     exit_section_(b, m, ELIF_STATEMENT, r);
     return r;
   }
 
-  // inline_statement | new_line_block
-  private static boolean elif_statement_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "elif_statement_3")) return false;
-    boolean r;
-    r = inline_statement(b, l + 1);
-    if (!r) r = new_line_block(b, l + 1);
-    return r;
-  }
-
   /* ********************************************************** */
-  // ELSE COLON (inline_statement | new_line_block)
+  // ELSE COLON statement_or_block
   public static boolean else_statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "else_statement")) return false;
     if (!nextTokenIs(b, ELSE)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeTokens(b, 0, ELSE, COLON);
-    r = r && else_statement_2(b, l + 1);
+    r = r && statement_or_block(b, l + 1);
     exit_section_(b, m, ELSE_STATEMENT, r);
-    return r;
-  }
-
-  // inline_statement | new_line_block
-  private static boolean else_statement_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "else_statement_2")) return false;
-    boolean r;
-    r = inline_statement(b, l + 1);
-    if (!r) r = new_line_block(b, l + 1);
     return r;
   }
 
@@ -1283,7 +1443,7 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // FOR id IN expression COLON (inline_statement | new_line_block)
+  // FOR id IN expression COLON statement_or_block
   public static boolean for_statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "for_statement")) return false;
     if (!nextTokenIs(b, FOR)) return false;
@@ -1294,17 +1454,8 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     r = r && consumeToken(b, IN);
     r = r && expression(b, l + 1);
     r = r && consumeToken(b, COLON);
-    r = r && for_statement_5(b, l + 1);
+    r = r && statement_or_block(b, l + 1);
     exit_section_(b, m, FOR_STATEMENT, r);
-    return r;
-  }
-
-  // inline_statement | new_line_block
-  private static boolean for_statement_5(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "for_statement_5")) return false;
-    boolean r;
-    r = inline_statement(b, l + 1);
-    if (!r) r = new_line_block(b, l + 1);
     return r;
   }
 
@@ -1605,7 +1756,7 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // IF expression COLON (inline_statement | new_line_block) (LINE_BREAK* elif_statement)* [LINE_BREAK* else_statement]
+  // IF expression COLON statement_or_block (LINE_BREAK* elif_statement)* [LINE_BREAK* else_statement]
   public static boolean if_statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "if_statement")) return false;
     if (!nextTokenIs(b, IF)) return false;
@@ -1614,19 +1765,10 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, IF);
     r = r && expression(b, l + 1);
     r = r && consumeToken(b, COLON);
-    r = r && if_statement_3(b, l + 1);
+    r = r && statement_or_block(b, l + 1);
     r = r && if_statement_4(b, l + 1);
     r = r && if_statement_5(b, l + 1);
     exit_section_(b, m, IF_STATEMENT, r);
-    return r;
-  }
-
-  // inline_statement | new_line_block
-  private static boolean if_statement_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "if_statement_3")) return false;
-    boolean r;
-    r = inline_statement(b, l + 1);
-    if (!r) r = new_line_block(b, l + 1);
     return r;
   }
 
@@ -1821,6 +1963,37 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, KEY, "<key>");
     r = expression(b, l + 1);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // string [COLON pattern]
+  public static boolean key_value_pattern(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "key_value_pattern")) return false;
+    if (!nextTokenIs(b, "<key value pattern>", DOUBLE_QUOTED_STRING, SINGLE_QUOTED_STRING)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, KEY_VALUE_PATTERN, "<key value pattern>");
+    r = string(b, l + 1);
+    r = r && key_value_pattern_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // [COLON pattern]
+  private static boolean key_value_pattern_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "key_value_pattern_1")) return false;
+    key_value_pattern_1_0(b, l + 1);
+    return true;
+  }
+
+  // COLON pattern
+  private static boolean key_value_pattern_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "key_value_pattern_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COLON);
+    r = r && pattern(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -2053,6 +2226,82 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // pattern_list COLON statement_or_block (LINE_BREAK* pattern_list COLON statement_or_block)*
+  public static boolean match_block(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "match_block")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, MATCH_BLOCK, "<match block>");
+    r = pattern_list(b, l + 1);
+    r = r && consumeToken(b, COLON);
+    r = r && statement_or_block(b, l + 1);
+    r = r && match_block_3(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // (LINE_BREAK* pattern_list COLON statement_or_block)*
+  private static boolean match_block_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "match_block_3")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!match_block_3_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "match_block_3", c)) break;
+    }
+    return true;
+  }
+
+  // LINE_BREAK* pattern_list COLON statement_or_block
+  private static boolean match_block_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "match_block_3_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = match_block_3_0_0(b, l + 1);
+    r = r && pattern_list(b, l + 1);
+    r = r && consumeToken(b, COLON);
+    r = r && statement_or_block(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // LINE_BREAK*
+  private static boolean match_block_3_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "match_block_3_0_0")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, LINE_BREAK)) break;
+      if (!empty_element_parsed_guard_(b, "match_block_3_0_0", c)) break;
+    }
+    return true;
+  }
+
+  /* ********************************************************** */
+  // MATCH expression COLON LINE_BREAK* <<indented match_block>>
+  public static boolean match_statement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "match_statement")) return false;
+    if (!nextTokenIs(b, MATCH)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, MATCH);
+    r = r && expression(b, l + 1);
+    r = r && consumeToken(b, COLON);
+    r = r && match_statement_3(b, l + 1);
+    r = r && indented(b, l + 1, GDScriptParser::match_block);
+    exit_section_(b, m, MATCH_STATEMENT, r);
+    return r;
+  }
+
+  // LINE_BREAK*
+  private static boolean match_statement_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "match_statement_3")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, LINE_BREAK)) break;
+      if (!empty_element_parsed_guard_(b, "match_statement_3", c)) break;
+    }
+    return true;
+  }
+
+  /* ********************************************************** */
   // MULTILINE_SINGLE_QUOTED_STRING | MULTILINE_DOUBLE_QUOTED_STRING
   static boolean multiline_string(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "multiline_string")) return false;
@@ -2225,6 +2474,71 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // string
+  //     | multiline_string
+  //     | REAL_NUMBER
+  //     | BINARY_NUMBER
+  //     | HEXADECIMAL_NUMBER
+  //     | UNDERSCORE
+  //     | NULL
+  //     | IDENTIFIER
+  //     | binding_pattern
+  //     | array_pattern
+  //     | dict_pattern
+  public static boolean pattern(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "pattern")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, PATTERN, "<pattern>");
+    r = string(b, l + 1);
+    if (!r) r = multiline_string(b, l + 1);
+    if (!r) r = consumeToken(b, REAL_NUMBER);
+    if (!r) r = consumeToken(b, BINARY_NUMBER);
+    if (!r) r = consumeToken(b, HEXADECIMAL_NUMBER);
+    if (!r) r = consumeToken(b, UNDERSCORE);
+    if (!r) r = consumeToken(b, NULL);
+    if (!r) r = consumeToken(b, IDENTIFIER);
+    if (!r) r = binding_pattern(b, l + 1);
+    if (!r) r = array_pattern(b, l + 1);
+    if (!r) r = dict_pattern(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // pattern (COMMA pattern)*
+  public static boolean pattern_list(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "pattern_list")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, PATTERN_LIST, "<pattern list>");
+    r = pattern(b, l + 1);
+    r = r && pattern_list_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // (COMMA pattern)*
+  private static boolean pattern_list_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "pattern_list_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!pattern_list_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "pattern_list_1", c)) break;
+    }
+    return true;
+  }
+
+  // COMMA pattern
+  private static boolean pattern_list_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "pattern_list_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && pattern(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // RETURN expression
   public static boolean return_statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "return_statement")) return false;
@@ -2347,6 +2661,8 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   // var_statement
   //     | if_statement
   //     | for_statement
+  //     | while_statement
+  //     | match_statement
   //     | return_statement
   //     | assign_statement
   //     | expression_statement
@@ -2357,6 +2673,8 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     r = var_statement(b, l + 1);
     if (!r) r = if_statement(b, l + 1);
     if (!r) r = for_statement(b, l + 1);
+    if (!r) r = while_statement(b, l + 1);
+    if (!r) r = match_statement(b, l + 1);
     if (!r) r = return_statement(b, l + 1);
     if (!r) r = assign_statement(b, l + 1);
     if (!r) r = expression_statement(b, l + 1);
@@ -2490,6 +2808,16 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, COMMA);
     r = r && type(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // inline_statement | new_line_block
+  static boolean statement_or_block(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "statement_or_block")) return false;
+    boolean r;
+    r = inline_statement(b, l + 1);
+    if (!r) r = new_line_block(b, l + 1);
     return r;
   }
 
@@ -2637,6 +2965,21 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     boolean r;
     r = consumeToken(b, EQUAL);
     if (!r) r = consumeToken(b, INFER);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // WHILE expression COLON statement_or_block
+  public static boolean while_statement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "while_statement")) return false;
+    if (!nextTokenIs(b, WHILE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, WHILE);
+    r = r && expression(b, l + 1);
+    r = r && consumeToken(b, COLON);
+    r = r && statement_or_block(b, l + 1);
+    exit_section_(b, m, WHILE_STATEMENT, r);
     return r;
   }
 
