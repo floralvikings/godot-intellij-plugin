@@ -238,7 +238,7 @@ private function_parameter_list ::= function_parameter? LINE_BREAK* (COMMA LINE_
 function_parameter ::= id (COLON type)? ((EQUAL | INFER) expression)?
 function_return_type ::= ARROW type
 
-block ::= <<indented <<listOf script_statement (end_of_statement ((&INDNONE &LINE_BREAK) | &INDEQ))>>>>
+block ::= <<indented <<listOf script_statement (end_of_statement ((&INDNONE LINE_BREAK+) | &INDEQ))>>>>
 
 private script_statement ::= var_statement
     | return_statement
@@ -326,7 +326,7 @@ lua_dictionary_entry ::= (key EQUAL expression) | DOT_DOT
 invocation_expression ::= id? call
 private call ::= L_PAREN LINE_BREAK* expression? LINE_BREAK* (COMMA LINE_BREAK* expression LINE_BREAK*)* R_PAREN
 
-lambda_expression ::= FUNC id? L_PAREN id? (COMMA id)* R_PAREN COLON expression
+lambda_expression ::= FUNC id? L_PAREN id? (COMMA id)* R_PAREN COLON block
 //endregion
 
 key ::= expression

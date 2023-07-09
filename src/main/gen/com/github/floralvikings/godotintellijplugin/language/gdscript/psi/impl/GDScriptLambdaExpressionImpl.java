@@ -29,8 +29,8 @@ public class GDScriptLambdaExpressionImpl extends GDScriptExpressionImpl impleme
 
   @Override
   @NotNull
-  public GDScriptExpression getExpression() {
-    return findNotNullChildByClass(GDScriptExpression.class);
+  public GDScriptBlock getBlock() {
+    return findNotNullChildByClass(GDScriptBlock.class);
   }
 
 }

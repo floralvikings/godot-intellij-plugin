@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface GDScriptLambdaExpression extends GDScriptExpression {
 
   @NotNull
-  GDScriptExpression getExpression();
+  GDScriptBlock getBlock();
 
 }
