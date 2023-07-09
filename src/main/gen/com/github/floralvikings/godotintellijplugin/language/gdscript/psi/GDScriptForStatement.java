@@ -5,19 +5,13 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GDScriptIfStatement extends PsiElement {
+public interface GDScriptForStatement extends PsiElement {
 
   @Nullable
   GDScriptAssignStatement getAssignStatement();
 
   @Nullable
   GDScriptBlock getBlock();
-
-  @NotNull
-  List<GDScriptElifStatement> getElifStatementList();
-
-  @Nullable
-  GDScriptElseStatement getElseStatement();
 
   @NotNull
   GDScriptExpression getExpression();
@@ -27,6 +21,9 @@ public interface GDScriptIfStatement extends PsiElement {
 
   @Nullable
   GDScriptForStatement getForStatement();
+
+  @NotNull
+  GDScriptId getId();
 
   @Nullable
   GDScriptIfStatement getIfStatement();

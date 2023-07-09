@@ -11,14 +11,14 @@ import static com.github.floralvikings.godotintellijplugin.language.gdscript.psi
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.github.floralvikings.godotintellijplugin.language.gdscript.psi.*;
 
-public class GDScriptIfStatementImpl extends ASTWrapperPsiElement implements GDScriptIfStatement {
+public class GDScriptForStatementImpl extends ASTWrapperPsiElement implements GDScriptForStatement {
 
-  public GDScriptIfStatementImpl(@NotNull ASTNode node) {
+  public GDScriptForStatementImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull GDScriptVisitor visitor) {
-    visitor.visitIfStatement(this);
+    visitor.visitForStatement(this);
   }
 
   @Override
@@ -41,18 +41,6 @@ public class GDScriptIfStatementImpl extends ASTWrapperPsiElement implements GDS
 
   @Override
   @NotNull
-  public List<GDScriptElifStatement> getElifStatementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GDScriptElifStatement.class);
-  }
-
-  @Override
-  @Nullable
-  public GDScriptElseStatement getElseStatement() {
-    return findChildByClass(GDScriptElseStatement.class);
-  }
-
-  @Override
-  @NotNull
   public GDScriptExpression getExpression() {
     return findNotNullChildByClass(GDScriptExpression.class);
   }
@@ -67,6 +55,12 @@ public class GDScriptIfStatementImpl extends ASTWrapperPsiElement implements GDS
   @Nullable
   public GDScriptForStatement getForStatement() {
     return findChildByClass(GDScriptForStatement.class);
+  }
+
+  @Override
+  @NotNull
+  public GDScriptId getId() {
+    return findNotNullChildByClass(GDScriptId.class);
   }
 
   @Override

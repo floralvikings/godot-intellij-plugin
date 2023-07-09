@@ -20,6 +20,9 @@ public interface GDScriptElifStatement extends PsiElement {
   GDScriptExpressionStatement getExpressionStatement();
 
   @Nullable
+  GDScriptForStatement getForStatement();
+
+  @Nullable
   GDScriptIfStatement getIfStatement();
 
   @Nullable
