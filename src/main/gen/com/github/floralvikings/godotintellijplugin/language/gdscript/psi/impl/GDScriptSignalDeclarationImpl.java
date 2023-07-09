@@ -35,8 +35,8 @@ public class GDScriptSignalDeclarationImpl extends ASTWrapperPsiElement implemen
 
   @Override
   @Nullable
-  public GDScriptParameters getParameters() {
-    return findChildByClass(GDScriptParameters.class);
+  public GDScriptSignalParameters getSignalParameters() {
+    return findChildByClass(GDScriptSignalParameters.class);
   }
 
 }

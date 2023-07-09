@@ -8,9 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface GDScriptExtendsDeclaration extends PsiElement {
 
   @NotNull
-  List<GDScriptId> getIdList();
-
-  @Nullable
-  PsiElement getLineBreak();
+  GDScriptType getType();
 
 }

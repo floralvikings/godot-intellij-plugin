@@ -5,12 +5,18 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GDScriptSignalDeclaration extends PsiElement {
+public interface GDScriptFunctionDeclaration extends PsiElement {
+
+  @NotNull
+  GDScriptBlock getBlock();
+
+  @NotNull
+  List<GDScriptFunctionParameter> getFunctionParameterList();
+
+  @Nullable
+  GDScriptFunctionReturnType getFunctionReturnType();
 
   @NotNull
   GDScriptId getId();
-
-  @Nullable
-  GDScriptSignalParameters getSignalParameters();
 
 }

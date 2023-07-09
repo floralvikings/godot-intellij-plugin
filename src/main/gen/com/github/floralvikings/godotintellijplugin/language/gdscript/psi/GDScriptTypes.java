@@ -25,21 +25,25 @@ public interface GDScriptTypes {
   IElementType EXPRESSION = new GDScriptElementType("EXPRESSION");
   IElementType EXPRESSION_STATEMENT = new GDScriptElementType("EXPRESSION_STATEMENT");
   IElementType EXTENDS_DECLARATION = new GDScriptElementType("EXTENDS_DECLARATION");
+  IElementType FUNCTION_DECLARATION = new GDScriptElementType("FUNCTION_DECLARATION");
+  IElementType FUNCTION_PARAMETER = new GDScriptElementType("FUNCTION_PARAMETER");
+  IElementType FUNCTION_RETURN_TYPE = new GDScriptElementType("FUNCTION_RETURN_TYPE");
   IElementType ID = new GDScriptElementType("ID");
   IElementType INVOCATION_EXPRESSION = new GDScriptElementType("INVOCATION_EXPRESSION");
   IElementType KEY = new GDScriptElementType("KEY");
   IElementType LAMBDA_EXPRESSION = new GDScriptElementType("LAMBDA_EXPRESSION");
   IElementType LUA_DICTIONARY_ENTRY = new GDScriptElementType("LUA_DICTIONARY_ENTRY");
   IElementType LUA_DICTIONARY_EXPRESSION = new GDScriptElementType("LUA_DICTIONARY_EXPRESSION");
-  IElementType PARAMETERS = new GDScriptElementType("PARAMETERS");
   IElementType RETURN_STATEMENT = new GDScriptElementType("RETURN_STATEMENT");
   IElementType SET_GET = new GDScriptElementType("SET_GET");
   IElementType SET_OR_GET = new GDScriptElementType("SET_OR_GET");
   IElementType SIGNAL_DECLARATION = new GDScriptElementType("SIGNAL_DECLARATION");
+  IElementType SIGNAL_PARAMETERS = new GDScriptElementType("SIGNAL_PARAMETERS");
   IElementType STRING = new GDScriptElementType("STRING");
   IElementType TOP_LEVEL_ANNOTATION = new GDScriptElementType("TOP_LEVEL_ANNOTATION");
   IElementType TYPE = new GDScriptElementType("TYPE");
   IElementType VAR_EXPORT = new GDScriptElementType("VAR_EXPORT");
+  IElementType VAR_STATEMENT = new GDScriptElementType("VAR_STATEMENT");
 
   IElementType AMPERSAND = new GDScriptTokenType("&");
   IElementType AMPERSAND_AMPERSAND = new GDScriptTokenType("&&");
@@ -229,6 +233,15 @@ public interface GDScriptTypes {
       else if (type == EXTENDS_DECLARATION) {
         return new GDScriptExtendsDeclarationImpl(node);
       }
+      else if (type == FUNCTION_DECLARATION) {
+        return new GDScriptFunctionDeclarationImpl(node);
+      }
+      else if (type == FUNCTION_PARAMETER) {
+        return new GDScriptFunctionParameterImpl(node);
+      }
+      else if (type == FUNCTION_RETURN_TYPE) {
+        return new GDScriptFunctionReturnTypeImpl(node);
+      }
       else if (type == ID) {
         return new GDScriptIdImpl(node);
       }
@@ -247,9 +260,6 @@ public interface GDScriptTypes {
       else if (type == LUA_DICTIONARY_EXPRESSION) {
         return new GDScriptLuaDictionaryExpressionImpl(node);
       }
-      else if (type == PARAMETERS) {
-        return new GDScriptParametersImpl(node);
-      }
       else if (type == RETURN_STATEMENT) {
         return new GDScriptReturnStatementImpl(node);
       }
@@ -262,6 +272,9 @@ public interface GDScriptTypes {
       else if (type == SIGNAL_DECLARATION) {
         return new GDScriptSignalDeclarationImpl(node);
       }
+      else if (type == SIGNAL_PARAMETERS) {
+        return new GDScriptSignalParametersImpl(node);
+      }
       else if (type == STRING) {
         return new GDScriptStringImpl(node);
       }
@@ -273,6 +286,9 @@ public interface GDScriptTypes {
       }
       else if (type == VAR_EXPORT) {
         return new GDScriptVarExportImpl(node);
+      }
+      else if (type == VAR_STATEMENT) {
+        return new GDScriptVarStatementImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

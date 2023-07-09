@@ -29,14 +29,8 @@ public class GDScriptExtendsDeclarationImpl extends ASTWrapperPsiElement impleme
 
   @Override
   @NotNull
-  public List<GDScriptId> getIdList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GDScriptId.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getLineBreak() {
-    return findChildByType(LINE_BREAK);
+  public GDScriptType getType() {
+    return findNotNullChildByClass(GDScriptType.class);
   }
 
 }

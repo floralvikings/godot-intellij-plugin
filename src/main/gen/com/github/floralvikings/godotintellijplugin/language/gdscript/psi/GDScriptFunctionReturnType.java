@@ -5,9 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GDScriptParameters extends PsiElement {
+public interface GDScriptFunctionReturnType extends PsiElement {
 
   @NotNull
-  List<GDScriptType> getTypeList();
+  GDScriptType getType();
 
 }

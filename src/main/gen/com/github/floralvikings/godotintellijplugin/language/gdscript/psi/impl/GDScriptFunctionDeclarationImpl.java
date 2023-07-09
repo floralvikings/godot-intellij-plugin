@@ -11,20 +11,38 @@ import static com.github.floralvikings.godotintellijplugin.language.gdscript.psi
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.github.floralvikings.godotintellijplugin.language.gdscript.psi.*;
 
-public class GDScriptClassNameDeclarationImpl extends ASTWrapperPsiElement implements GDScriptClassNameDeclaration {
+public class GDScriptFunctionDeclarationImpl extends ASTWrapperPsiElement implements GDScriptFunctionDeclaration {
 
-  public GDScriptClassNameDeclarationImpl(@NotNull ASTNode node) {
+  public GDScriptFunctionDeclarationImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull GDScriptVisitor visitor) {
-    visitor.visitClassNameDeclaration(this);
+    visitor.visitFunctionDeclaration(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof GDScriptVisitor) accept((GDScriptVisitor)visitor);
     else super.accept(visitor);
+  }
+
+  @Override
+  @NotNull
+  public GDScriptBlock getBlock() {
+    return findNotNullChildByClass(GDScriptBlock.class);
+  }
+
+  @Override
+  @NotNull
+  public List<GDScriptFunctionParameter> getFunctionParameterList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GDScriptFunctionParameter.class);
+  }
+
+  @Override
+  @Nullable
+  public GDScriptFunctionReturnType getFunctionReturnType() {
+    return findChildByClass(GDScriptFunctionReturnType.class);
   }
 
   @Override

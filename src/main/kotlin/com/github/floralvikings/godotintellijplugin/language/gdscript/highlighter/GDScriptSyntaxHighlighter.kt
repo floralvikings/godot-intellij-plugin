@@ -16,7 +16,7 @@ class GDScriptSyntaxHighlighter : SyntaxHighlighterBase() {
 
     override fun getTokenHighlights(tokenType: IElementType?): Array<TextAttributesKey> {
         return when (tokenType) {
-            VAR, CONST, ENUM, FUNC, IF, ELIF, ELSE, FOR, WHILE, MATCH, RETURN, CLASS_NAME, EXTENDS, SIGNAL -> KEYWORD_KEYS
+            VAR, CONST, ENUM, FUNC, IF, ELIF, ELSE, FOR, WHILE, MATCH, RETURN, CLASS_NAME, EXTENDS, SIGNAL, PASS -> KEYWORD_KEYS
             LINE_COMMENT -> LINE_COMMENT_KEYS
             DOUBLE_QUOTED_STRING -> STRING_LITERAL_KEYS
             REAL_NUMBER, BINARY_NUMBER, HEXADECIMAL_NUMBER -> NUMBER_LITERAL_KEYS

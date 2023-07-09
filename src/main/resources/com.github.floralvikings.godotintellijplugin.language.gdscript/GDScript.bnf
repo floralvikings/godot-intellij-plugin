@@ -166,7 +166,7 @@
     ]
 }
 
-root ::= (top_level_annotation end_of_statement?)* (class_name_declaration | extends_declaration)* top_level_statement*
+root ::= (top_level_annotation end_of_statement?)* ((class_name_declaration | extends_declaration) end_of_statement)* (LINE_BREAK | (top_level_statement end_of_statement))*
 
 private meta listOf ::= <<p1>> (<<p2>> <<p1>>)*
 
@@ -175,19 +175,18 @@ external INDLT ::= indLt
 external INDGT ::= indGt
 external INDNONE ::= indNone
 
-private top_level_statement ::= (class_var_declaration_statement
-    | class_const_declaration_statement
-    | enum_declaration_statement
-    | signal_declaration_statement
-)
+private top_level_statement ::= class_var_declaration
+    | class_const_declaration
+    | signal_declaration
+    | enum_declaration
+    | function_declaration
 
 top_level_annotation ::= (AT_ICON call) | AT_TOOL
 
-extends_declaration ::= EXTENDS nested_type end_of_statement
-class_name_declaration ::= CLASS_NAME id end_of_statement
+extends_declaration ::= EXTENDS type
+class_name_declaration ::= CLASS_NAME id
 
-private class_var_declaration_statement ::= class_var_declaration end_of_statement
-class_var_declaration ::= var_export? LINE_BREAK* AT_ONREADY? LINE_BREAK* VAR id (
+class_var_declaration ::= [var_export LINE_BREAK*] [AT_ONREADY LINE_BREAK*] VAR id (
     (COLON(type(
         ((LINE_BREAK (block_get|block_set))+)
         | ([(EQUAL|INFER) expression])
@@ -197,7 +196,7 @@ class_var_declaration ::= var_export? LINE_BREAK* AT_ONREADY? LINE_BREAK* VAR id
 )
 
 block_get ::= <<indented (GET COLON LINE_BREAK block)>>
-block_set ::= <<indented (SET parameters COLON LINE_BREAK block)>>
+block_set ::= <<indented (SET L_PAREN function_parameter R_PAREN COLON LINE_BREAK block)>>
 
 var_export ::= export_annotation call?
 private export_annotation ::= AT_EXPORT
@@ -221,25 +220,31 @@ private export_annotation ::= AT_EXPORT
     | AT_EXPORT_FLAGS_3D_NAVIGATION
 set_get ::= set_or_get [COMMA set_or_get]
 
-// TODO Add function-style property declaration
 set_or_get ::= (SET | GET) EQUAL id
 
-private class_const_declaration_statement ::= class_const_declaration end_of_statement
 class_const_declaration ::= CONST id [COLON type] EQUAL expression
 
-private signal_declaration_statement ::= signal_declaration end_of_statement
-signal_declaration ::= SIGNAL id parameters?
-parameters ::= L_PAREN [type (COMMA type)*] R_PAREN
+signal_declaration ::= SIGNAL id signal_parameters?
+signal_parameters ::= L_PAREN [type (COMMA type)*] R_PAREN
 
-private enum_declaration_statement ::= enum_declaration end_of_statement
 enum_declaration ::= ENUM id? (L_BRACE LINE_BREAK* enum_entry? LINE_BREAK* (COMMA LINE_BREAK* enum_entry LINE_BREAK*)* COMMA? LINE_BREAK* R_BRACE)?
 enum_entry ::= id (EQUAL expression)?
 
+function_declaration ::= function_annotations? STATIC? FUNC id function_declaration_parameters function_return_type? COLON function_body
+private function_annotations ::= AT_RPC LINE_BREAK*
+private function_body ::= LINE_BREAK* block
+private function_declaration_parameters ::= L_PAREN LINE_BREAK* function_parameter_list LINE_BREAK* R_PAREN
+private function_parameter_list ::= function_parameter? LINE_BREAK* (COMMA LINE_BREAK* function_parameter LINE_BREAK*)* COMMA?
+function_parameter ::= id (COLON type)? ((EQUAL | INFER) expression)?
+function_return_type ::= ARROW type
+
 block ::= <<indented <<listOf script_statement (end_of_statement (&INDNONE | &INDEQ) | &INDEQ)>>>>
 
-private script_statement ::= assign_statement
+private script_statement ::= var_statement
     | return_statement
+    | assign_statement
     | expression_statement
+    | PASS
 
 return_statement ::= RETURN expression
 
@@ -256,6 +261,8 @@ assign_operator ::= EQUAL
     | PIPE_EQUAL
     | CARET_EQUAL
     | INFER
+
+var_statement ::= VAR id (COLON type)? ((EQUAL | INFER) expression)?
 
 expression_statement ::= expression
 
