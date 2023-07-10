@@ -1,11 +1,10 @@
-package com.github.floralvikings.godotintellijplugin.language.gdscript;
+package com.github.floralvikings.godotea.language.gdscript;
 
-import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
 import static com.intellij.psi.TokenType.WHITE_SPACE;
-import static com.github.floralvikings.godotintellijplugin.language.gdscript.psi.GDScriptTypes.*;
+import static com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes.*;
 
 %%
 

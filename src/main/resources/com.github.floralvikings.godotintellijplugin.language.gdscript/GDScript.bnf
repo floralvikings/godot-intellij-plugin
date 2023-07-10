@@ -1,17 +1,17 @@
 {
-    parserClass = "com.github.floralvikings.godotintellijplugin.language.gdscript.parser.GDScriptParser"
-    parserUtilClass = "com.github.floralvikings.godotintellijplugin.language.gdscript.parser.GDScriptParserUtil"
+    parserClass = "com.github.floralvikings.godotea.language.gdscript.parser.GDScriptParser"
+    parserUtilClass = "com.github.floralvikings.godotea.language.gdscript.parser.GDScriptParserUtil"
 
     extends = "com.intellij.extapi.psi.ASTWrapperPsiElement"
 
     psiClassPrefix = "GDScript"
     psiImplClassSuffix = "Impl"
-    psiPackage = "com.github.floralvikings.godotintellijplugin.language.gdscript.psi"
-    psiImplPackage = "com.github.floralvikings.godotintellijplugin.language.gdscript.psi.impl"
+    psiPackage = "com.github.floralvikings.godotea.language.gdscript.psi"
+    psiImplPackage = "com.github.floralvikings.godotea.language.gdscript.psi.impl"
 
-    elementTypeHolderClass = "com.github.floralvikings.godotintellijplugin.language.gdscript.psi.GDScriptTypes"
-    elementTypeClass = "com.github.floralvikings.godotintellijplugin.language.gdscript.psi.GDScriptElementType"
-    tokenTypeClass = "com.github.floralvikings.godotintellijplugin.language.gdscript.psi.GDScriptTokenType"
+    elementTypeHolderClass = "com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes"
+    elementTypeClass = "com.github.floralvikings.godotea.language.gdscript.psi.GDScriptElementType"
+    tokenTypeClass = "com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTokenType"
 
     extends(".*_expression")=expression
 
