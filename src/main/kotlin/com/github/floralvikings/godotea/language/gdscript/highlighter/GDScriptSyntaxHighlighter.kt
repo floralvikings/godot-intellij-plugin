@@ -15,13 +15,32 @@ class GDScriptSyntaxHighlighter : SyntaxHighlighterBase() {
     override fun getHighlightingLexer(): Lexer = GDScriptLexerAdapter()
 
     override fun getTokenHighlights(tokenType: IElementType?): Array<TextAttributesKey> {
+        val keywords = setOf(
+            VAR, CONST, CLASS, ENUM, FUNC, IF, ELIF, ELSE, FOR, WHILE, CONTINUE, PASS, RETURN, MATCH, ASSERT, AWAIT,
+            BREAKPOINT, CLASS_NAME, EXTENDS, SUPER, SELF, SIGNAL, STATIC, SET, GET, TRUE, FALSE, NULL, AND, OR, NOT,
+            INT, FLOAT, BOOL, VOID, IN, IS, AS
+        )
+        val stringLiterals = setOf(
+            DOUBLE_QUOTED_STRING, SINGLE_QUOTED_STRING, MULTILINE_DOUBLE_QUOTED_STRING, MULTILINE_SINGLE_QUOTED_STRING
+        )
+        val numberLiterals = setOf(
+            REAL_NUMBER, BINARY_NUMBER, HEXADECIMAL_NUMBER
+        )
+        val annotations = setOf(
+            AT_EXPORT, AT_EXPORT_CATEGORY, AT_EXPORT_COLOR_NO_ALPHA, AT_EXPORT_DIR, AT_EXPORT_ENUM,
+            AT_EXPORT_EXP_EASING, AT_EXPORT_FILE, AT_EXPORT_FLAGS, AT_EXPORT_FLAGS_2D_NAVIGATION,
+            AT_EXPORT_FLAGS_2D_PHYSICS, AT_EXPORT_FLAGS_2D_RENDER, AT_EXPORT_FLAGS_3D_NAVIGATION,
+            AT_EXPORT_FLAGS_3D_PHYSICS, AT_EXPORT_FLAGS_3D_RENDER, AT_EXPORT_FLAGS_AVOIDANCE, AT_EXPORT_GLOBAL_DIR,
+            AT_EXPORT_GLOBAL_FILE, AT_EXPORT_GROUP, AT_EXPORT_MULTILINE, AT_EXPORT_NODE_PATH, AT_EXPORT_PLACEHOLDER,
+            AT_EXPORT_RANGE, AT_EXPORT_SUBGROUP, AT_ICON, AT_ONREADY, AT_RPC, AT_STATIC_UNLOAD, AT_TOOL,
+            AT_WARNING_IGNORE
+        )
         return when (tokenType) {
-            VAR, CONST, ENUM, FUNC, IF, ELIF, ELSE, FOR, WHILE, MATCH, RETURN, CLASS_NAME, EXTENDS, SIGNAL, PASS, AWAIT,
-                SUPER
-                -> KEYWORD_KEYS
+            in keywords -> KEYWORD_KEYS
+            in stringLiterals -> STRING_LITERAL_KEYS
+            in numberLiterals -> NUMBER_LITERAL_KEYS
+            in annotations    -> ANNOTATION_KEYS
             LINE_COMMENT -> LINE_COMMENT_KEYS
-            DOUBLE_QUOTED_STRING -> STRING_LITERAL_KEYS
-            REAL_NUMBER, BINARY_NUMBER, HEXADECIMAL_NUMBER -> NUMBER_LITERAL_KEYS
             BAD_CHARACTER -> BAD_CHARACTER_KEYS
             else -> EMPTY_KEYS
         }
@@ -35,6 +54,7 @@ class GDScriptSyntaxHighlighter : SyntaxHighlighterBase() {
             createTextAttributesKey("GDSCRIPT_STRING_LITERAL", DefaultLanguageHighlighterColors.STRING)
         val NUMBER_LITERAL_KEY =
             createTextAttributesKey("GDSCRIPT_NUMBER_LITERAL", DefaultLanguageHighlighterColors.NUMBER)
+        val ANNOTATION_KEY = createTextAttributesKey("GDSCRIPT_ANNOTATION", DefaultLanguageHighlighterColors.METADATA)
         val BAD_CHARACTER_KEY = createTextAttributesKey("GDSCRIPT_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER)
 
         val KEYWORD_KEYS = arrayOf(KEYWORD_KEY)
@@ -42,6 +62,7 @@ class GDScriptSyntaxHighlighter : SyntaxHighlighterBase() {
         val STRING_LITERAL_KEYS = arrayOf(STRING_LITERAL_KEY)
         val NUMBER_LITERAL_KEYS = arrayOf(NUMBER_LITERAL_KEY)
         val BAD_CHARACTER_KEYS = arrayOf(BAD_CHARACTER_KEY)
+        val ANNOTATION_KEYS = arrayOf(ANNOTATION_KEY)
         val EMPTY_KEYS = arrayOf<TextAttributesKey>()
     }
 }

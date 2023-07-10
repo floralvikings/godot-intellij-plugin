@@ -41,10 +41,8 @@
         SELF = "self"
         SIGNAL = "signal"
         STATIC = "static"
-        SETGET = "setget"
         SET = "set"
         GET = "get"
-        YIELD = "yield"
         TRUE = "true"
         FALSE = "false"
         NULL = "null"
@@ -58,48 +56,38 @@
         IN = "in"
         IS = "is"
         AS = "as"
-        TOOL = "tool"
-        MASTER = "master"
-        PUPPET = "puppet"
-        REMOTE = "remote"
-        SYNC = "SYNC"
-        MASTERSYNC = "mastersync"
-        PUPPETSYNC = "puppetsync"
-        REMOTESYNC = "remotesync"
         //endregion
 
         //region annotations
-        AT_ONREADY = "@onready"
-        AT_TOOL = "@tool"
-
         AT_EXPORT = "@export"
-        AT_EXPORT_ENUM = "@export_enum"
-        AT_EXPORT_FILE = "@export_file"
+        AT_EXPORT_CATEGORY = "@export_category"
+        AT_EXPORT_COLOR_NO_ALPHA = "@export_color_no_alpha"
         AT_EXPORT_DIR = "@export_dir"
-        AT_EXPORT_GLOBAL_FILE = "@export_global_file"
+        AT_EXPORT_ENUM = "@export_enum"
+        AT_EXPORT_EXP_EASING = "@export_exp_easing"
+        AT_EXPORT_FILE = "@export_file"
+        AT_EXPORT_FLAGS = "@export_flags"
+        AT_EXPORT_FLAGS_2D_NAVIGATION = "@export_flags_2d_navigation"
+        AT_EXPORT_FLAGS_2D_PHYSICS = "@export_flags_2d_physics"
+        AT_EXPORT_FLAGS_2D_RENDER = "@export_flags_2d_render"
+        AT_EXPORT_FLAGS_3D_NAVIGATION = "@export_flags_3d_navigation"
+        AT_EXPORT_FLAGS_3D_PHYSICS = "@export_flags_3d_physics"
+        AT_EXPORT_FLAGS_3D_RENDER = "@export_flags_3d_render"
+        AT_EXPORT_FLAGS_AVOIDANCE = "@export_flags_avoidance"
         AT_EXPORT_GLOBAL_DIR = "@export_global_dir"
+        AT_EXPORT_GLOBAL_FILE = "@export_global_file"
+        AT_EXPORT_GROUP = "@export_group"
         AT_EXPORT_MULTILINE = "@export_multiline"
+        AT_EXPORT_NODE_PATH = "@export_node_path"
         AT_EXPORT_PLACEHOLDER = "@export_placeholder"
         AT_EXPORT_RANGE = "@export_range"
-        AT_EXPORT_EXP_EASING = "@export_exp_easing"
-        AT_EXPORT_COLOR_NO_ALPHA = "@export_color_no_alpha"
-        AT_EXPORT_NODE_PATH = "@export_node_path"
-        AT_EXPORT_FLAGS = "@export_flags"
-        AT_EXPORT_FLAGS_2D_RENDER = "@export_flags_2d_render"
-        AT_EXPORT_FLAGS_2D_PHYSICS = "@export_flags_2d_physics"
-        AT_EXPORT_FLAGS_2D_NAVIGATION = "@export_flags_2d_navigation"
-        AT_EXPORT_FLAGS_3D_RENDER = "@export_flags_3d_render"
-        AT_EXPORT_FLAGS_3D_PHYSICS = "@export_flags_3d_physics"
-        AT_EXPORT_FLAGS_3D_NAVIGATION = "@export_flags_3d_navigation"
-
+        AT_EXPORT_SUBGROUP = "@export_subgroup"
         AT_ICON = "@icon"
+        AT_ONREADY = "@onready"
         AT_RPC = "@rpc"
-        AT_MASTER = "@master"
-        AT_PUPPET = "@puppet"
-        AT_REMOTE = "@remote"
-        AT_MASTERSYNC = "@mastersync"
-        AT_PUPPETSYNC = "@puppetsync"
-        AT_REMOTESYNC = "@remotesync"
+        AT_STATIC_UNLOAD = "@static_unload"
+        AT_TOOL = "@tool"
+        AT_WARNING_IGNORE = "@warning_ignore"
         //endregion
 
         //region operators
@@ -210,24 +198,29 @@ block_set ::= <<indented (SET L_PAREN function_parameter R_PAREN COLON LINE_BREA
 
 var_export ::= export_annotation call?
 private export_annotation ::= AT_EXPORT
-    | AT_EXPORT_ENUM
-    | AT_EXPORT_FILE
+    | AT_EXPORT_CATEGORY
+    | AT_EXPORT_COLOR_NO_ALPHA
     | AT_EXPORT_DIR
-    | AT_EXPORT_GLOBAL_FILE
+    | AT_EXPORT_ENUM
+    | AT_EXPORT_EXP_EASING
+    | AT_EXPORT_FILE
+    | AT_EXPORT_FLAGS
+    | AT_EXPORT_FLAGS_2D_NAVIGATION
+    | AT_EXPORT_FLAGS_2D_PHYSICS
+    | AT_EXPORT_FLAGS_2D_RENDER
+    | AT_EXPORT_FLAGS_3D_NAVIGATION
+    | AT_EXPORT_FLAGS_3D_PHYSICS
+    | AT_EXPORT_FLAGS_3D_RENDER
+    | AT_EXPORT_FLAGS_AVOIDANCE
     | AT_EXPORT_GLOBAL_DIR
+    | AT_EXPORT_GLOBAL_FILE
+    | AT_EXPORT_GROUP
     | AT_EXPORT_MULTILINE
+    | AT_EXPORT_NODE_PATH
     | AT_EXPORT_PLACEHOLDER
     | AT_EXPORT_RANGE
-    | AT_EXPORT_EXP_EASING
-    | AT_EXPORT_COLOR_NO_ALPHA
-    | AT_EXPORT_NODE_PATH
-    | AT_EXPORT_FLAGS
-    | AT_EXPORT_FLAGS_2D_RENDER
-    | AT_EXPORT_FLAGS_2D_PHYSICS
-    | AT_EXPORT_FLAGS_2D_NAVIGATION
-    | AT_EXPORT_FLAGS_3D_RENDER
-    | AT_EXPORT_FLAGS_3D_PHYSICS
-    | AT_EXPORT_FLAGS_3D_NAVIGATION
+    | AT_EXPORT_SUBGROUP
+
 set_get ::= set_or_get [COMMA set_or_get]
 
 set_or_get ::= (SET | GET) EQUAL id

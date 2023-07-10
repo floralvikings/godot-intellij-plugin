@@ -64,10 +64,8 @@ SINGLE_QUOTED_STRING='([^'\\]|\\.)*'
   "self"                              { return SELF; }
   "signal"                            { return SIGNAL; }
   "static"                            { return STATIC; }
-  "setget"                            { return SETGET; }
   "set"                               { return SET; }
   "get"                               { return GET; }
-  "yield"                             { return YIELD; }
   "true"                              { return TRUE; }
   "false"                             { return FALSE; }
   "null"                              { return NULL; }
@@ -81,43 +79,35 @@ SINGLE_QUOTED_STRING='([^'\\]|\\.)*'
   "in"                                { return IN; }
   "is"                                { return IS; }
   "as"                                { return AS; }
-  "tool"                              { return TOOL; }
-  "master"                            { return MASTER; }
-  "puppet"                            { return PUPPET; }
-  "remote"                            { return REMOTE; }
-  "SYNC"                              { return SYNC; }
-  "mastersync"                        { return MASTERSYNC; }
-  "puppetsync"                        { return PUPPETSYNC; }
-  "remotesync"                        { return REMOTESYNC; }
-  "@onready"                          { return AT_ONREADY; }
-  "@tool"                             { return AT_TOOL; }
   "@export"                           { return AT_EXPORT; }
-  "@export_enum"                      { return AT_EXPORT_ENUM; }
-  "@export_file"                      { return AT_EXPORT_FILE; }
+  "@export_category"                  { return AT_EXPORT_CATEGORY; }
+  "@export_color_no_alpha"            { return AT_EXPORT_COLOR_NO_ALPHA; }
   "@export_dir"                       { return AT_EXPORT_DIR; }
-  "@export_global_file"               { return AT_EXPORT_GLOBAL_FILE; }
+  "@export_enum"                      { return AT_EXPORT_ENUM; }
+  "@export_exp_easing"                { return AT_EXPORT_EXP_EASING; }
+  "@export_file"                      { return AT_EXPORT_FILE; }
+  "@export_flags"                     { return AT_EXPORT_FLAGS; }
+  "@export_flags_2d_navigation"       { return AT_EXPORT_FLAGS_2D_NAVIGATION; }
+  "@export_flags_2d_physics"          { return AT_EXPORT_FLAGS_2D_PHYSICS; }
+  "@export_flags_2d_render"           { return AT_EXPORT_FLAGS_2D_RENDER; }
+  "@export_flags_3d_navigation"       { return AT_EXPORT_FLAGS_3D_NAVIGATION; }
+  "@export_flags_3d_physics"          { return AT_EXPORT_FLAGS_3D_PHYSICS; }
+  "@export_flags_3d_render"           { return AT_EXPORT_FLAGS_3D_RENDER; }
+  "@export_flags_avoidance"           { return AT_EXPORT_FLAGS_AVOIDANCE; }
   "@export_global_dir"                { return AT_EXPORT_GLOBAL_DIR; }
+  "@export_global_file"               { return AT_EXPORT_GLOBAL_FILE; }
+  "@export_group"                     { return AT_EXPORT_GROUP; }
   "@export_multiline"                 { return AT_EXPORT_MULTILINE; }
+  "@export_node_path"                 { return AT_EXPORT_NODE_PATH; }
   "@export_placeholder"               { return AT_EXPORT_PLACEHOLDER; }
   "@export_range"                     { return AT_EXPORT_RANGE; }
-  "@export_exp_easing"                { return AT_EXPORT_EXP_EASING; }
-  "@export_color_no_alpha"            { return AT_EXPORT_COLOR_NO_ALPHA; }
-  "@export_node_path"                 { return AT_EXPORT_NODE_PATH; }
-  "@export_flags"                     { return AT_EXPORT_FLAGS; }
-  "@export_flags_2d_render"           { return AT_EXPORT_FLAGS_2D_RENDER; }
-  "@export_flags_2d_physics"          { return AT_EXPORT_FLAGS_2D_PHYSICS; }
-  "@export_flags_2d_navigation"       { return AT_EXPORT_FLAGS_2D_NAVIGATION; }
-  "@export_flags_3d_render"           { return AT_EXPORT_FLAGS_3D_RENDER; }
-  "@export_flags_3d_physics"          { return AT_EXPORT_FLAGS_3D_PHYSICS; }
-  "@export_flags_3d_navigation"       { return AT_EXPORT_FLAGS_3D_NAVIGATION; }
+  "@export_subgroup"                  { return AT_EXPORT_SUBGROUP; }
   "@icon"                             { return AT_ICON; }
+  "@onready"                          { return AT_ONREADY; }
   "@rpc"                              { return AT_RPC; }
-  "@master"                           { return AT_MASTER; }
-  "@puppet"                           { return AT_PUPPET; }
-  "@remote"                           { return AT_REMOTE; }
-  "@mastersync"                       { return AT_MASTERSYNC; }
-  "@puppetsync"                       { return AT_PUPPETSYNC; }
-  "@remotesync"                       { return AT_REMOTESYNC; }
+  "@static_unload"                    { return AT_STATIC_UNLOAD; }
+  "@tool"                             { return AT_TOOL; }
+  "@warning_ignore"                   { return AT_WARNING_IGNORE; }
   "<"                                 { return LESS; }
   "<="                                { return LESS_EQUAL; }
   ">"                                 { return GREATER; }

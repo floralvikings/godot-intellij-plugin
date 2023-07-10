@@ -93,23 +93,25 @@ fun generateParserTask(
 fun generateLexerTask(
     lexerPath: String,
     targetClassName: String,
+    targetDirPath: String,
     infix: String,
     suffix: String = "",
     config: GenerateLexerTask.() -> Unit = {}
 ) =
     task<GenerateLexerTask>("generate${infix.capitalized()}Lexer${suffix.capitalized()}") {
         sourceFile.set(file(lexerPath))
-        targetDir.set("src/main/gen")
+        targetDir.set(targetDirPath)
         targetClass.set(targetClassName)
         purgeOldFiles = true
         config()
     }
 
-val gdscriptGrammarPath = "src/main/resources/com/github/floralvikings/godotea/language/gdscript/GDScript.bnf"
-val gdscriptLexerPath   = "src/main/resources/com/github/floralvikings/godotea/language/gdscript/_GDScriptLexer.flex"
+val gdscriptGrammarPath = "src/main/resources/grammars/GDScript.bnf"
+val gdscriptLexerPath   = "src/main/resources/grammars/_GDScriptLexer.flex"
 val gdScriptParserPath  = "com/github/floralvikings/godotea/language/gdscript/parser/GDScriptParser.java"
 val gdScriptPsiRoot     = "com/github/floralvikings/godotea/language/gdscript/psi"
 val gdScriptLexerTargetClass = "com.github.floralvikings.godotea.language.gdscript._GDScriptLexer"
+val gdScriptLexerTargetDir = "src/main/gen/"
 
 val generateGDScriptParser = generateParserTask(
     gdscriptGrammarPath,
@@ -125,6 +127,7 @@ val generateGDScriptParser = generateParserTask(
 val generateGDScriptLexer = generateLexerTask(
     gdscriptLexerPath,
     gdScriptLexerTargetClass,
+    gdScriptLexerTargetDir,
     "GDScript"
 )
 
@@ -206,7 +209,7 @@ tasks {
 
     generateLexer {
         sourceFile.set(file(gdscriptLexerPath))
-        targetDir.set("src/main/gen/")
+        targetDir.set(gdScriptLexerTargetDir)
         targetClass.set(gdScriptLexerTargetClass)
     }
 
