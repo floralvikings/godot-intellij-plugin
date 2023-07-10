@@ -8,6 +8,7 @@
     psiImplClassSuffix = "Impl"
     psiPackage = "com.github.floralvikings.godotea.language.gdscript.psi"
     psiImplPackage = "com.github.floralvikings.godotea.language.gdscript.psi.impl"
+    psiImplUtilClass = "com.github.floralvikings.godotea.language.gdscript.psi.GDScriptImplPsiUtil"
 
     elementTypeHolderClass = "com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes"
     elementTypeClass = "com.github.floralvikings.godotea.language.gdscript.psi.GDScriptElementType"
@@ -182,7 +183,7 @@ private class_statement ::= class_var_declaration
 top_level_annotation ::= (AT_ICON call) | AT_TOOL
 
 extends_declaration ::= EXTENDS (type | string)
-class_name_declaration ::= CLASS_NAME id
+class_name_declaration ::= CLASS_NAME id {methods=[getClassName]}
 
 class_var_declaration ::= ((var_export LINE_BREAK*) | (AT_ONREADY LINE_BREAK*))* VAR id (
     (COLON(type(
@@ -241,7 +242,7 @@ private function_parameter_list ::= function_parameter? LINE_BREAK* (COMMA LINE_
 function_parameter ::= id (COLON type)? ((EQUAL | INFER) expression)?
 function_return_type ::= ARROW type
 
-inner_class_declaration ::= CLASS id extends_declaration? COLON inner_class_body
+inner_class_declaration ::= CLASS id extends_declaration? COLON inner_class_body {methods=[getClassName]}
 private inner_class_body ::= LINE_BREAK*  class_block
 
 

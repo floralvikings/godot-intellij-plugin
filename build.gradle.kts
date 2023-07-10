@@ -1,8 +1,5 @@
-import org.gradle.configurationcache.extensions.capitalized
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
-import org.jetbrains.grammarkit.tasks.GenerateLexerTask
-import org.jetbrains.grammarkit.tasks.GenerateParserTask
 
 fun properties(key: String) = providers.gradleProperty(key)
 fun environment(key: String) = providers.environmentVariable(key)
@@ -14,7 +11,6 @@ plugins {
     alias(libs.plugins.changelog) // Gradle Changelog Plugin
     alias(libs.plugins.qodana) // Gradle Qodana Plugin
     alias(libs.plugins.kover) // Gradle Kover Plugin
-    id("org.jetbrains.grammarkit") version "2022.3.1"
 }
 
 group = properties("pluginGroup").get()
@@ -72,72 +68,6 @@ koverReport {
         }
     }
 }
-
-fun generateParserTask(
-    bnfPath: String,
-    parserPath: String,
-    psiRootPath: String,
-    infix: String,
-    suffix: String = "",
-    config: GenerateParserTask.() -> Unit = {}
-) =
-    task<GenerateParserTask>("generate${infix.capitalized()}Parser${suffix.capitalized()}") {
-        sourceFile.set(file(bnfPath))
-        targetRoot.set("src/main/gen")
-        pathToParser.set(parserPath)
-        pathToPsiRoot.set(psiRootPath)
-        purgeOldFiles = true
-        config()
-    }
-
-fun generateLexerTask(
-    lexerPath: String,
-    targetClassName: String,
-    targetDirPath: String,
-    infix: String,
-    suffix: String = "",
-    config: GenerateLexerTask.() -> Unit = {}
-) =
-    task<GenerateLexerTask>("generate${infix.capitalized()}Lexer${suffix.capitalized()}") {
-        sourceFile.set(file(lexerPath))
-        targetDir.set(targetDirPath)
-        targetClass.set(targetClassName)
-        purgeOldFiles = true
-        config()
-    }
-
-val gdscriptGrammarPath = "src/main/resources/grammars/GDScript.bnf"
-val gdscriptLexerPath   = "src/main/resources/grammars/_GDScriptLexer.flex"
-val gdScriptParserPath  = "com/github/floralvikings/godotea/language/gdscript/parser/GDScriptParser.java"
-val gdScriptPsiRoot     = "com/github/floralvikings/godotea/language/gdscript/psi"
-val gdScriptLexerTargetClass = "com.github.floralvikings.godotea.language.gdscript._GDScriptLexer"
-val gdScriptLexerTargetDir = "src/main/gen/"
-
-val generateGDScriptParser = generateParserTask(
-    gdscriptGrammarPath,
-    gdScriptParserPath,
-    gdScriptPsiRoot,
-    "GDScript"
-) {
-    val compileKotlin = tasks.named("compileKotlin")
-    dependsOn(compileKotlin)
-    classpath(compileKotlin.get().outputs)
-}
-
-val generateGDScriptLexer = generateLexerTask(
-    gdscriptLexerPath,
-    gdScriptLexerTargetClass,
-    gdScriptLexerTargetDir,
-    "GDScript"
-)
-
-val generateGDScriptParserInitial = generateParserTask(
-    gdscriptGrammarPath,
-    gdScriptParserPath,
-    gdScriptPsiRoot,
-    "GDScript",
-    "initial"
-)
 
 tasks {
     wrapper {
@@ -200,24 +130,9 @@ tasks {
         channels = properties("pluginVersion").map { listOf(it.split('-').getOrElse(1) { "default" }.split('.').first()) }
     }
 
-    generateParser {
-        sourceFile.set(file(gdscriptGrammarPath))
-        targetRoot.set("src/main/gen")
-        pathToParser.set(gdScriptParserPath)
-        pathToPsiRoot.set(gdScriptPsiRoot)
-    }
-
-    generateLexer {
-        sourceFile.set(file(gdscriptLexerPath))
-        targetDir.set(gdScriptLexerTargetDir)
-        targetClass.set(gdScriptLexerTargetClass)
-    }
-
     compileKotlin {
-        dependsOn(generateGDScriptLexer, generateGDScriptParserInitial)
     }
 
     compileJava {
-        dependsOn(generateGDScriptParser)
     }
 }

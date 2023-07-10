@@ -1,4 +1,4 @@
-package com.github.floralvikings.godotea.language.gdscript;
+package grammars;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
