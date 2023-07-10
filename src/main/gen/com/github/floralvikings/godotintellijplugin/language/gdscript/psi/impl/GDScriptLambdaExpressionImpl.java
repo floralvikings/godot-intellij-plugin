@@ -28,9 +28,87 @@ public class GDScriptLambdaExpressionImpl extends GDScriptExpressionImpl impleme
   }
 
   @Override
-  @NotNull
+  @Nullable
+  public GDScriptAssertStatement getAssertStatement() {
+    return findChildByClass(GDScriptAssertStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public GDScriptAssignStatement getAssignStatement() {
+    return findChildByClass(GDScriptAssignStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public GDScriptAwaitStatement getAwaitStatement() {
+    return findChildByClass(GDScriptAwaitStatement.class);
+  }
+
+  @Override
+  @Nullable
   public GDScriptBlock getBlock() {
-    return findNotNullChildByClass(GDScriptBlock.class);
+    return findChildByClass(GDScriptBlock.class);
+  }
+
+  @Override
+  @Nullable
+  public GDScriptBreakStatement getBreakStatement() {
+    return findChildByClass(GDScriptBreakStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public GDScriptConstStatement getConstStatement() {
+    return findChildByClass(GDScriptConstStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public GDScriptContinueStatement getContinueStatement() {
+    return findChildByClass(GDScriptContinueStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public GDScriptExpressionStatement getExpressionStatement() {
+    return findChildByClass(GDScriptExpressionStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public GDScriptForStatement getForStatement() {
+    return findChildByClass(GDScriptForStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public GDScriptIfStatement getIfStatement() {
+    return findChildByClass(GDScriptIfStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public GDScriptMatchStatement getMatchStatement() {
+    return findChildByClass(GDScriptMatchStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public GDScriptReturnStatement getReturnStatement() {
+    return findChildByClass(GDScriptReturnStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public GDScriptVarStatement getVarStatement() {
+    return findChildByClass(GDScriptVarStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public GDScriptWhileStatement getWhileStatement() {
+    return findChildByClass(GDScriptWhileStatement.class);
   }
 
 }

@@ -7,7 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface GDScriptExtendsDeclaration extends PsiElement {
 
-  @NotNull
+  @Nullable
+  GDScriptString getString();
+
+  @Nullable
   GDScriptType getType();
 
 }

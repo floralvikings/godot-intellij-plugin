@@ -64,9 +64,9 @@ public class GDScriptClassVarDeclarationImpl extends ASTWrapperPsiElement implem
   }
 
   @Override
-  @Nullable
-  public GDScriptVarExport getVarExport() {
-    return findChildByClass(GDScriptVarExport.class);
+  @NotNull
+  public List<GDScriptVarExport> getVarExportList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GDScriptVarExport.class);
   }
 
 }

@@ -28,9 +28,15 @@ public class GDScriptExtendsDeclarationImpl extends ASTWrapperPsiElement impleme
   }
 
   @Override
-  @NotNull
+  @Nullable
+  public GDScriptString getString() {
+    return findChildByClass(GDScriptString.class);
+  }
+
+  @Override
+  @Nullable
   public GDScriptType getType() {
-    return findNotNullChildByClass(GDScriptType.class);
+    return findChildByClass(GDScriptType.class);
   }
 
 }

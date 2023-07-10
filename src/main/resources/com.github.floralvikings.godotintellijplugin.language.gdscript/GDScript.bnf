@@ -193,10 +193,10 @@ private class_statement ::= class_var_declaration
 
 top_level_annotation ::= (AT_ICON call) | AT_TOOL
 
-extends_declaration ::= EXTENDS type
+extends_declaration ::= EXTENDS (type | string)
 class_name_declaration ::= CLASS_NAME id
 
-class_var_declaration ::= [var_export LINE_BREAK*] [AT_ONREADY LINE_BREAK*] VAR id (
+class_var_declaration ::= ((var_export LINE_BREAK*) | (AT_ONREADY LINE_BREAK*))* VAR id (
     (COLON(type(
         ((LINE_BREAK (block_get|block_set))+)
         | ([(EQUAL|INFER) expression])
@@ -388,7 +388,7 @@ lua_dictionary_entry ::= (key EQUAL expression) | DOT_DOT
 invocation_expression ::= id? call
 private call ::= L_PAREN LINE_BREAK* expression? LINE_BREAK* (COMMA LINE_BREAK* expression LINE_BREAK*)* R_PAREN
 
-lambda_expression ::= FUNC id? L_PAREN id? (COMMA id)* R_PAREN COLON block
+lambda_expression ::= FUNC id? L_PAREN id? (COMMA id)* R_PAREN COLON (inline_statement | function_body)
 
 key ::= expression
 type ::= array_type | nested_type
@@ -399,4 +399,5 @@ id ::= IDENTIFIER | INT | FLOAT | BOOL | VOID | NODE_PATH | SUPER
 string ::= SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING
 private multiline_string ::= MULTILINE_SINGLE_QUOTED_STRING | MULTILINE_DOUBLE_QUOTED_STRING
 
+// TODO Handle line continuation; currently doesn't work
 private end_of_statement ::= (LINE_BREAK |  <<eof>> | SEMICOLON+)

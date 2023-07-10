@@ -25,7 +25,7 @@ public interface GDScriptClassVarDeclaration extends PsiElement {
   @Nullable
   GDScriptType getType();
 
-  @Nullable
-  GDScriptVarExport getVarExport();
+  @NotNull
+  List<GDScriptVarExport> getVarExportList();
 
 }
