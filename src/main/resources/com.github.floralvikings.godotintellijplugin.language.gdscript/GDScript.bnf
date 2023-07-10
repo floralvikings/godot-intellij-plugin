@@ -37,6 +37,7 @@
         CLASS = "class"
         CLASS_NAME = "class_name"
         EXTENDS = "extends"
+        SUPER = "super"
         SELF = "self"
         SIGNAL = "signal"
         STATIC = "static"
@@ -166,7 +167,8 @@
     ]
 }
 
-root ::= (top_level_annotation end_of_statement?)* ((class_name_declaration | extends_declaration) end_of_statement)* (LINE_BREAK | (top_level_statement end_of_statement))*
+root ::= LINE_BREAK* (top_level_annotation end_of_statement?)*
+    LINE_BREAK* ((class_name_declaration | extends_declaration) end_of_statement LINE_BREAK*)* (LINE_BREAK | (top_level_statement end_of_statement))*
 
 private meta listOf ::= <<p1>> (<<p2>> <<p1>>)*
 
@@ -181,6 +183,13 @@ private top_level_statement ::= class_var_declaration
     | enum_declaration
     | function_declaration
     | inner_class_declaration
+
+private class_statement ::= class_var_declaration
+    | class_const_declaration
+    | signal_declaration
+    | enum_declaration
+    | function_declaration
+    | extends_declaration
 
 top_level_annotation ::= (AT_ICON call) | AT_TOOL
 
@@ -239,11 +248,17 @@ private function_parameter_list ::= function_parameter? LINE_BREAK* (COMMA LINE_
 function_parameter ::= id (COLON type)? ((EQUAL | INFER) expression)?
 function_return_type ::= ARROW type
 
-inner_class_declaration ::= CLASS IDENTIFIER [ extends_declaration ] COLON LINE_BREAK+ [extends_declaration end_of_statement] <<indented (LINE_BREAK | (top_level_statement end_of_statement))*>>
+inner_class_declaration ::= CLASS id extends_declaration? COLON inner_class_body
+private inner_class_body ::= LINE_BREAK*  class_block
 
-block ::= <<indented <<listOf script_statement (end_of_statement ((&INDNONE LINE_BREAK+) | &INDEQ))>>>>
+
+block        ::= <<indented <<listOf script_statement end_of_block_statement>>>>
+class_block  ::= <<indented <<listOf (&INDEQ class_statement)  end_of_block_statement>>>>
+
+private end_of_block_statement ::= end_of_statement (((&INDNONE | &INDEQ) LINE_BREAK+)+ | (&INDEQ))
 
 private script_statement ::= var_statement
+    | const_statement
     | if_statement
     | for_statement
     | while_statement
@@ -307,9 +322,11 @@ assign_operator ::= EQUAL
     | INFER
 
 var_statement ::= VAR id (COLON type)? ((EQUAL | INFER) AWAIT? expression)?
+const_statement ::= CONST id (COLON type)? (EQUAL | INFER) expression
 expression_statement ::= expression
 assert_statement ::= ASSERT L_PAREN expression [COMMA string] R_PAREN
 await_statement ::= AWAIT expression
+
 
 // region expression
 expression ::= (operand | operator)+
@@ -378,7 +395,7 @@ type ::= array_type | nested_type
 private array_type ::= id (L_BRACKET id R_BRACKET)
 private nested_type ::= id (DOT id)*
 
-id ::= IDENTIFIER | INT | FLOAT | BOOL | VOID | NODE_PATH
+id ::= IDENTIFIER | INT | FLOAT | BOOL | VOID | NODE_PATH | SUPER
 string ::= SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING
 private multiline_string ::= MULTILINE_SINGLE_QUOTED_STRING | MULTILINE_DOUBLE_QUOTED_STRING
 

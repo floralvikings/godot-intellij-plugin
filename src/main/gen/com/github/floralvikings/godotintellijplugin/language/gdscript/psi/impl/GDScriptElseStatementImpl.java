@@ -59,6 +59,12 @@ public class GDScriptElseStatementImpl extends ASTWrapperPsiElement implements G
 
   @Override
   @Nullable
+  public GDScriptConstStatement getConstStatement() {
+    return findChildByClass(GDScriptConstStatement.class);
+  }
+
+  @Override
+  @Nullable
   public GDScriptContinueStatement getContinueStatement() {
     return findChildByClass(GDScriptContinueStatement.class);
   }

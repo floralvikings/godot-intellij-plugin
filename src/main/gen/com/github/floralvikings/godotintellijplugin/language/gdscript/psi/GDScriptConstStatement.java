@@ -5,15 +5,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GDScriptInnerClassDeclaration extends PsiElement {
+public interface GDScriptConstStatement extends PsiElement {
 
   @NotNull
-  GDScriptClassBlock getClassBlock();
-
-  @Nullable
-  GDScriptExtendsDeclaration getExtendsDeclaration();
+  GDScriptExpression getExpression();
 
   @NotNull
   GDScriptId getId();
+
+  @Nullable
+  GDScriptType getType();
 
 }

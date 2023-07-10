@@ -59,6 +59,12 @@ public class GDScriptMatchBlockImpl extends ASTWrapperPsiElement implements GDSc
 
   @Override
   @NotNull
+  public List<GDScriptConstStatement> getConstStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GDScriptConstStatement.class);
+  }
+
+  @Override
+  @NotNull
   public List<GDScriptContinueStatement> getContinueStatementList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GDScriptContinueStatement.class);
   }

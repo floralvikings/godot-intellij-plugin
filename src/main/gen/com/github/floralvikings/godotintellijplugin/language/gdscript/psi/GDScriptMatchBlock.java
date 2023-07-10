@@ -23,6 +23,9 @@ public interface GDScriptMatchBlock extends PsiElement {
   List<GDScriptBreakStatement> getBreakStatementList();
 
   @NotNull
+  List<GDScriptConstStatement> getConstStatementList();
+
+  @NotNull
   List<GDScriptContinueStatement> getContinueStatementList();
 
   @NotNull

@@ -20,9 +20,11 @@ public interface GDScriptTypes {
   IElementType BLOCK_GET = new GDScriptElementType("BLOCK_GET");
   IElementType BLOCK_SET = new GDScriptElementType("BLOCK_SET");
   IElementType BREAK_STATEMENT = new GDScriptElementType("BREAK_STATEMENT");
+  IElementType CLASS_BLOCK = new GDScriptElementType("CLASS_BLOCK");
   IElementType CLASS_CONST_DECLARATION = new GDScriptElementType("CLASS_CONST_DECLARATION");
   IElementType CLASS_NAME_DECLARATION = new GDScriptElementType("CLASS_NAME_DECLARATION");
   IElementType CLASS_VAR_DECLARATION = new GDScriptElementType("CLASS_VAR_DECLARATION");
+  IElementType CONST_STATEMENT = new GDScriptElementType("CONST_STATEMENT");
   IElementType CONTINUE_STATEMENT = new GDScriptElementType("CONTINUE_STATEMENT");
   IElementType DICTIONARY_ENTRY = new GDScriptElementType("DICTIONARY_ENTRY");
   IElementType DICTIONARY_EXPRESSION = new GDScriptElementType("DICTIONARY_EXPRESSION");
@@ -187,6 +189,7 @@ public interface GDScriptTypes {
   IElementType STAR = new GDScriptTokenType("*");
   IElementType STAR_EQUAL = new GDScriptTokenType("*=");
   IElementType STATIC = new GDScriptTokenType("static");
+  IElementType SUPER = new GDScriptTokenType("super");
   IElementType SYNC = new GDScriptTokenType("SYNC");
   IElementType TILDE = new GDScriptTokenType("~");
   IElementType TOOL = new GDScriptTokenType("tool");
@@ -236,6 +239,9 @@ public interface GDScriptTypes {
       else if (type == BREAK_STATEMENT) {
         return new GDScriptBreakStatementImpl(node);
       }
+      else if (type == CLASS_BLOCK) {
+        return new GDScriptClassBlockImpl(node);
+      }
       else if (type == CLASS_CONST_DECLARATION) {
         return new GDScriptClassConstDeclarationImpl(node);
       }
@@ -244,6 +250,9 @@ public interface GDScriptTypes {
       }
       else if (type == CLASS_VAR_DECLARATION) {
         return new GDScriptClassVarDeclarationImpl(node);
+      }
+      else if (type == CONST_STATEMENT) {
+        return new GDScriptConstStatementImpl(node);
       }
       else if (type == CONTINUE_STATEMENT) {
         return new GDScriptContinueStatementImpl(node);

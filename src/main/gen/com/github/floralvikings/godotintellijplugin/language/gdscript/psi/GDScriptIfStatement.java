@@ -23,6 +23,9 @@ public interface GDScriptIfStatement extends PsiElement {
   GDScriptBreakStatement getBreakStatement();
 
   @Nullable
+  GDScriptConstStatement getConstStatement();
+
+  @Nullable
   GDScriptContinueStatement getContinueStatement();
 
   @NotNull

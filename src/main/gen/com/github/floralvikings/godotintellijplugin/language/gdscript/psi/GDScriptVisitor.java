@@ -55,6 +55,10 @@ public class GDScriptVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitClassBlock(@NotNull GDScriptClassBlock o) {
+    visitPsiElement(o);
+  }
+
   public void visitClassConstDeclaration(@NotNull GDScriptClassConstDeclaration o) {
     visitPsiElement(o);
   }
@@ -64,6 +68,10 @@ public class GDScriptVisitor extends PsiElementVisitor {
   }
 
   public void visitClassVarDeclaration(@NotNull GDScriptClassVarDeclaration o) {
+    visitPsiElement(o);
+  }
+
+  public void visitConstStatement(@NotNull GDScriptConstStatement o) {
     visitPsiElement(o);
   }
 

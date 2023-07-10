@@ -410,80 +410,12 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // <<indented <<listOf script_statement (end_of_statement ((&INDNONE LINE_BREAK+) | &INDEQ))>>>>
+  // <<indented <<listOf script_statement end_of_block_statement>>>>
   public static boolean block(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "block")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, BLOCK, "<block>");
     r = indented(b, l + 1, block_0_0_parser_);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // end_of_statement ((&INDNONE LINE_BREAK+) | &INDEQ)
-  private static boolean block_0_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_0_0_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = end_of_statement(b, l + 1);
-    r = r && block_0_0_1_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (&INDNONE LINE_BREAK+) | &INDEQ
-  private static boolean block_0_0_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_0_0_1_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = block_0_0_1_1_0(b, l + 1);
-    if (!r) r = block_0_0_1_1_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // &INDNONE LINE_BREAK+
-  private static boolean block_0_0_1_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_0_0_1_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = block_0_0_1_1_0_0(b, l + 1);
-    r = r && block_0_0_1_1_0_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // &INDNONE
-  private static boolean block_0_0_1_1_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_0_0_1_1_0_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _AND_);
-    r = indNone(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // LINE_BREAK+
-  private static boolean block_0_0_1_1_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_0_0_1_1_0_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, LINE_BREAK);
-    while (r) {
-      int c = current_position_(b);
-      if (!consumeToken(b, LINE_BREAK)) break;
-      if (!empty_element_parsed_guard_(b, "block_0_0_1_1_0_1", c)) break;
-    }
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // &INDEQ
-  private static boolean block_0_0_1_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_0_0_1_1_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _AND_);
-    r = indEq(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -639,6 +571,38 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // <<indented <<listOf (&INDEQ class_statement)  end_of_block_statement>>>>
+  public static boolean class_block(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "class_block")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, CLASS_BLOCK, "<class block>");
+    r = indented(b, l + 1, class_block_0_0_parser_);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // &INDEQ class_statement
+  private static boolean class_block_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "class_block_0_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = class_block_0_0_0_0(b, l + 1);
+    r = r && class_statement(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // &INDEQ
+  private static boolean class_block_0_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "class_block_0_0_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _AND_);
+    r = indEq(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
   // CONST id [COLON type] EQUAL expression
   public static boolean class_const_declaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "class_const_declaration")) return false;
@@ -682,6 +646,25 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, CLASS_NAME);
     r = r && id(b, l + 1);
     exit_section_(b, m, CLASS_NAME_DECLARATION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // class_var_declaration
+  //     | class_const_declaration
+  //     | signal_declaration
+  //     | enum_declaration
+  //     | function_declaration
+  //     | extends_declaration
+  static boolean class_statement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "class_statement")) return false;
+    boolean r;
+    r = class_var_declaration(b, l + 1);
+    if (!r) r = class_const_declaration(b, l + 1);
+    if (!r) r = signal_declaration(b, l + 1);
+    if (!r) r = enum_declaration(b, l + 1);
+    if (!r) r = function_declaration(b, l + 1);
+    if (!r) r = extends_declaration(b, l + 1);
     return r;
   }
 
@@ -916,6 +899,49 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   // EQUAL | INFER
   private static boolean class_var_declaration_4_2_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "class_var_declaration_4_2_0_0")) return false;
+    boolean r;
+    r = consumeToken(b, EQUAL);
+    if (!r) r = consumeToken(b, INFER);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // CONST id (COLON type)? (EQUAL | INFER) expression
+  public static boolean const_statement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "const_statement")) return false;
+    if (!nextTokenIs(b, CONST)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, CONST);
+    r = r && id(b, l + 1);
+    r = r && const_statement_2(b, l + 1);
+    r = r && const_statement_3(b, l + 1);
+    r = r && expression(b, l + 1);
+    exit_section_(b, m, CONST_STATEMENT, r);
+    return r;
+  }
+
+  // (COLON type)?
+  private static boolean const_statement_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "const_statement_2")) return false;
+    const_statement_2_0(b, l + 1);
+    return true;
+  }
+
+  // COLON type
+  private static boolean const_statement_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "const_statement_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COLON);
+    r = r && type(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // EQUAL | INFER
+  private static boolean const_statement_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "const_statement_3")) return false;
     boolean r;
     r = consumeToken(b, EQUAL);
     if (!r) r = consumeToken(b, INFER);
@@ -1227,6 +1253,111 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     r = consumeTokens(b, 0, ELSE, COLON);
     r = r && statement_or_block(b, l + 1);
     exit_section_(b, m, ELSE_STATEMENT, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // end_of_statement (((&INDNONE | &INDEQ) LINE_BREAK+)+ | (&INDEQ))
+  static boolean end_of_block_statement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "end_of_block_statement")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = end_of_statement(b, l + 1);
+    r = r && end_of_block_statement_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ((&INDNONE | &INDEQ) LINE_BREAK+)+ | (&INDEQ)
+  private static boolean end_of_block_statement_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "end_of_block_statement_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = end_of_block_statement_1_0(b, l + 1);
+    if (!r) r = end_of_block_statement_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ((&INDNONE | &INDEQ) LINE_BREAK+)+
+  private static boolean end_of_block_statement_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "end_of_block_statement_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = end_of_block_statement_1_0_0(b, l + 1);
+    while (r) {
+      int c = current_position_(b);
+      if (!end_of_block_statement_1_0_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "end_of_block_statement_1_0", c)) break;
+    }
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (&INDNONE | &INDEQ) LINE_BREAK+
+  private static boolean end_of_block_statement_1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "end_of_block_statement_1_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = end_of_block_statement_1_0_0_0(b, l + 1);
+    r = r && end_of_block_statement_1_0_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // &INDNONE | &INDEQ
+  private static boolean end_of_block_statement_1_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "end_of_block_statement_1_0_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = end_of_block_statement_1_0_0_0_0(b, l + 1);
+    if (!r) r = end_of_block_statement_1_0_0_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // &INDNONE
+  private static boolean end_of_block_statement_1_0_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "end_of_block_statement_1_0_0_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _AND_);
+    r = indNone(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // &INDEQ
+  private static boolean end_of_block_statement_1_0_0_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "end_of_block_statement_1_0_0_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _AND_);
+    r = indEq(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // LINE_BREAK+
+  private static boolean end_of_block_statement_1_0_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "end_of_block_statement_1_0_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LINE_BREAK);
+    while (r) {
+      int c = current_position_(b);
+      if (!consumeToken(b, LINE_BREAK)) break;
+      if (!empty_element_parsed_guard_(b, "end_of_block_statement_1_0_0_1", c)) break;
+    }
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // &INDEQ
+  private static boolean end_of_block_statement_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "end_of_block_statement_1_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _AND_);
+    r = indEq(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -1818,7 +1949,7 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // IDENTIFIER | INT | FLOAT | BOOL | VOID | NODE_PATH
+  // IDENTIFIER | INT | FLOAT | BOOL | VOID | NODE_PATH | SUPER
   public static boolean id(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "id")) return false;
     boolean r;
@@ -1829,6 +1960,7 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, BOOL);
     if (!r) r = consumeToken(b, VOID);
     if (!r) r = consumeToken(b, NODE_PATH);
+    if (!r) r = consumeToken(b, SUPER);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -1925,93 +2057,49 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // CLASS IDENTIFIER [ extends_declaration ] COLON LINE_BREAK+ [extends_declaration end_of_statement] <<indented (LINE_BREAK | (top_level_statement end_of_statement))*>>
+  // LINE_BREAK*  class_block
+  static boolean inner_class_body(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "inner_class_body")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = inner_class_body_0(b, l + 1);
+    r = r && class_block(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // LINE_BREAK*
+  private static boolean inner_class_body_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "inner_class_body_0")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, LINE_BREAK)) break;
+      if (!empty_element_parsed_guard_(b, "inner_class_body_0", c)) break;
+    }
+    return true;
+  }
+
+  /* ********************************************************** */
+  // CLASS id extends_declaration? COLON inner_class_body
   public static boolean inner_class_declaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "inner_class_declaration")) return false;
     if (!nextTokenIs(b, CLASS)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, CLASS, IDENTIFIER);
+    r = consumeToken(b, CLASS);
+    r = r && id(b, l + 1);
     r = r && inner_class_declaration_2(b, l + 1);
     r = r && consumeToken(b, COLON);
-    r = r && inner_class_declaration_4(b, l + 1);
-    r = r && inner_class_declaration_5(b, l + 1);
-    r = r && indented(b, l + 1, GDScriptParser::inner_class_declaration_6_0);
+    r = r && inner_class_body(b, l + 1);
     exit_section_(b, m, INNER_CLASS_DECLARATION, r);
     return r;
   }
 
-  // [ extends_declaration ]
+  // extends_declaration?
   private static boolean inner_class_declaration_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "inner_class_declaration_2")) return false;
     extends_declaration(b, l + 1);
     return true;
-  }
-
-  // LINE_BREAK+
-  private static boolean inner_class_declaration_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "inner_class_declaration_4")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, LINE_BREAK);
-    while (r) {
-      int c = current_position_(b);
-      if (!consumeToken(b, LINE_BREAK)) break;
-      if (!empty_element_parsed_guard_(b, "inner_class_declaration_4", c)) break;
-    }
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // [extends_declaration end_of_statement]
-  private static boolean inner_class_declaration_5(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "inner_class_declaration_5")) return false;
-    inner_class_declaration_5_0(b, l + 1);
-    return true;
-  }
-
-  // extends_declaration end_of_statement
-  private static boolean inner_class_declaration_5_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "inner_class_declaration_5_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = extends_declaration(b, l + 1);
-    r = r && end_of_statement(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (LINE_BREAK | (top_level_statement end_of_statement))*
-  private static boolean inner_class_declaration_6_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "inner_class_declaration_6_0")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!inner_class_declaration_6_0_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "inner_class_declaration_6_0", c)) break;
-    }
-    return true;
-  }
-
-  // LINE_BREAK | (top_level_statement end_of_statement)
-  private static boolean inner_class_declaration_6_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "inner_class_declaration_6_0_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, LINE_BREAK);
-    if (!r) r = inner_class_declaration_6_0_0_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // top_level_statement end_of_statement
-  private static boolean inner_class_declaration_6_0_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "inner_class_declaration_6_0_0_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = top_level_statement(b, l + 1);
-    r = r && end_of_statement(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */
@@ -2630,7 +2718,8 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (top_level_annotation end_of_statement?)* ((class_name_declaration | extends_declaration) end_of_statement)* (LINE_BREAK | (top_level_statement end_of_statement))*
+  // LINE_BREAK* (top_level_annotation end_of_statement?)*
+  //     LINE_BREAK* ((class_name_declaration | extends_declaration) end_of_statement LINE_BREAK*)* (LINE_BREAK | (top_level_statement end_of_statement))*
   static boolean root(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "root")) return false;
     boolean r;
@@ -2638,40 +2727,24 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     r = root_0(b, l + 1);
     r = r && root_1(b, l + 1);
     r = r && root_2(b, l + 1);
+    r = r && root_3(b, l + 1);
+    r = r && root_4(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // (top_level_annotation end_of_statement?)*
+  // LINE_BREAK*
   private static boolean root_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "root_0")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!root_0_0(b, l + 1)) break;
+      if (!consumeToken(b, LINE_BREAK)) break;
       if (!empty_element_parsed_guard_(b, "root_0", c)) break;
     }
     return true;
   }
 
-  // top_level_annotation end_of_statement?
-  private static boolean root_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "root_0_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = top_level_annotation(b, l + 1);
-    r = r && root_0_0_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // end_of_statement?
-  private static boolean root_0_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "root_0_0_1")) return false;
-    end_of_statement(b, l + 1);
-    return true;
-  }
-
-  // ((class_name_declaration | extends_declaration) end_of_statement)*
+  // (top_level_annotation end_of_statement?)*
   private static boolean root_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "root_1")) return false;
     while (true) {
@@ -2682,51 +2755,103 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (class_name_declaration | extends_declaration) end_of_statement
+  // top_level_annotation end_of_statement?
   private static boolean root_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "root_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = root_1_0_0(b, l + 1);
+    r = top_level_annotation(b, l + 1);
+    r = r && root_1_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // end_of_statement?
+  private static boolean root_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "root_1_0_1")) return false;
+    end_of_statement(b, l + 1);
+    return true;
+  }
+
+  // LINE_BREAK*
+  private static boolean root_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "root_2")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, LINE_BREAK)) break;
+      if (!empty_element_parsed_guard_(b, "root_2", c)) break;
+    }
+    return true;
+  }
+
+  // ((class_name_declaration | extends_declaration) end_of_statement LINE_BREAK*)*
+  private static boolean root_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "root_3")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!root_3_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "root_3", c)) break;
+    }
+    return true;
+  }
+
+  // (class_name_declaration | extends_declaration) end_of_statement LINE_BREAK*
+  private static boolean root_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "root_3_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = root_3_0_0(b, l + 1);
     r = r && end_of_statement(b, l + 1);
+    r = r && root_3_0_2(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // class_name_declaration | extends_declaration
-  private static boolean root_1_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "root_1_0_0")) return false;
+  private static boolean root_3_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "root_3_0_0")) return false;
     boolean r;
     r = class_name_declaration(b, l + 1);
     if (!r) r = extends_declaration(b, l + 1);
     return r;
   }
 
-  // (LINE_BREAK | (top_level_statement end_of_statement))*
-  private static boolean root_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "root_2")) return false;
+  // LINE_BREAK*
+  private static boolean root_3_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "root_3_0_2")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!root_2_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "root_2", c)) break;
+      if (!consumeToken(b, LINE_BREAK)) break;
+      if (!empty_element_parsed_guard_(b, "root_3_0_2", c)) break;
+    }
+    return true;
+  }
+
+  // (LINE_BREAK | (top_level_statement end_of_statement))*
+  private static boolean root_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "root_4")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!root_4_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "root_4", c)) break;
     }
     return true;
   }
 
   // LINE_BREAK | (top_level_statement end_of_statement)
-  private static boolean root_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "root_2_0")) return false;
+  private static boolean root_4_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "root_4_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, LINE_BREAK);
-    if (!r) r = root_2_0_1(b, l + 1);
+    if (!r) r = root_4_0_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // top_level_statement end_of_statement
-  private static boolean root_2_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "root_2_0_1")) return false;
+  private static boolean root_4_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "root_4_0_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = top_level_statement(b, l + 1);
@@ -2737,6 +2862,7 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // var_statement
+  //     | const_statement
   //     | if_statement
   //     | for_statement
   //     | while_statement
@@ -2753,6 +2879,7 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "script_statement")) return false;
     boolean r;
     r = var_statement(b, l + 1);
+    if (!r) r = const_statement(b, l + 1);
     if (!r) r = if_statement(b, l + 1);
     if (!r) r = for_statement(b, l + 1);
     if (!r) r = while_statement(b, l + 1);
@@ -3077,5 +3204,6 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  private static final Parser block_0_0_parser_ = listOf_$(GDScriptParser::script_statement, GDScriptParser::block_0_0_1);
+  private static final Parser block_0_0_parser_ = listOf_$(GDScriptParser::script_statement, GDScriptParser::end_of_block_statement);
+  private static final Parser class_block_0_0_parser_ = listOf_$(GDScriptParser::class_block_0_0_0, GDScriptParser::end_of_block_statement);
 }

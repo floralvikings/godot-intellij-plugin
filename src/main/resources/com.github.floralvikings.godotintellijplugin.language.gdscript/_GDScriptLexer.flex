@@ -60,6 +60,7 @@ SINGLE_QUOTED_STRING='([^'\\]|\\.)*'
   "class"                             { return CLASS; }
   "class_name"                        { return CLASS_NAME; }
   "extends"                           { return EXTENDS; }
+  "super"                             { return SUPER; }
   "self"                              { return SELF; }
   "signal"                            { return SIGNAL; }
   "static"                            { return STATIC; }
