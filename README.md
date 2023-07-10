@@ -18,6 +18,8 @@
 
 <!-- Plugin description -->
 Adds support for Godot 4 to IntelliJ.
+
+Currently supports basic grammar and syntax highlighting.
 <!-- Plugin description end -->
 
 ## Installation
