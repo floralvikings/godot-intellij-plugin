@@ -410,12 +410,33 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // <<indented <<listOf script_statement end_of_block_statement>>>>
+  // <<indented <<listOf (&INDEQ script_statement) end_of_block_statement>>>>
   public static boolean block(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "block")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, BLOCK, "<block>");
     r = indented(b, l + 1, block_0_0_parser_);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // &INDEQ script_statement
+  private static boolean block_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "block_0_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = block_0_0_0_0(b, l + 1);
+    r = r && script_statement(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // &INDEQ
+  private static boolean block_0_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "block_0_0_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _AND_);
+    r = indEq(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -571,7 +592,7 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // <<indented <<listOf (&INDEQ class_statement)  end_of_block_statement>>>>
+  // <<indented <<listOf (&INDEQ class_statement) end_of_block_statement>>>>
   public static boolean class_block(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "class_block")) return false;
     boolean r;
@@ -3204,6 +3225,6 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  private static final Parser block_0_0_parser_ = listOf_$(GDScriptParser::script_statement, GDScriptParser::end_of_block_statement);
+  private static final Parser block_0_0_parser_ = listOf_$(GDScriptParser::block_0_0_0, GDScriptParser::end_of_block_statement);
   private static final Parser class_block_0_0_parser_ = listOf_$(GDScriptParser::class_block_0_0_0, GDScriptParser::end_of_block_statement);
 }

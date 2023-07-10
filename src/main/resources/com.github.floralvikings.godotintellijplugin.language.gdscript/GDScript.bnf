@@ -252,8 +252,8 @@ inner_class_declaration ::= CLASS id extends_declaration? COLON inner_class_body
 private inner_class_body ::= LINE_BREAK*  class_block
 
 
-block        ::= <<indented <<listOf script_statement end_of_block_statement>>>>
-class_block  ::= <<indented <<listOf (&INDEQ class_statement)  end_of_block_statement>>>>
+block        ::= <<indented <<listOf (&INDEQ script_statement) end_of_block_statement>>>>
+class_block  ::= <<indented <<listOf (&INDEQ class_statement) end_of_block_statement>>>>
 
 private end_of_block_statement ::= end_of_statement (((&INDNONE | &INDEQ) LINE_BREAK+)+ | (&INDEQ))
 
