@@ -1,0 +1,1 @@
+var lambda = func(x): print(x)

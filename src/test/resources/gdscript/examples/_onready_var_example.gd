@@ -1,0 +1,1 @@
+@onready var my_label = get_node("MyLabel")
