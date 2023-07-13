@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes.*;
 import com.github.floralvikings.godotea.language.gdscript.psi.*;
+import com.github.floralvikings.godotea.language.gdscript.psi.util.GDScriptImplPsiUtil;
 
 public class GDScriptInvocationExpressionImpl extends GDScriptExpressionImpl implements GDScriptInvocationExpression {
 
@@ -29,8 +30,8 @@ public class GDScriptInvocationExpressionImpl extends GDScriptExpressionImpl imp
 
   @Override
   @Nullable
-  public GDScriptId getId() {
-    return findChildByClass(GDScriptId.class);
+  public GDScriptFunctionName getFunctionName() {
+    return findChildByClass(GDScriptFunctionName.class);
   }
 
 }

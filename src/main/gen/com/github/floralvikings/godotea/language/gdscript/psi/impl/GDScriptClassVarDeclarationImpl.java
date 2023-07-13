@@ -10,6 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.github.floralvikings.godotea.language.gdscript.psi.*;
+import com.github.floralvikings.godotea.language.gdscript.psi.util.GDScriptImplPsiUtil;
 
 public class GDScriptClassVarDeclarationImpl extends ASTWrapperPsiElement implements GDScriptClassVarDeclaration {
 

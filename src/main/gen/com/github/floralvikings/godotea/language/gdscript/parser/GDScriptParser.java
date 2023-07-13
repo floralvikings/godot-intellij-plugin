@@ -1761,7 +1761,7 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // function_annotations? STATIC? FUNC id function_declaration_parameters function_return_type? COLON function_body
+  // function_annotations? STATIC? FUNC function_name function_declaration_parameters function_return_type? COLON function_body
   public static boolean function_declaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "function_declaration")) return false;
     boolean r;
@@ -1769,7 +1769,7 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     r = function_declaration_0(b, l + 1);
     r = r && function_declaration_1(b, l + 1);
     r = r && consumeToken(b, FUNC);
-    r = r && id(b, l + 1);
+    r = r && function_name(b, l + 1);
     r = r && function_declaration_parameters(b, l + 1);
     r = r && function_declaration_5(b, l + 1);
     r = r && consumeToken(b, COLON);
@@ -1835,6 +1835,18 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
       if (!empty_element_parsed_guard_(b, "function_declaration_parameters_3", c)) break;
     }
     return true;
+  }
+
+  /* ********************************************************** */
+  // IDENTIFIER
+  public static boolean function_name(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "function_name")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, FUNCTION_NAME, r);
+    return r;
   }
 
   /* ********************************************************** */
@@ -2148,9 +2160,10 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // id? call
+  // function_name? call
   public static boolean invocation_expression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "invocation_expression")) return false;
+    if (!nextTokenIs(b, "<invocation expression>", IDENTIFIER, L_PAREN)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, INVOCATION_EXPRESSION, "<invocation expression>");
     r = invocation_expression_0(b, l + 1);
@@ -2159,10 +2172,10 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // id?
+  // function_name?
   private static boolean invocation_expression_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "invocation_expression_0")) return false;
-    id(b, l + 1);
+    function_name(b, l + 1);
     return true;
   }
 

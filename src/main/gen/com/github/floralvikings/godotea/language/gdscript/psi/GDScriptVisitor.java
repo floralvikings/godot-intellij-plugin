@@ -127,6 +127,10 @@ public class GDScriptVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitFunctionName(@NotNull GDScriptFunctionName o) {
+    visitPsiElement(o);
+  }
+
   public void visitFunctionParameter(@NotNull GDScriptFunctionParameter o) {
     visitPsiElement(o);
   }

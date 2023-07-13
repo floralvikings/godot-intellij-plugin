@@ -38,6 +38,7 @@ public interface GDScriptTypes {
   IElementType EXTENDS_DECLARATION = new GDScriptElementType("EXTENDS_DECLARATION");
   IElementType FOR_STATEMENT = new GDScriptElementType("FOR_STATEMENT");
   IElementType FUNCTION_DECLARATION = new GDScriptElementType("FUNCTION_DECLARATION");
+  IElementType FUNCTION_NAME = new GDScriptElementType("FUNCTION_NAME");
   IElementType FUNCTION_PARAMETER = new GDScriptElementType("FUNCTION_PARAMETER");
   IElementType FUNCTION_RETURN_TYPE = new GDScriptElementType("FUNCTION_RETURN_TYPE");
   IElementType ID = new GDScriptElementType("ID");
@@ -282,6 +283,9 @@ public interface GDScriptTypes {
       }
       else if (type == FUNCTION_DECLARATION) {
         return new GDScriptFunctionDeclarationImpl(node);
+      }
+      else if (type == FUNCTION_NAME) {
+        return new GDScriptFunctionNameImpl(node);
       }
       else if (type == FUNCTION_PARAMETER) {
         return new GDScriptFunctionParameterImpl(node);

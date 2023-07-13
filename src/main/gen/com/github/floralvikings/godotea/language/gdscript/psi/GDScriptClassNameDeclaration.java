@@ -10,7 +10,4 @@ public interface GDScriptClassNameDeclaration extends PsiElement {
   @NotNull
   GDScriptId getId();
 
-  @Nullable
-  String getClassName();
-
 }

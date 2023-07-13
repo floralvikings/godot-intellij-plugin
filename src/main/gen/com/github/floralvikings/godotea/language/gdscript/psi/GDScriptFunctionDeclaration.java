@@ -11,12 +11,12 @@ public interface GDScriptFunctionDeclaration extends PsiElement {
   GDScriptBlock getBlock();
 
   @NotNull
+  GDScriptFunctionName getFunctionName();
+
+  @NotNull
   List<GDScriptFunctionParameter> getFunctionParameterList();
 
   @Nullable
   GDScriptFunctionReturnType getFunctionReturnType();
-
-  @NotNull
-  GDScriptId getId();
 
 }

@@ -28,6 +28,10 @@
             implementationClass="com.github.floralvikings.godotea.language.gdscript.highlighter.GDScriptAnnotator"/>
         <colorSettingsPage
                 implementation="com.github.floralvikings.godotea.language.gdscript.highlighter.GDScriptColorSettingsPage" />
+        <lang.refactoringSupport
+                language="GDScript"
+                implementationClass="com.github.floralvikings.godotea.language.gdscript.refactoring.GDScriptRefactoringSupportProvider"
+                />
     </extensions>
 
     <applicationListeners>

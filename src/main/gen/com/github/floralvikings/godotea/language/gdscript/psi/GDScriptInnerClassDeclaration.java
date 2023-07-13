@@ -16,7 +16,4 @@ public interface GDScriptInnerClassDeclaration extends PsiElement {
   @NotNull
   GDScriptId getId();
 
-  @Nullable
-  String getClassName();
-
 }

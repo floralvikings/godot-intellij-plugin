@@ -10,6 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.github.floralvikings.godotea.language.gdscript.psi.*;
+import com.github.floralvikings.godotea.language.gdscript.psi.util.GDScriptImplPsiUtil;
 
 public class GDScriptClassNameDeclarationImpl extends ASTWrapperPsiElement implements GDScriptClassNameDeclaration {
 
@@ -31,12 +32,6 @@ public class GDScriptClassNameDeclarationImpl extends ASTWrapperPsiElement imple
   @NotNull
   public GDScriptId getId() {
     return findNotNullChildByClass(GDScriptId.class);
-  }
-
-  @Override
-  @Nullable
-  public String getClassName() {
-    return GDScriptImplPsiUtil.getClassName(this);
   }
 
 }

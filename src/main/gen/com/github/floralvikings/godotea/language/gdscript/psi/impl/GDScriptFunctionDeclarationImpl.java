@@ -10,6 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.github.floralvikings.godotea.language.gdscript.psi.*;
+import com.github.floralvikings.godotea.language.gdscript.psi.util.GDScriptImplPsiUtil;
 
 public class GDScriptFunctionDeclarationImpl extends ASTWrapperPsiElement implements GDScriptFunctionDeclaration {
 
@@ -35,6 +36,12 @@ public class GDScriptFunctionDeclarationImpl extends ASTWrapperPsiElement implem
 
   @Override
   @NotNull
+  public GDScriptFunctionName getFunctionName() {
+    return findNotNullChildByClass(GDScriptFunctionName.class);
+  }
+
+  @Override
+  @NotNull
   public List<GDScriptFunctionParameter> getFunctionParameterList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GDScriptFunctionParameter.class);
   }
@@ -43,12 +50,6 @@ public class GDScriptFunctionDeclarationImpl extends ASTWrapperPsiElement implem
   @Nullable
   public GDScriptFunctionReturnType getFunctionReturnType() {
     return findChildByClass(GDScriptFunctionReturnType.class);
-  }
-
-  @Override
-  @NotNull
-  public GDScriptId getId() {
-    return findNotNullChildByClass(GDScriptId.class);
   }
 
 }
