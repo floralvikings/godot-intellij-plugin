@@ -50,14 +50,14 @@ class GDScriptParserUtil : GeneratedParserUtilBase() {
         fun indented(builder: PsiBuilder, level: Int, parser: Parser): Boolean {
             val state = getParserState(builder) ?: return false
             val tokIndent: Int = state.getTokenIndent()
-            log.warn("Indenting section to $tokIndent; current indent: ${state.currentIndent}")
+            log.debug("Indenting section to $tokIndent; current indent: ${state.currentIndent}")
             if (tokIndent > state.currentIndent) {
                 val prevIndent: Int = state.currentIndent
                 state.currentIndent = tokIndent
-                log.warn("Indentation changed from $prevIndent to $tokIndent")
-                log.warn("Parsing with $parser")
+                log.debug("Indentation changed from $prevIndent to $tokIndent")
+                log.debug("Parsing with $parser")
                 val result = parser.parse(builder, level + 1)
-                log.warn("Indentation changed from ${state.currentIndent} to $prevIndent")
+                log.debug("Indentation changed from ${state.currentIndent} to $prevIndent")
                 state.currentIndent = prevIndent
                 return result
             }
@@ -104,7 +104,7 @@ class GDScriptParserUtil : GeneratedParserUtilBase() {
             parser: PsiParser?,
             extendsSets: Array<TokenSet?>?
         ): PsiBuilder? {
-            log.warn("Adapting PSI Builder to track parser state")
+            log.debug("Adapting PSI Builder to track parser state")
             val psiBuilder = GeneratedParserUtilBase.adapt_builder_(root, builder, parser, extendsSets)
             val state = ParserState(psiBuilder)
             psiBuilder.putUserData(PARSER_STATE_KEY, state)

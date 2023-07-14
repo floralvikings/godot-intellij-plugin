@@ -24,6 +24,7 @@ repositories {
 // Dependencies are managed with Gradle version catalog - read more: https://docs.gradle.org/current/userguide/platforms.html#sub:version-catalog
 dependencies {
     implementation("it.unimi.dsi:fastutil:8.5.12")
+    implementation("org.jdom:jdom:2.0.2")
 //    implementation(libs.annotations)
 }
 
