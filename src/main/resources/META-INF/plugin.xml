@@ -9,8 +9,6 @@
     <resource-bundle>messages.MyBundle</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.floralvikings.godotea.toolWindow.MyToolWindowFactory"
-                    id="MyToolWindow"/>
         <fileType
                 name="GDScript File"
                 implementationClass="com.github.floralvikings.godotea.language.gdscript.GDScriptFileType"
@@ -21,17 +19,17 @@
                 language="GDScript"
                 implementationClass="com.github.floralvikings.godotea.language.gdscript.parser.GDScriptParserDefinition"/>
         <lang.syntaxHighlighterFactory
-            language="GDScript"
-            implementationClass="com.github.floralvikings.godotea.language.gdscript.highlighter.GDScriptSyntaxHighlighterFactory" />
+                language="GDScript"
+                implementationClass="com.github.floralvikings.godotea.language.gdscript.highlighter.GDScriptSyntaxHighlighterFactory"/>
         <annotator
-            language="GDScript"
-            implementationClass="com.github.floralvikings.godotea.language.gdscript.highlighter.GDScriptAnnotator"/>
+                language="GDScript"
+                implementationClass="com.github.floralvikings.godotea.language.gdscript.highlighter.GDScriptAnnotator"/>
         <colorSettingsPage
-                implementation="com.github.floralvikings.godotea.language.gdscript.highlighter.GDScriptColorSettingsPage" />
+                implementation="com.github.floralvikings.godotea.language.gdscript.highlighter.GDScriptColorSettingsPage"/>
+        <lang.refactoringSupport
+                language="GDScript"
+                implementationClass="com.github.floralvikings.godotea.language.gdscript.refactoring.GDScriptRefactoringSupportProvider"
+        />
+        <sdkType implementation="com.github.floralvikings.godotea.sdk.GodotSdk" />
     </extensions>
-
-    <applicationListeners>
-        <listener class="com.github.floralvikings.godotea.listeners.MyApplicationActivationListener"
-                  topic="com.intellij.openapi.application.ApplicationActivationListener"/>
-    </applicationListeners>
 </idea-plugin>

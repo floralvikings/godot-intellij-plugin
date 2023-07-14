@@ -5,6 +5,7 @@ import com.github.floralvikings.godotea.language.gdscript.GDScriptParsingTestCas
 class ExamplesTest : GDScriptParsingTestCase("examples") {
     fun test_array_example() = doTest(true, true)
     fun test_dictionary_example() = doTest(true, true)
+    fun test_dictionary_key_addition_example() = doTest(true, true)
     fun test_export_annotation_example() = doTest(true, true);
     fun test_export_annotation_with_constant_argument() = doTest(true, true)
     fun test_gdscript_example() = doTest(true, true)
