@@ -52,6 +52,7 @@ public interface GDScriptTypes {
   IElementType LUA_DICTIONARY_EXPRESSION = new GDScriptElementType("LUA_DICTIONARY_EXPRESSION");
   IElementType MATCH_BLOCK = new GDScriptElementType("MATCH_BLOCK");
   IElementType MATCH_STATEMENT = new GDScriptElementType("MATCH_STATEMENT");
+  IElementType PARAMETER_NAME = new GDScriptElementType("PARAMETER_NAME");
   IElementType PATTERN = new GDScriptElementType("PATTERN");
   IElementType PATTERN_LIST = new GDScriptElementType("PATTERN_LIST");
   IElementType RETURN_STATEMENT = new GDScriptElementType("RETURN_STATEMENT");
@@ -325,6 +326,9 @@ public interface GDScriptTypes {
       }
       else if (type == MATCH_STATEMENT) {
         return new GDScriptMatchStatementImpl(node);
+      }
+      else if (type == PARAMETER_NAME) {
+        return new GDScriptParameterNameImpl(node);
       }
       else if (type == PATTERN) {
         return new GDScriptPatternImpl(node);

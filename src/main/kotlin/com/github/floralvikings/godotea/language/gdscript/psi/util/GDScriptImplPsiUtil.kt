@@ -4,9 +4,12 @@ import com.github.floralvikings.godotea.language.gdscript.findFunctionDeclaratio
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptElementFactory
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFunctionDeclaration
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFunctionName
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptId
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes
 import com.github.floralvikings.godotea.language.gdscript.reference.GDScriptFunctionReference
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
+import com.intellij.psi.util.elementType
 
 class GDScriptImplPsiUtil {
     companion object {
@@ -41,6 +44,11 @@ class GDScriptImplPsiUtil {
             val declaration = findFunctionDeclaration(element.containingFile, element.text) ?: return null
             val functionName = declaration.functionName
             return GDScriptFunctionReference(functionName, functionName.textRange)
+        }
+
+        @JvmStatic
+        fun getReferences(id: GDScriptId): Array<PsiReference> {
+            return emptyArray()
         }
     }
 }

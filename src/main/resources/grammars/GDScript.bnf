@@ -240,7 +240,7 @@ private function_annotations ::= AT_RPC LINE_BREAK*
 private function_body ::= LINE_BREAK* block
 private function_declaration_parameters ::= L_PAREN LINE_BREAK* function_parameter_list LINE_BREAK* R_PAREN
 private function_parameter_list ::= function_parameter? LINE_BREAK* (COMMA LINE_BREAK* function_parameter LINE_BREAK*)* COMMA?
-function_parameter ::= id (COLON type)? ((EQUAL | INFER) expression)? {
+function_parameter ::= parameter_name (COLON type)? ((EQUAL | INFER) expression)? {
     methods = []
 }
 function_return_type ::= ARROW type
@@ -393,7 +393,8 @@ private array_type ::= id (L_BRACKET id R_BRACKET)
 private nested_type ::= id (DOT id)*
 
 function_name ::= IDENTIFIER
-id ::= IDENTIFIER | INT | FLOAT | BOOL | VOID | NODE_PATH | SUPER
+parameter_name ::= IDENTIFIER
+id ::= IDENTIFIER | INT | FLOAT | BOOL | VOID | NODE_PATH | SUPER {methods = [getReferences]}
 string ::= SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING
 private multiline_string ::= MULTILINE_SINGLE_QUOTED_STRING | MULTILINE_DOUBLE_QUOTED_STRING
 

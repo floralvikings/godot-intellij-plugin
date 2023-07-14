@@ -1850,15 +1850,16 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // id (COLON type)? ((EQUAL | INFER) expression)?
+  // parameter_name (COLON type)? ((EQUAL | INFER) expression)?
   public static boolean function_parameter(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "function_parameter")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, FUNCTION_PARAMETER, "<function parameter>");
-    r = id(b, l + 1);
+    Marker m = enter_section_(b);
+    r = parameter_name(b, l + 1);
     r = r && function_parameter_1(b, l + 1);
     r = r && function_parameter_2(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
+    exit_section_(b, m, FUNCTION_PARAMETER, r);
     return r;
   }
 
@@ -2703,6 +2704,18 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, NOT);
     if (!r) r = consumeToken(b, IF);
     if (!r) r = consumeToken(b, ELSE);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // IDENTIFIER
+  public static boolean parameter_name(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "parameter_name")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, PARAMETER_NAME, r);
     return r;
   }
 
