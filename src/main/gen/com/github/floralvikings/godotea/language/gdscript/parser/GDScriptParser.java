@@ -690,7 +690,7 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ((var_export LINE_BREAK*) | (AT_ONREADY LINE_BREAK*))* VAR id (
+  // ((var_export LINE_BREAK*) | (AT_ONREADY LINE_BREAK*))* VAR class_var_name (
   //     (COLON(type(
   //         ((LINE_BREAK (block_get|block_set))+)
   //         | ([(EQUAL|INFER) expression])
@@ -704,7 +704,7 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, CLASS_VAR_DECLARATION, "<class var declaration>");
     r = class_var_declaration_0(b, l + 1);
     r = r && consumeToken(b, VAR);
-    r = r && id(b, l + 1);
+    r = r && class_var_name(b, l + 1);
     r = r && class_var_declaration_3(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
@@ -930,6 +930,18 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     boolean r;
     r = consumeToken(b, EQUAL);
     if (!r) r = consumeToken(b, INFER);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // IDENTIFIER
+  public static boolean class_var_name(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "class_var_name")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, CLASS_VAR_NAME, r);
     return r;
   }
 

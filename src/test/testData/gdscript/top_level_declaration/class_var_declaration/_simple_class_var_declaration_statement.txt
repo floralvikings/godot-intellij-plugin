@@ -1,0 +1,6 @@
+GDScript File(0,8)
+  GDScriptClassVarDeclarationImpl(CLASS_VAR_DECLARATION)(0,8)
+    PsiElement(GDScriptTokenType.var)('var')(0,3)
+    PsiWhiteSpace(' ')(3,4)
+    GDScriptClassVarNameImpl(CLASS_VAR_NAME)(4,8)
+      PsiElement(GDScriptTokenType.IDENTIFIER)('test')(4,8)

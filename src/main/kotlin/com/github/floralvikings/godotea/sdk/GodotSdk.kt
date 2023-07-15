@@ -19,7 +19,7 @@ import javax.swing.Icon
 import javax.swing.SwingUtilities
 
 class GodotSdk : SdkType("Godot") {
-    private val log = Logger.getInstance(GDScriptParserUtil::class.java)
+    private val log = Logger.getInstance(GodotSdk::class.java)
 
     override fun saveAdditionalData(additionalData: SdkAdditionalData, additional: Element) {
 
@@ -106,7 +106,7 @@ class GodotSdk : SdkType("Godot") {
         } else {
             processHandler.runProcess(10000)
         }
-        log.warn("Version check output: ${processOutput.stdout.trim()}")
+        log.debug("Version check output: ${processOutput.stdout.trim()}")
         return processOutput
     }
 }

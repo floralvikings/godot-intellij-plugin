@@ -1,9 +1,12 @@
 @file:JvmName("GDScriptUtil")
 package com.github.floralvikings.godotea.language.gdscript
 
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptClassVarDeclaration
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFile
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFunctionDeclaration
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptInnerClassDeclaration
 import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
 import com.intellij.psi.search.FileTypeIndex
@@ -14,6 +17,13 @@ fun findFunctionDeclaration(file: PsiFile, functionName: String): GDScriptFuncti
     return PsiTreeUtil.getChildrenOfType(file, GDScriptFunctionDeclaration::class.java)
         ?.asSequence()
         ?.filter { it.functionName.text == functionName }
+        ?.firstOrNull()
+}
+
+fun findClassVarDeclaration(file: PsiFile, classVarName: String): GDScriptClassVarDeclaration? {
+    return PsiTreeUtil.getChildrenOfType(file, GDScriptClassVarDeclaration::class.java)
+        ?.asSequence()
+        ?.filter { it.classVarName.text == classVarName }
         ?.firstOrNull()
 }
 
@@ -42,3 +52,12 @@ fun findFunctionDeclarations(project: Project): List<GDScriptFunctionDeclaration
         .flatten()
         .toList()
 }
+
+val GDScriptClassVarDeclaration.containingClass: GDScriptInnerClassDeclaration?
+    get() {
+        val parent: PsiElement? = this.parent
+        if (parent is GDScriptInnerClassDeclaration) {
+            return parent
+        }
+        return null
+    }

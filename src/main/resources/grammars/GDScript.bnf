@@ -8,7 +8,7 @@
     psiImplClassSuffix = "Impl"
     psiPackage = "com.github.floralvikings.godotea.language.gdscript.psi"
     psiImplPackage = "com.github.floralvikings.godotea.language.gdscript.psi.impl"
-    psiImplUtilClass = "com.github.floralvikings.godotea.language.gdscript.psi.util.GDScriptImplPsiUtil"
+    psiImplUtilClass = "com.github.floralvikings.godotea.language.gdscript.psi.GDScriptImplPsiUtil"
 
     elementTypeHolderClass = "com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes"
     elementTypeClass = "com.github.floralvikings.godotea.language.gdscript.psi.GDScriptElementType"
@@ -185,14 +185,18 @@ top_level_annotation ::= (AT_ICON call) | AT_TOOL
 extends_declaration ::= EXTENDS (type | string)
 class_name_declaration ::= CLASS_NAME id
 
-class_var_declaration ::= ((var_export LINE_BREAK*) | (AT_ONREADY LINE_BREAK*))* VAR id (
+class_var_declaration ::= ((var_export LINE_BREAK*) | (AT_ONREADY LINE_BREAK*))* VAR class_var_name (
     (COLON(type(
         ((LINE_BREAK (block_get|block_set))+)
         | ([(EQUAL|INFER) expression])
     )))
     | (COLON set_get)
     | [(EQUAL | INFER) expression]
-)
+) {
+    mixin="com.github.floralvikings.godotea.language.gdscript.psi.GDScriptNamedElementImpl"
+    implements=["com.github.floralvikings.godotea.language.gdscript.psi.GDScriptNamedElement"]
+    methods=[getName setName getNameIdentifier getDeclaringElement getRangeInDeclaringElement]
+}
 
 block_get ::= <<indented (GET COLON LINE_BREAK block)>>
 block_set ::= <<indented (SET L_PAREN function_parameter R_PAREN COLON LINE_BREAK block)>>
@@ -394,7 +398,9 @@ private nested_type ::= id (DOT id)*
 
 function_name ::= IDENTIFIER
 parameter_name ::= IDENTIFIER
-id ::= IDENTIFIER | INT | FLOAT | BOOL | VOID | NODE_PATH | SUPER {methods = [getReferences]}
+class_var_name ::= IDENTIFIER
+
+id ::= IDENTIFIER | INT | FLOAT | BOOL | VOID | NODE_PATH | SUPER {methods = [getReference]}
 string ::= SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING
 private multiline_string ::= MULTILINE_SINGLE_QUOTED_STRING | MULTILINE_DOUBLE_QUOTED_STRING
 

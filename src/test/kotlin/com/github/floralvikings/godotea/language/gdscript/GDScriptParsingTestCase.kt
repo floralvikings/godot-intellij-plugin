@@ -4,7 +4,7 @@ import com.github.floralvikings.godotea.language.gdscript.parser.GDScriptParserD
 import com.intellij.testFramework.ParsingTestCase
 
 abstract class GDScriptParsingTestCase(val dataPath: String) : ParsingTestCase(dataPath, "gd", GDScriptParserDefinition()){
-    override fun getTestDataPath(): String = "src/test/resources/gdscript"
+    override fun getTestDataPath(): String = "src/test/testData/gdscript"
 
     override fun skipSpaces(): Boolean = false
 

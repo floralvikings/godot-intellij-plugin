@@ -24,6 +24,7 @@ public interface GDScriptTypes {
   IElementType CLASS_CONST_DECLARATION = new GDScriptElementType("CLASS_CONST_DECLARATION");
   IElementType CLASS_NAME_DECLARATION = new GDScriptElementType("CLASS_NAME_DECLARATION");
   IElementType CLASS_VAR_DECLARATION = new GDScriptElementType("CLASS_VAR_DECLARATION");
+  IElementType CLASS_VAR_NAME = new GDScriptElementType("CLASS_VAR_NAME");
   IElementType CONST_STATEMENT = new GDScriptElementType("CONST_STATEMENT");
   IElementType CONTINUE_STATEMENT = new GDScriptElementType("CONTINUE_STATEMENT");
   IElementType DICTIONARY_ENTRY = new GDScriptElementType("DICTIONARY_ENTRY");
@@ -242,6 +243,9 @@ public interface GDScriptTypes {
       }
       else if (type == CLASS_VAR_DECLARATION) {
         return new GDScriptClassVarDeclarationImpl(node);
+      }
+      else if (type == CLASS_VAR_NAME) {
+        return new GDScriptClassVarNameImpl(node);
       }
       else if (type == CONST_STATEMENT) {
         return new GDScriptConstStatementImpl(node);

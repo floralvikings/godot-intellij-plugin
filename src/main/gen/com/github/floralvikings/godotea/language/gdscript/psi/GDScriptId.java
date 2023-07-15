@@ -4,6 +4,7 @@ package com.github.floralvikings.godotea.language.gdscript.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 
 public interface GDScriptId extends PsiElement {
 
@@ -12,5 +13,8 @@ public interface GDScriptId extends PsiElement {
 
   @Nullable
   PsiElement getNodePath();
+
+  @NotNull
+  PsiReference getReference();
 
 }

@@ -4,8 +4,9 @@ package com.github.floralvikings.godotea.language.gdscript.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.openapi.util.TextRange;
 
-public interface GDScriptClassVarDeclaration extends PsiElement {
+public interface GDScriptClassVarDeclaration extends GDScriptNamedElement {
 
   @NotNull
   List<GDScriptBlockGet> getBlockGetList();
@@ -13,11 +14,11 @@ public interface GDScriptClassVarDeclaration extends PsiElement {
   @NotNull
   List<GDScriptBlockSet> getBlockSetList();
 
+  @NotNull
+  GDScriptClassVarName getClassVarName();
+
   @Nullable
   GDScriptExpression getExpression();
-
-  @NotNull
-  GDScriptId getId();
 
   @Nullable
   GDScriptSetGet getSetGet();
@@ -27,5 +28,20 @@ public interface GDScriptClassVarDeclaration extends PsiElement {
 
   @NotNull
   List<GDScriptVarExport> getVarExportList();
+
+  @Nullable
+  String getName();
+
+  @NotNull
+  PsiElement setName(@NotNull String newName);
+
+  @NotNull
+  PsiElement getNameIdentifier();
+
+  @NotNull
+  PsiElement getDeclaringElement();
+
+  @NotNull
+  TextRange getRangeInDeclaringElement();
 
 }

@@ -1,7 +1,6 @@
 package com.github.floralvikings.godotea.language.gdscript.highlighter
 
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes.FUNCTION_DECLARATION
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes.ID
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes.*
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
