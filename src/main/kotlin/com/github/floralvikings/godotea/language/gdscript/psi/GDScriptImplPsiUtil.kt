@@ -1,11 +1,17 @@
 package com.github.floralvikings.godotea.language.gdscript.psi
 
+import com.github.floralvikings.godotea.language.gdscript.containingClass
+import com.github.floralvikings.godotea.language.gdscript.findClassVarDeclaration
 import com.github.floralvikings.godotea.language.gdscript.reference.GDScriptIDReference
 import com.intellij.openapi.diagnostic.Logger
-import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiElementResolveResult
 import com.intellij.psi.PsiReference
+import com.intellij.psi.ResolveResult
+import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
+import com.intellij.psi.util.childrenOfType
 
+@Suppress("EXTENSION_SHADOWED_BY_MEMBER")
 class GDScriptImplPsiUtil {
     companion object {
         private val log = Logger.getInstance(GDScriptImplPsiUtil::class.java)
@@ -27,13 +33,30 @@ class GDScriptImplPsiUtil {
         }
 
         @JvmStatic
-        fun GDScriptClassVarDeclaration.getNameIdentifier(): PsiElement = classVarName.identifier
+        fun GDScriptClassVarDeclaration.getNameIdentifier(): PsiElement = classVarName
 
         @JvmStatic
-        fun GDScriptClassVarDeclaration.getDeclaringElement(): PsiElement = this
+        fun GDScriptClassVarDeclaration.getTextOffset(): Int {
+            return classVarName.textOffset
+        }
 
         @JvmStatic
-        fun GDScriptClassVarDeclaration.getRangeInDeclaringElement(): TextRange = classVarName.textRange
+        fun GDScriptClassVarDeclaration.getQualifiedName(): String {
+            var containingClass = this.containingClass
+            var qualifiedName = classVarName.text
+            while(containingClass != null) {
+                qualifiedName = "${containingClass.id.text}.$qualifiedName"
+                containingClass = containingClass.containingClass
+            }
+            val classNameDeclarations = containingFile.childrenOfType<GDScriptClassNameDeclaration>()
+            val rootClassName = if(classNameDeclarations.isNotEmpty()) {
+                classNameDeclarations[0].id.text
+            } else {
+                containingFile.name
+            }
+            qualifiedName = "$rootClassName.$qualifiedName"
+            return qualifiedName
+        }
 
         @JvmStatic
         fun GDScriptId.getReference(): PsiReference {

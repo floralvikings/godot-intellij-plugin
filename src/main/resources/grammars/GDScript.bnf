@@ -193,9 +193,9 @@ class_var_declaration ::= ((var_export LINE_BREAK*) | (AT_ONREADY LINE_BREAK*))*
     | (COLON set_get)
     | [(EQUAL | INFER) expression]
 ) {
-    mixin="com.github.floralvikings.godotea.language.gdscript.psi.GDScriptNamedElementImpl"
-    implements=["com.github.floralvikings.godotea.language.gdscript.psi.GDScriptNamedElement"]
-    methods=[getName setName getNameIdentifier getDeclaringElement getRangeInDeclaringElement]
+    mixin="GDScriptNamedElementImpl"
+    implements=["GDScriptNamedElement"]
+    methods=[getName setName getNameIdentifier getQualifiedName getTextOffset]
 }
 
 block_get ::= <<indented (GET COLON LINE_BREAK block)>>

@@ -4,7 +4,6 @@ package com.github.floralvikings.godotea.language.gdscript.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import com.intellij.openapi.util.TextRange;
 
 public interface GDScriptClassVarDeclaration extends GDScriptNamedElement {
 
@@ -39,9 +38,8 @@ public interface GDScriptClassVarDeclaration extends GDScriptNamedElement {
   PsiElement getNameIdentifier();
 
   @NotNull
-  PsiElement getDeclaringElement();
+  String getQualifiedName();
 
-  @NotNull
-  TextRange getRangeInDeclaringElement();
+  int getTextOffset();
 
 }

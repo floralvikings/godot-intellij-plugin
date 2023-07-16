@@ -8,13 +8,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes.*;
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptNamedElementImpl;
 import com.github.floralvikings.godotea.language.gdscript.psi.*;
-import com.intellij.openapi.util.TextRange;
 
 public class GDScriptClassVarDeclarationImpl extends GDScriptNamedElementImpl implements GDScriptClassVarDeclaration {
 
-  public GDScriptClassVarDeclarationImpl(@NotNull ASTNode node) {
+  public GDScriptClassVarDeclarationImpl(ASTNode node) {
     super(node);
   }
 
@@ -90,14 +88,13 @@ public class GDScriptClassVarDeclarationImpl extends GDScriptNamedElementImpl im
 
   @Override
   @NotNull
-  public PsiElement getDeclaringElement() {
-    return GDScriptImplPsiUtil.getDeclaringElement(this);
+  public String getQualifiedName() {
+    return GDScriptImplPsiUtil.getQualifiedName(this);
   }
 
   @Override
-  @NotNull
-  public TextRange getRangeInDeclaringElement() {
-    return GDScriptImplPsiUtil.getRangeInDeclaringElement(this);
+  public int getTextOffset() {
+    return GDScriptImplPsiUtil.getTextOffset(this);
   }
 
 }

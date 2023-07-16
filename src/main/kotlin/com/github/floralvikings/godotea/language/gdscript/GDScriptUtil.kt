@@ -53,11 +53,15 @@ fun findFunctionDeclarations(project: Project): List<GDScriptFunctionDeclaration
         .toList()
 }
 
-val GDScriptClassVarDeclaration.containingClass: GDScriptInnerClassDeclaration?
+val PsiElement.containingClass: GDScriptInnerClassDeclaration?
     get() {
-        val parent: PsiElement? = this.parent
-        if (parent is GDScriptInnerClassDeclaration) {
-            return parent
+        var current: PsiElement? = this.parent
+        while(current!= null) {
+            if(current is GDScriptInnerClassDeclaration) {
+                return current
+            }
+            current = current.parent
         }
         return null
     }
+
