@@ -3,6 +3,7 @@ package com.github.floralvikings.godotea.language.gdscript.navigation
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptClassVarDeclaration
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFile
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFunctionDeclaration
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptInnerClassDeclaration
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptVarStatement
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.childrenOfType
@@ -23,6 +24,18 @@ class GoToDeclarationTest : BasePlatformTestCase() {
 
     fun test_go_to_parameter_declaration() = doTest {
         childrenOfType<GDScriptFunctionDeclaration>()[0].functionParameterList[0]
+    }
+
+    fun test_go_to_inner_class_var() = doTest {
+        childrenOfType<GDScriptInnerClassDeclaration>()[0].classBlock.childrenOfType<GDScriptClassVarDeclaration>()[0]
+    }
+
+    fun test_go_to_shadowed_inner_class_var() = doTest {
+        childrenOfType<GDScriptInnerClassDeclaration>()[0].classBlock.childrenOfType<GDScriptClassVarDeclaration>()[0]
+    }
+
+    fun test_go_to_shadowed_local_var() = doTest {
+        childrenOfType<GDScriptFunctionDeclaration>()[0].block.childrenOfType<GDScriptVarStatement>()[0]
     }
 
     private fun configFile() {

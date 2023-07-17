@@ -39,7 +39,7 @@ private fun resolveVarDeclaration(id: GDScriptId): PsiElement? {
             if (parameterDeclaration != null) {
                 return parameterDeclaration
             }
-        } else if (current is GDScriptBlock && current.parent is GDScriptInnerClassDeclaration) {
+        } else if (current is GDScriptClassBlock && current.parent is GDScriptInnerClassDeclaration) {
             val varStatements = current.childrenOfType<GDScriptClassVarDeclaration>()
             val classVarDeclaration = varStatements
                 .firstOrNull { it.classVarName.text == id.text }
