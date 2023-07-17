@@ -8,12 +8,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.github.floralvikings.godotea.language.gdscript.psi.*;
 
-public class GDScriptFunctionDeclarationImpl extends ASTWrapperPsiElement implements GDScriptFunctionDeclaration {
+public class GDScriptFunctionDeclarationImpl extends GDScriptNamedElementImpl implements GDScriptFunctionDeclaration {
 
-  public GDScriptFunctionDeclarationImpl(@NotNull ASTNode node) {
+  public GDScriptFunctionDeclarationImpl(ASTNode node) {
     super(node);
   }
 
@@ -49,6 +48,29 @@ public class GDScriptFunctionDeclarationImpl extends ASTWrapperPsiElement implem
   @Nullable
   public GDScriptFunctionReturnType getFunctionReturnType() {
     return findChildByClass(GDScriptFunctionReturnType.class);
+  }
+
+  @Override
+  @Nullable
+  public String getName() {
+    return GDScriptImplPsiUtil.getName(this);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement setName(@NotNull String newName) {
+    return GDScriptImplPsiUtil.setName(this, newName);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getNameIdentifier() {
+    return GDScriptImplPsiUtil.getNameIdentifier(this);
+  }
+
+  @Override
+  public int getTextOffset() {
+    return GDScriptImplPsiUtil.getTextOffset(this);
   }
 
 }

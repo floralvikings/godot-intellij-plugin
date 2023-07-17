@@ -1,6 +1,7 @@
 package com.github.floralvikings.godotea.language.gdscript.navigation
 
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptClassVarDeclaration
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFunctionDeclaration
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFunctionParameter
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptVarStatement
 import com.intellij.lang.HelpID
@@ -18,6 +19,7 @@ class GDScriptFindUsagesProvider : FindUsagesProvider {
         psiElement is GDScriptClassVarDeclaration
                 || psiElement is GDScriptVarStatement
                 || psiElement is GDScriptFunctionParameter
+                || psiElement is GDScriptFunctionDeclaration
 
     override fun getHelpId(psiElement: PsiElement): @NonNls String = HelpID.FIND_OTHER_USAGES
 
@@ -25,6 +27,7 @@ class GDScriptFindUsagesProvider : FindUsagesProvider {
         is GDScriptClassVarDeclaration -> "Class Variable"
         is GDScriptFunctionParameter -> "Function Parameter"
         is GDScriptVarStatement -> "Local Variable"
+        is GDScriptFunctionDeclaration -> "Function Declaration"
         else -> ""
     }
 
@@ -32,6 +35,7 @@ class GDScriptFindUsagesProvider : FindUsagesProvider {
         is GDScriptClassVarDeclaration -> element.classVarName.text
         is GDScriptFunctionParameter -> element.parameterName.text
         is GDScriptVarStatement -> element.localVarName.text
+        is GDScriptFunctionDeclaration -> element.functionName.text
         else -> element.text
     }
 
@@ -39,6 +43,7 @@ class GDScriptFindUsagesProvider : FindUsagesProvider {
         is GDScriptClassVarDeclaration -> element.classVarName.text
         is GDScriptFunctionParameter -> element.parameterName.text
         is GDScriptVarStatement -> element.localVarName.text
+        is GDScriptFunctionDeclaration -> element.functionName.text
         else -> element.text
     }
 }

@@ -2,6 +2,7 @@ package com.github.floralvikings.godotea.language.gdscript.psi
 
 import com.github.floralvikings.godotea.language.gdscript.reference.GDScriptIDReference
 import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.diagnostic.debug
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
 
@@ -69,6 +70,26 @@ class GDScriptImplPsiUtil {
 
         @JvmStatic
         fun GDScriptFunctionParameter.getTextOffset(): Int = parameterName.textOffset
+
+        @JvmStatic
+        fun GDScriptFunctionDeclaration.getName(): String? = functionName.identifier.text
+
+        @JvmStatic
+        fun GDScriptFunctionDeclaration.setName(newName: String): PsiElement {
+            log.debug{"Setting function name to $newName"}
+            val identifierNode = functionName.identifier.node
+            if(identifierNode != null) {
+                val newIdentifier = GDScriptElementFactory.createIdentifier(project, newName)
+                functionName.node.replaceChild(identifierNode, newIdentifier.node)
+            }
+            return this
+        }
+
+        @JvmStatic
+        fun GDScriptFunctionDeclaration.getNameIdentifier(): PsiElement = functionName
+
+        @JvmStatic
+        fun GDScriptFunctionDeclaration.getTextOffset(): Int = functionName.textOffset
 
         @JvmStatic
         fun GDScriptId.getReference(): PsiReference = GDScriptIDReference(this)

@@ -238,7 +238,11 @@ signal_parameters ::= L_PAREN [type (COMMA type)*] R_PAREN
 enum_declaration ::= ENUM id? (L_BRACE LINE_BREAK* enum_entry? LINE_BREAK* (COMMA LINE_BREAK* enum_entry LINE_BREAK*)* COMMA? LINE_BREAK* R_BRACE)?
 enum_entry ::= id (EQUAL expression)?
 
-function_declaration ::= function_annotations? STATIC? FUNC function_name function_declaration_parameters function_return_type? COLON function_body
+function_declaration ::= function_annotations? STATIC? FUNC function_name function_declaration_parameters function_return_type? COLON function_body {
+    mixin="GDScriptNamedElementImpl"
+    implements=["GDScriptNamedElement"]
+    methods=[getName setName getNameIdentifier getTextOffset]
+}
 
 private function_annotations ::= AT_RPC LINE_BREAK*
 private function_body ::= LINE_BREAK* block
