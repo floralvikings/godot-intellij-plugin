@@ -59,6 +59,30 @@ class GDScriptImplPsiUtil {
         }
 
         @JvmStatic
+        fun GDScriptVarStatement.getName(): String? {
+            return localVarName.identifier.text
+        }
+
+        @JvmStatic
+        fun GDScriptVarStatement.setName(newName: String): PsiElement {
+            log.debug("Setting local var declaration name to $newName")
+            val identifierNode = localVarName.identifier.node
+            if(identifierNode != null) {
+                val newIdentifier = GDScriptElementFactory.createIdentifier(project, newName)
+                localVarName.node.replaceChild(identifierNode, newIdentifier.node)
+            }
+            return this
+        }
+
+        @JvmStatic
+        fun GDScriptVarStatement.getNameIdentifier(): PsiElement = localVarName
+
+        @JvmStatic
+        fun GDScriptVarStatement.getTextOffset(): Int {
+            return localVarName.textOffset
+        }
+
+        @JvmStatic
         fun GDScriptId.getReference(): PsiReference {
             return GDScriptIDReference(this)
         }

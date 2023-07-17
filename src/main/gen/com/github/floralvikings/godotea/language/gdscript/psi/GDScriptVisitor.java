@@ -171,6 +171,10 @@ public class GDScriptVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitLocalVarName(@NotNull GDScriptLocalVarName o) {
+    visitPsiElement(o);
+  }
+
   public void visitLuaDictionaryEntry(@NotNull GDScriptLuaDictionaryEntry o) {
     visitPsiElement(o);
   }
@@ -236,7 +240,7 @@ public class GDScriptVisitor extends PsiElementVisitor {
   }
 
   public void visitVarStatement(@NotNull GDScriptVarStatement o) {
-    visitPsiElement(o);
+    visitNamedElement(o);
   }
 
   public void visitWhileStatement(@NotNull GDScriptWhileStatement o) {

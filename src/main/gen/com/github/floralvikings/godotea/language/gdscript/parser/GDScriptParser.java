@@ -2336,6 +2336,18 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // IDENTIFIER
+  public static boolean local_var_name(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "local_var_name")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, LOCAL_VAR_NAME, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // (key EQUAL expression) | DOT_DOT
   public static boolean lua_dictionary_entry(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "lua_dictionary_entry")) return false;
@@ -3214,14 +3226,14 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // VAR id (COLON type)? ((EQUAL | INFER) AWAIT? expression)?
+  // VAR local_var_name (COLON type)? ((EQUAL | INFER) AWAIT? expression)?
   public static boolean var_statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "var_statement")) return false;
     if (!nextTokenIs(b, VAR)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, VAR);
-    r = r && id(b, l + 1);
+    r = r && local_var_name(b, l + 1);
     r = r && var_statement_2(b, l + 1);
     r = r && var_statement_3(b, l + 1);
     exit_section_(b, m, VAR_STATEMENT, r);

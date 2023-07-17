@@ -49,6 +49,7 @@ public interface GDScriptTypes {
   IElementType KEY = new GDScriptElementType("KEY");
   IElementType KEY_VALUE_PATTERN = new GDScriptElementType("KEY_VALUE_PATTERN");
   IElementType LAMBDA_EXPRESSION = new GDScriptElementType("LAMBDA_EXPRESSION");
+  IElementType LOCAL_VAR_NAME = new GDScriptElementType("LOCAL_VAR_NAME");
   IElementType LUA_DICTIONARY_ENTRY = new GDScriptElementType("LUA_DICTIONARY_ENTRY");
   IElementType LUA_DICTIONARY_EXPRESSION = new GDScriptElementType("LUA_DICTIONARY_EXPRESSION");
   IElementType MATCH_BLOCK = new GDScriptElementType("MATCH_BLOCK");
@@ -318,6 +319,9 @@ public interface GDScriptTypes {
       }
       else if (type == LAMBDA_EXPRESSION) {
         return new GDScriptLambdaExpressionImpl(node);
+      }
+      else if (type == LOCAL_VAR_NAME) {
+        return new GDScriptLocalVarNameImpl(node);
       }
       else if (type == LUA_DICTIONARY_ENTRY) {
         return new GDScriptLuaDictionaryEntryImpl(node);

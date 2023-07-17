@@ -322,7 +322,11 @@ assign_operator ::= EQUAL
     | CARET_EQUAL
     | INFER
 
-var_statement ::= VAR id (COLON type)? ((EQUAL | INFER) AWAIT? expression)?
+var_statement ::= VAR local_var_name (COLON type)? ((EQUAL | INFER) AWAIT? expression)? {
+    mixin="GDScriptNamedElementImpl"
+    implements=["GDScriptNamedElement"]
+    methods=[getName setName getNameIdentifier getTextOffset]
+}
 const_statement ::= CONST id (COLON type)? (EQUAL | INFER) expression
 expression_statement ::= expression
 assert_statement ::= ASSERT L_PAREN expression [COMMA string] R_PAREN
@@ -399,6 +403,7 @@ private nested_type ::= id (DOT id)*
 function_name ::= IDENTIFIER
 parameter_name ::= IDENTIFIER
 class_var_name ::= IDENTIFIER
+local_var_name ::= IDENTIFIER
 
 id ::= IDENTIFIER | INT | FLOAT | BOOL | VOID | NODE_PATH | SUPER {methods = [getReference]}
 string ::= SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING
