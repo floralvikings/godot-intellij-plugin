@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GDScriptFunctionDeclaration extends PsiElement {
+public interface GDScriptFunctionDeclaration extends GDScriptNamedElement {
 
   @NotNull
   GDScriptBlock getBlock();
@@ -18,5 +18,16 @@ public interface GDScriptFunctionDeclaration extends PsiElement {
 
   @Nullable
   GDScriptFunctionReturnType getFunctionReturnType();
+
+  @Nullable
+  String getName();
+
+  @NotNull
+  PsiElement setName(@NotNull String newName);
+
+  @NotNull
+  PsiElement getNameIdentifier();
+
+  int getTextOffset();
 
 }

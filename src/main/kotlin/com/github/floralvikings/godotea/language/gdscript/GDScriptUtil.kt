@@ -13,14 +13,35 @@ import com.intellij.psi.util.elementType
 private val log = Logger.getInstance("com.github.floralvikings.godotea.language.gdscript.GDScriptUtil")
 
 fun findDeclaration(id: GDScriptId): PsiElement? {
-    return if(id.isMember()) {
+    return if (id.isMember()) {
         null
     } else if (id.isFunctionName()) {
-        // TODO resolve function declaration
-        null
+        resolveFunctionDeclaration(id)
     } else {
         resolveVarDeclaration(id)
     }
+}
+
+private fun resolveFunctionDeclaration(id: GDScriptId): PsiElement? {
+    var current: PsiElement? = id
+    // Search for functions in the same class
+    while (current != null) {
+        current = current.parent
+        if (current is GDScriptClassBlock) {
+            val innerClassFunctionDeclaration = current.childrenOfType<GDScriptFunctionDeclaration>()
+                .firstOrNull { it.functionName.text == id.text }
+            if (innerClassFunctionDeclaration != null) {
+                return innerClassFunctionDeclaration
+            }
+        } else if (current is GDScriptFile) {
+            val topLevelFunctionDeclaration = current.childrenOfType<GDScriptFunctionDeclaration>()
+                .firstOrNull { it.functionName.text == id.text }
+            if(topLevelFunctionDeclaration != null) {
+                return topLevelFunctionDeclaration
+            }
+        }
+    }
+    return null
 }
 
 private fun resolveVarDeclaration(id: GDScriptId): PsiElement? {
@@ -62,7 +83,7 @@ private fun resolveVarDeclaration(id: GDScriptId): PsiElement? {
 val PsiElement.prevNonWhitespaceSibling: PsiElement?
     get() {
         var current = prevSibling
-        while(current != null && current is PsiWhiteSpace) {
+        while (current != null && current is PsiWhiteSpace) {
             current = current.prevSibling
         }
         return current
@@ -71,7 +92,7 @@ val PsiElement.prevNonWhitespaceSibling: PsiElement?
 val PsiElement.nextNonWhitespaceSibling: PsiElement?
     get() {
         var current = nextSibling
-        while(current != null && current is PsiWhiteSpace) {
+        while (current != null && current is PsiWhiteSpace) {
             current = current.nextSibling
         }
         return current

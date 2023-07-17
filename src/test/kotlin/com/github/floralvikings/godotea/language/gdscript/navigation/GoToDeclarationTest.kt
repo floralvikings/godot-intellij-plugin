@@ -38,6 +38,18 @@ class GoToDeclarationTest : BasePlatformTestCase() {
         childrenOfType<GDScriptFunctionDeclaration>()[0].block.childrenOfType<GDScriptVarStatement>()[0]
     }
 
+    fun test_go_to_top_level_function_declaration() = doTest {
+        childrenOfType<GDScriptFunctionDeclaration>()[0]
+    }
+
+    fun test_go_to_inner_class_function_declaration() = doTest {
+        childrenOfType<GDScriptInnerClassDeclaration>()[0].classBlock.childrenOfType<GDScriptFunctionDeclaration>()[0]
+    }
+
+    fun test_go_to_top_level_function_declaration_from_inner_class() = doTest {
+        childrenOfType<GDScriptFunctionDeclaration>()[0]
+    }
+
     private fun configFile() {
         val testName = getTestName(true)
         myFixture.configureByFile("$testName.gd")
