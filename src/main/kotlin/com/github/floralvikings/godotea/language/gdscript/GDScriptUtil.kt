@@ -1,44 +1,85 @@
 @file:JvmName("GDScriptUtil")
+
 package com.github.floralvikings.godotea.language.gdscript
 
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFile
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFunctionDeclaration
-import com.intellij.openapi.project.Project
+import com.github.floralvikings.godotea.language.gdscript.psi.*
+import com.intellij.openapi.diagnostic.Logger
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiManager
-import com.intellij.psi.search.FileTypeIndex
-import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.PsiWhiteSpace
+import com.intellij.psi.util.childrenOfType
+import com.intellij.psi.util.elementType
 
-fun findFunctionDeclaration(file: PsiFile, functionName: String): GDScriptFunctionDeclaration? {
-    return PsiTreeUtil.getChildrenOfType(file, GDScriptFunctionDeclaration::class.java)
-        ?.asSequence()
-        ?.filter { it.functionName.text == functionName }
-        ?.firstOrNull()
+private val log = Logger.getInstance("com.github.floralvikings.godotea.language.gdscript.GDScriptUtil")
+
+fun findDeclaration(id: GDScriptId): PsiElement? {
+    return if(id.isMember()) {
+        null
+    } else if (id.isFunctionName()) {
+        // TODO resolve function declaration
+        null
+    } else {
+        resolveVarDeclaration(id)
+    }
 }
 
-fun findFunctionDeclarations(project: Project, functionName: String): List<GDScriptFunctionDeclaration> {
-    return FileTypeIndex.getFiles(GDScriptFileType.INSTANCE, GlobalSearchScope.allScope(project))
-        .asSequence()
-        .map { PsiManager.getInstance(project).findFile(it) }
-        .filterIsInstance<GDScriptFile>()
-        .map { PsiTreeUtil.getChildrenOfType(it, GDScriptFunctionDeclaration::class.java) }
-        .filterNotNull()
-        .map { array ->
-            array.filter { declaration -> declaration.functionName.text == functionName }
+private fun resolveVarDeclaration(id: GDScriptId): PsiElement? {
+    var current: PsiElement? = id
+    while (current != null) {
+        if (current is GDScriptBlock && current.parent is GDScriptFunctionDeclaration) {
+            val varStatements = current.childrenOfType<GDScriptVarStatement>()
+            val localVarDeclaration = varStatements
+                .firstOrNull { it.localVarName.text == id.text }
+            if (localVarDeclaration != null) {
+                return localVarDeclaration
+            }
+        } else if (current is GDScriptFunctionDeclaration) {
+            val parameterDeclaration = current.functionParameterList
+                .firstOrNull { it.parameterName.text == id.text }
+            if (parameterDeclaration != null) {
+                return parameterDeclaration
+            }
+        } else if (current is GDScriptClassBlock && current.parent is GDScriptInnerClassDeclaration) {
+            val varStatements = current.childrenOfType<GDScriptClassVarDeclaration>()
+            val classVarDeclaration = varStatements
+                .firstOrNull { it.classVarName.text == id.text }
+            if (classVarDeclaration != null) {
+                return classVarDeclaration
+            }
+        } else if (current is PsiFile) {
+            val varStatements = current.childrenOfType<GDScriptClassVarDeclaration>()
+            val classVarDeclaration = varStatements
+                .firstOrNull { it.classVarName.text == id.text }
+            if (classVarDeclaration != null) {
+                return classVarDeclaration
+            }
         }
-        .flatten()
-        .toList()
+        current = current.parent
+    }
+    return null
 }
 
-fun findFunctionDeclarations(project: Project): List<GDScriptFunctionDeclaration> {
-    return FileTypeIndex.getFiles(GDScriptFileType.INSTANCE, GlobalSearchScope.allScope(project))
-        .asSequence()
-        .map { PsiManager.getInstance(project).findFile(it) }
-        .filterIsInstance<GDScriptFile>()
-        .map { PsiTreeUtil.getChildrenOfType(it, GDScriptFunctionDeclaration::class.java) }
-        .filterNotNull()
-        .map { it.toList() }
-        .flatten()
-        .toList()
-}
+val PsiElement.prevNonWhitespaceSibling: PsiElement?
+    get() {
+        var current = prevSibling
+        while(current != null && current is PsiWhiteSpace) {
+            current = current.prevSibling
+        }
+        return current
+    }
+
+val PsiElement.nextNonWhitespaceSibling: PsiElement?
+    get() {
+        var current = nextSibling
+        while(current != null && current is PsiWhiteSpace) {
+            current = current.nextSibling
+        }
+        return current
+    }
+
+private fun GDScriptId.isMember() =
+    prevNonWhitespaceSibling.elementType == GDScriptTypes.DOT
+
+private fun GDScriptId.isFunctionName() =
+    nextNonWhitespaceSibling.elementType == GDScriptTypes.L_PAREN
+

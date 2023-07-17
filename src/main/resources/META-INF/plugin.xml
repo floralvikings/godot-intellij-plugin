@@ -30,6 +30,13 @@
                 language="GDScript"
                 implementationClass="com.github.floralvikings.godotea.language.gdscript.refactoring.GDScriptRefactoringSupportProvider"
         />
-        <sdkType implementation="com.github.floralvikings.godotea.sdk.GodotSdk" />
+        <sdkType implementation="com.github.floralvikings.godotea.sdk.GodotSdk"/>
+        <lang.directNavigationProvider
+                implementation="com.github.floralvikings.godotea.language.gdscript.navigation.GDScriptIDNavigationProvider"
+        />
+        <lang.findUsagesProvider
+                language="GDScript"
+                implementationClass="com.github.floralvikings.godotea.language.gdscript.navigation.GDScriptFindUsagesProvider"
+        />
     </extensions>
 </idea-plugin>

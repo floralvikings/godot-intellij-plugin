@@ -24,6 +24,7 @@ public interface GDScriptTypes {
   IElementType CLASS_CONST_DECLARATION = new GDScriptElementType("CLASS_CONST_DECLARATION");
   IElementType CLASS_NAME_DECLARATION = new GDScriptElementType("CLASS_NAME_DECLARATION");
   IElementType CLASS_VAR_DECLARATION = new GDScriptElementType("CLASS_VAR_DECLARATION");
+  IElementType CLASS_VAR_NAME = new GDScriptElementType("CLASS_VAR_NAME");
   IElementType CONST_STATEMENT = new GDScriptElementType("CONST_STATEMENT");
   IElementType CONTINUE_STATEMENT = new GDScriptElementType("CONTINUE_STATEMENT");
   IElementType DICTIONARY_ENTRY = new GDScriptElementType("DICTIONARY_ENTRY");
@@ -48,10 +49,12 @@ public interface GDScriptTypes {
   IElementType KEY = new GDScriptElementType("KEY");
   IElementType KEY_VALUE_PATTERN = new GDScriptElementType("KEY_VALUE_PATTERN");
   IElementType LAMBDA_EXPRESSION = new GDScriptElementType("LAMBDA_EXPRESSION");
+  IElementType LOCAL_VAR_NAME = new GDScriptElementType("LOCAL_VAR_NAME");
   IElementType LUA_DICTIONARY_ENTRY = new GDScriptElementType("LUA_DICTIONARY_ENTRY");
   IElementType LUA_DICTIONARY_EXPRESSION = new GDScriptElementType("LUA_DICTIONARY_EXPRESSION");
   IElementType MATCH_BLOCK = new GDScriptElementType("MATCH_BLOCK");
   IElementType MATCH_STATEMENT = new GDScriptElementType("MATCH_STATEMENT");
+  IElementType PARAMETER_NAME = new GDScriptElementType("PARAMETER_NAME");
   IElementType PATTERN = new GDScriptElementType("PATTERN");
   IElementType PATTERN_LIST = new GDScriptElementType("PATTERN_LIST");
   IElementType RETURN_STATEMENT = new GDScriptElementType("RETURN_STATEMENT");
@@ -242,6 +245,9 @@ public interface GDScriptTypes {
       else if (type == CLASS_VAR_DECLARATION) {
         return new GDScriptClassVarDeclarationImpl(node);
       }
+      else if (type == CLASS_VAR_NAME) {
+        return new GDScriptClassVarNameImpl(node);
+      }
       else if (type == CONST_STATEMENT) {
         return new GDScriptConstStatementImpl(node);
       }
@@ -314,6 +320,9 @@ public interface GDScriptTypes {
       else if (type == LAMBDA_EXPRESSION) {
         return new GDScriptLambdaExpressionImpl(node);
       }
+      else if (type == LOCAL_VAR_NAME) {
+        return new GDScriptLocalVarNameImpl(node);
+      }
       else if (type == LUA_DICTIONARY_ENTRY) {
         return new GDScriptLuaDictionaryEntryImpl(node);
       }
@@ -325,6 +334,9 @@ public interface GDScriptTypes {
       }
       else if (type == MATCH_STATEMENT) {
         return new GDScriptMatchStatementImpl(node);
+      }
+      else if (type == PARAMETER_NAME) {
+        return new GDScriptParameterNameImpl(node);
       }
       else if (type == PATTERN) {
         return new GDScriptPatternImpl(node);

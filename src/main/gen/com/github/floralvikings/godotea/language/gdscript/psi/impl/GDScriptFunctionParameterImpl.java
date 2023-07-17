@@ -8,13 +8,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.github.floralvikings.godotea.language.gdscript.psi.*;
-import com.github.floralvikings.godotea.language.gdscript.psi.util.GDScriptImplPsiUtil;
 
-public class GDScriptFunctionParameterImpl extends ASTWrapperPsiElement implements GDScriptFunctionParameter {
+public class GDScriptFunctionParameterImpl extends GDScriptNamedElementImpl implements GDScriptFunctionParameter {
 
-  public GDScriptFunctionParameterImpl(@NotNull ASTNode node) {
+  public GDScriptFunctionParameterImpl(ASTNode node) {
     super(node);
   }
 
@@ -36,14 +34,37 @@ public class GDScriptFunctionParameterImpl extends ASTWrapperPsiElement implemen
 
   @Override
   @NotNull
-  public GDScriptId getId() {
-    return findNotNullChildByClass(GDScriptId.class);
+  public GDScriptParameterName getParameterName() {
+    return findNotNullChildByClass(GDScriptParameterName.class);
   }
 
   @Override
   @Nullable
   public GDScriptType getType() {
     return findChildByClass(GDScriptType.class);
+  }
+
+  @Override
+  @Nullable
+  public String getName() {
+    return GDScriptImplPsiUtil.getName(this);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement setName(@NotNull String newName) {
+    return GDScriptImplPsiUtil.setName(this, newName);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getNameIdentifier() {
+    return GDScriptImplPsiUtil.getNameIdentifier(this);
+  }
+
+  @Override
+  public int getTextOffset() {
+    return GDScriptImplPsiUtil.getTextOffset(this);
   }
 
 }

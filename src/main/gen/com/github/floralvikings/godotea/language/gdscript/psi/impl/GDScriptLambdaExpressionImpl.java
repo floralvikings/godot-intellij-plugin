@@ -9,7 +9,6 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes.*;
 import com.github.floralvikings.godotea.language.gdscript.psi.*;
-import com.github.floralvikings.godotea.language.gdscript.psi.util.GDScriptImplPsiUtil;
 
 public class GDScriptLambdaExpressionImpl extends GDScriptExpressionImpl implements GDScriptLambdaExpression {
 

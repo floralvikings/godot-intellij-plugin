@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GDScriptClassVarDeclaration extends PsiElement {
+public interface GDScriptClassVarDeclaration extends GDScriptNamedElement {
 
   @NotNull
   List<GDScriptBlockGet> getBlockGetList();
@@ -13,11 +13,11 @@ public interface GDScriptClassVarDeclaration extends PsiElement {
   @NotNull
   List<GDScriptBlockSet> getBlockSetList();
 
+  @NotNull
+  GDScriptClassVarName getClassVarName();
+
   @Nullable
   GDScriptExpression getExpression();
-
-  @NotNull
-  GDScriptId getId();
 
   @Nullable
   GDScriptSetGet getSetGet();
@@ -27,5 +27,16 @@ public interface GDScriptClassVarDeclaration extends PsiElement {
 
   @NotNull
   List<GDScriptVarExport> getVarExportList();
+
+  @Nullable
+  String getName();
+
+  @NotNull
+  PsiElement setName(@NotNull String newName);
+
+  @NotNull
+  PsiElement getNameIdentifier();
+
+  int getTextOffset();
 
 }

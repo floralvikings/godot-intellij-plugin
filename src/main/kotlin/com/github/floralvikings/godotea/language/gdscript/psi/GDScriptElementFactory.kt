@@ -12,7 +12,7 @@ class GDScriptElementFactory {
             val text = "var $id"
             val gdScriptFile = createFile(project, text)
             val declaration = gdScriptFile.firstChild as GDScriptClassVarDeclaration
-            return declaration.id.identifier!!
+            return declaration.classVarName.identifier
         }
 
         @JvmStatic

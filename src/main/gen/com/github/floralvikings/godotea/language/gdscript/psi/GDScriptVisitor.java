@@ -68,6 +68,10 @@ public class GDScriptVisitor extends PsiElementVisitor {
   }
 
   public void visitClassVarDeclaration(@NotNull GDScriptClassVarDeclaration o) {
+    visitNamedElement(o);
+  }
+
+  public void visitClassVarName(@NotNull GDScriptClassVarName o) {
     visitPsiElement(o);
   }
 
@@ -132,7 +136,7 @@ public class GDScriptVisitor extends PsiElementVisitor {
   }
 
   public void visitFunctionParameter(@NotNull GDScriptFunctionParameter o) {
-    visitPsiElement(o);
+    visitNamedElement(o);
   }
 
   public void visitFunctionReturnType(@NotNull GDScriptFunctionReturnType o) {
@@ -167,6 +171,10 @@ public class GDScriptVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitLocalVarName(@NotNull GDScriptLocalVarName o) {
+    visitPsiElement(o);
+  }
+
   public void visitLuaDictionaryEntry(@NotNull GDScriptLuaDictionaryEntry o) {
     visitPsiElement(o);
   }
@@ -180,6 +188,10 @@ public class GDScriptVisitor extends PsiElementVisitor {
   }
 
   public void visitMatchStatement(@NotNull GDScriptMatchStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitParameterName(@NotNull GDScriptParameterName o) {
     visitPsiElement(o);
   }
 
@@ -228,10 +240,14 @@ public class GDScriptVisitor extends PsiElementVisitor {
   }
 
   public void visitVarStatement(@NotNull GDScriptVarStatement o) {
-    visitPsiElement(o);
+    visitNamedElement(o);
   }
 
   public void visitWhileStatement(@NotNull GDScriptWhileStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitNamedElement(@NotNull GDScriptNamedElement o) {
     visitPsiElement(o);
   }
 

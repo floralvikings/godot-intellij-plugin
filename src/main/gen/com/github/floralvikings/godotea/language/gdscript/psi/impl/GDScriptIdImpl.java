@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.github.floralvikings.godotea.language.gdscript.psi.*;
-import com.github.floralvikings.godotea.language.gdscript.psi.util.GDScriptImplPsiUtil;
+import com.intellij.psi.PsiReference;
 
 public class GDScriptIdImpl extends ASTWrapperPsiElement implements GDScriptId {
 
@@ -38,6 +38,12 @@ public class GDScriptIdImpl extends ASTWrapperPsiElement implements GDScriptId {
   @Nullable
   public PsiElement getNodePath() {
     return findChildByType(NODE_PATH);
+  }
+
+  @Override
+  @NotNull
+  public PsiReference getReference() {
+    return GDScriptImplPsiUtil.getReference(this);
   }
 
 }

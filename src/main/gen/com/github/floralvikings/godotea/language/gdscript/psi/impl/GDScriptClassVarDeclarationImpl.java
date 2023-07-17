@@ -8,13 +8,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.github.floralvikings.godotea.language.gdscript.psi.*;
-import com.github.floralvikings.godotea.language.gdscript.psi.util.GDScriptImplPsiUtil;
 
-public class GDScriptClassVarDeclarationImpl extends ASTWrapperPsiElement implements GDScriptClassVarDeclaration {
+public class GDScriptClassVarDeclarationImpl extends GDScriptNamedElementImpl implements GDScriptClassVarDeclaration {
 
-  public GDScriptClassVarDeclarationImpl(@NotNull ASTNode node) {
+  public GDScriptClassVarDeclarationImpl(ASTNode node) {
     super(node);
   }
 
@@ -41,15 +39,15 @@ public class GDScriptClassVarDeclarationImpl extends ASTWrapperPsiElement implem
   }
 
   @Override
-  @Nullable
-  public GDScriptExpression getExpression() {
-    return findChildByClass(GDScriptExpression.class);
+  @NotNull
+  public GDScriptClassVarName getClassVarName() {
+    return findNotNullChildByClass(GDScriptClassVarName.class);
   }
 
   @Override
-  @NotNull
-  public GDScriptId getId() {
-    return findNotNullChildByClass(GDScriptId.class);
+  @Nullable
+  public GDScriptExpression getExpression() {
+    return findChildByClass(GDScriptExpression.class);
   }
 
   @Override
@@ -68,6 +66,29 @@ public class GDScriptClassVarDeclarationImpl extends ASTWrapperPsiElement implem
   @NotNull
   public List<GDScriptVarExport> getVarExportList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GDScriptVarExport.class);
+  }
+
+  @Override
+  @Nullable
+  public String getName() {
+    return GDScriptImplPsiUtil.getName(this);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement setName(@NotNull String newName) {
+    return GDScriptImplPsiUtil.setName(this, newName);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getNameIdentifier() {
+    return GDScriptImplPsiUtil.getNameIdentifier(this);
+  }
+
+  @Override
+  public int getTextOffset() {
+    return GDScriptImplPsiUtil.getTextOffset(this);
   }
 
 }
