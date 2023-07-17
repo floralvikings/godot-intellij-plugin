@@ -1,6 +1,7 @@
 package com.github.floralvikings.godotea.language.gdscript.highlighter
 
 import com.github.floralvikings.godotea.language.gdscript.lexer.GDScriptLexerAdapter
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes.*
 import com.intellij.lexer.Lexer
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
@@ -17,7 +18,8 @@ class GDScriptSyntaxHighlighter : SyntaxHighlighterBase() {
     override fun getTokenHighlights(tokenType: IElementType?): Array<TextAttributesKey> {
         val keywords = setOf(
             VAR, CONST, CLASS, ENUM, FUNC, IF, ELIF, ELSE, FOR, WHILE, CONTINUE, PASS, RETURN, MATCH, ASSERT, AWAIT,
-            BREAKPOINT, CLASS_NAME, EXTENDS, SUPER, SELF, SIGNAL, STATIC, SET, GET, TRUE, FALSE, NULL, AND, OR, NOT,
+            BREAKPOINT,
+            GDScriptTypes.CLASS_NAME, EXTENDS, SUPER, SELF, SIGNAL, STATIC, SET, GET, TRUE, FALSE, NULL, AND, OR, NOT,
             INT, FLOAT, BOOL, VOID, IN, IS, AS
         )
         val stringLiterals = setOf(
@@ -55,6 +57,8 @@ class GDScriptSyntaxHighlighter : SyntaxHighlighterBase() {
         val NUMBER_LITERAL_KEY =
             createTextAttributesKey("GDSCRIPT_NUMBER_LITERAL", DefaultLanguageHighlighterColors.NUMBER)
         val ANNOTATION_KEY = createTextAttributesKey("GDSCRIPT_ANNOTATION", DefaultLanguageHighlighterColors.METADATA)
+        val FUNCTION_DECLARATION = createTextAttributesKey("GDSCRIPT_FUNCTION_DECLARATION", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION)
+        val CLASS_NAME = createTextAttributesKey("GDSCRIPT_CLASS_DECLARATION", DefaultLanguageHighlighterColors.CLASS_NAME)
         val BAD_CHARACTER_KEY = createTextAttributesKey("GDSCRIPT_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER)
 
         val KEYWORD_KEYS = arrayOf(KEYWORD_KEY)

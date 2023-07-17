@@ -11,7 +11,9 @@ import javax.swing.Icon
 class GDScriptColorSettingsPage : ColorSettingsPage {
     companion object {
         val DESCRIPTORS = arrayOf(
-            AttributesDescriptor("Annotations", GDScriptSyntaxHighlighter.ANNOTATION_KEY)
+            AttributesDescriptor("Annotations", GDScriptSyntaxHighlighter.ANNOTATION_KEY),
+            AttributesDescriptor("Function name declarations", GDScriptSyntaxHighlighter.FUNCTION_DECLARATION),
+            AttributesDescriptor("Class name declarations", GDScriptSyntaxHighlighter.CLASS_NAME),
         )
     }
 

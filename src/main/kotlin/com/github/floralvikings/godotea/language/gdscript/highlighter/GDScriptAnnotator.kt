@@ -1,31 +1,36 @@
 package com.github.floralvikings.godotea.language.gdscript.highlighter
 
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes.*
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptClassNameDeclaration
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFunctionName
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptId
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
-import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.psi.PsiElement
-import com.intellij.psi.util.elementType
 
 class GDScriptAnnotator : Annotator {
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
-        val isIdentifier = element.elementType == ID
-        if (isIdentifier) {
-            annotateIdentifier(element, holder)
+        if (element is GDScriptFunctionName) {
+            annotateFunctionDeclarationName(element, holder)
+        }
+        if(element is GDScriptId) {
+            annotateId(element, holder)
         }
     }
 
-    private fun annotateIdentifier(element: PsiElement, holder: AnnotationHolder) {
-        when(element.parent.elementType) {
-            FUNCTION_DECLARATION -> annotateFunctionDeclarationName(holder, element)
+    private fun annotateId(element: GDScriptId, holder: AnnotationHolder) {
+        if(element.parent is GDScriptClassNameDeclaration) {
+            holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+                .range(element.textRange)
+                .textAttributes(GDScriptSyntaxHighlighter.CLASS_NAME)
+                .create()
         }
     }
 
-    private fun annotateFunctionDeclarationName(holder: AnnotationHolder, element: PsiElement) {
+    private fun annotateFunctionDeclarationName(element: GDScriptFunctionName, holder: AnnotationHolder) {
         holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
             .range(element.textRange)
-            .textAttributes(DefaultLanguageHighlighterColors.FUNCTION_DECLARATION)
+            .textAttributes(GDScriptSyntaxHighlighter.FUNCTION_DECLARATION)
             .create()
     }
 }
