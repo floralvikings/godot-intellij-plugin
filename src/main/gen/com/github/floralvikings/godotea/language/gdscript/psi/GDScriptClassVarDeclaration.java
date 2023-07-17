@@ -37,9 +37,6 @@ public interface GDScriptClassVarDeclaration extends GDScriptNamedElement {
   @NotNull
   PsiElement getNameIdentifier();
 
-  @NotNull
-  String getQualifiedName();
-
   int getTextOffset();
 
 }

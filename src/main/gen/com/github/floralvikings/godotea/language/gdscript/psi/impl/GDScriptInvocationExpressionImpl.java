@@ -29,8 +29,8 @@ public class GDScriptInvocationExpressionImpl extends GDScriptExpressionImpl imp
 
   @Override
   @Nullable
-  public GDScriptFunctionName getFunctionName() {
-    return findChildByClass(GDScriptFunctionName.class);
+  public GDScriptId getId() {
+    return findChildByClass(GDScriptId.class);
   }
 
 }

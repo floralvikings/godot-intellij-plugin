@@ -36,7 +36,7 @@
         />
         <lang.findUsagesProvider
                 language="GDScript"
-                implementationClass="com.github.floralvikings.godotea.language.gdscript.navigation.GDScriptClassVarFindUsagesProvider"
+                implementationClass="com.github.floralvikings.godotea.language.gdscript.navigation.GDScriptFindUsagesProvider"
         />
     </extensions>
 </idea-plugin>

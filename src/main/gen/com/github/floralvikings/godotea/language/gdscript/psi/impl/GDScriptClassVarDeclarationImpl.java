@@ -87,12 +87,6 @@ public class GDScriptClassVarDeclarationImpl extends GDScriptNamedElementImpl im
   }
 
   @Override
-  @NotNull
-  public String getQualifiedName() {
-    return GDScriptImplPsiUtil.getQualifiedName(this);
-  }
-
-  @Override
   public int getTextOffset() {
     return GDScriptImplPsiUtil.getTextOffset(this);
   }

@@ -1,9 +1,7 @@
 package com.github.floralvikings.godotea.language.gdscript.reference
 
-import com.github.floralvikings.godotea.language.gdscript.findClassVarDeclaration
 import com.github.floralvikings.godotea.language.gdscript.findDeclaration
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptId
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptImplPsiUtil
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.diagnostic.debug
 import com.intellij.openapi.util.Key

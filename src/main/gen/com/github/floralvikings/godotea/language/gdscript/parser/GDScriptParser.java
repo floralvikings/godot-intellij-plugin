@@ -2173,10 +2173,9 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // function_name? call
+  // id? call
   public static boolean invocation_expression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "invocation_expression")) return false;
-    if (!nextTokenIs(b, "<invocation expression>", IDENTIFIER, L_PAREN)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, INVOCATION_EXPRESSION, "<invocation expression>");
     r = invocation_expression_0(b, l + 1);
@@ -2185,10 +2184,10 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // function_name?
+  // id?
   private static boolean invocation_expression_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "invocation_expression_0")) return false;
-    function_name(b, l + 1);
+    id(b, l + 1);
     return true;
   }
 
