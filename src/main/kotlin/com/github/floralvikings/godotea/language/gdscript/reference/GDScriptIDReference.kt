@@ -1,6 +1,7 @@
 package com.github.floralvikings.godotea.language.gdscript.reference
 
 import com.github.floralvikings.godotea.language.gdscript.findDeclaration
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptElementFactory
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptId
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.diagnostic.debug
@@ -23,6 +24,13 @@ class GDScriptIDReference(private val id: GDScriptId) : PsiReferenceBase<GDScrip
 
     override fun getRangeInElement(): TextRange {
         return id.textRange.shiftLeft(id.startOffset)
+    }
+
+    override fun handleElementRename(newElementName: String): PsiElement {
+        val identifier = id.identifier ?: return id
+        val newIdentifier = GDScriptElementFactory.createIdentifier(id.project, newElementName)
+        id.node.replaceChild(identifier.node, newIdentifier.node)
+        return id
     }
 
     class GDScriptIDReferenceCachedValueProvider(val id: GDScriptId) : CachedValueProvider<PsiElement?> {
