@@ -1,4 +1,4 @@
-package com.github.floralvikings.godotea.language.gdscript.examples
+package com.github.floralvikings.godotea.language.gdscript.parser.examples
 
 import com.github.floralvikings.godotea.language.gdscript.GDScriptParsingTestCase
 

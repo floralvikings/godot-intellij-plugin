@@ -1,4 +1,4 @@
-package com.github.floralvikings.godotea.language.gdscript.top_level_declaration
+package com.github.floralvikings.godotea.language.gdscript.parser.top_level_declaration
 
 import com.github.floralvikings.godotea.language.gdscript.GDScriptParsingTestCase
 

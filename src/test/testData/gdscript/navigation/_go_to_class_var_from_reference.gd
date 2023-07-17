@@ -1,4 +1,4 @@
 var foo = "Hello World"
 
 func test():
-    print(foo)
+    <caret>foo.begins_with("H")
