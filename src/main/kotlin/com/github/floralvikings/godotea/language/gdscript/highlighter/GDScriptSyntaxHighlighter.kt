@@ -8,12 +8,9 @@ import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.HighlighterColors
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey
-import com.intellij.openapi.editor.markup.TextAttributes
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase
 import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
-import com.intellij.ui.JBColor
-import java.awt.Font
 
 class GDScriptSyntaxHighlighter : SyntaxHighlighterBase() {
     override fun getHighlightingLexer(): Lexer = GDScriptLexerAdapter()
@@ -21,8 +18,7 @@ class GDScriptSyntaxHighlighter : SyntaxHighlighterBase() {
     override fun getTokenHighlights(tokenType: IElementType?): Array<TextAttributesKey> {
         val keywords = setOf(
             VAR, CONST, CLASS, ENUM, FUNC, IF, ELIF, ELSE, FOR, WHILE, CONTINUE, PASS, RETURN, MATCH, ASSERT, AWAIT,
-            BREAKPOINT,
-            GDScriptTypes.CLASS_NAME, EXTENDS, SUPER, SELF, SIGNAL, STATIC, SET, GET, TRUE, FALSE, NULL, AND, OR, NOT,
+            BREAKPOINT, EXTENDS, SUPER, SELF, SIGNAL, STATIC, SET, GET, TRUE, FALSE, NULL, AND, OR, NOT,
             INT, FLOAT, BOOL, VOID, IN, IS, AS
         )
         val stringLiterals = setOf(
@@ -61,7 +57,10 @@ class GDScriptSyntaxHighlighter : SyntaxHighlighterBase() {
             createTextAttributesKey("GDSCRIPT_NUMBER_LITERAL", DefaultLanguageHighlighterColors.NUMBER)
         val ANNOTATION = createTextAttributesKey("GDSCRIPT_ANNOTATION", DefaultLanguageHighlighterColors.METADATA)
         val FUNCTION_DECLARATION =
-            createTextAttributesKey("GDSCRIPT_FUNCTION_DECLARATION", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION)
+            createTextAttributesKey(
+                "GDSCRIPT_FUNCTION_DECLARATION",
+                DefaultLanguageHighlighterColors.FUNCTION_DECLARATION
+            )
         val BUILT_IN_FUNCTION =
             createTextAttributesKey("GDSCRIPT_BUILT_IN_FUNCTION", DefaultLanguageHighlighterColors.PREDEFINED_SYMBOL)
         val BUILT_IN_CLASS =

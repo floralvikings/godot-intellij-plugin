@@ -1,17 +1,19 @@
-package com.github.floralvikings.godotea.language.gdscript.typification
+package com.github.floralvikings.godotea.language.gdscript.typification.structure
+
+import com.github.floralvikings.godotea.language.gdscript.typification.builtins.basic.GDVoid
 
 fun type(name: String, configure: TypeBuilder.() -> Unit): GDScriptType = TypeBuilder(name).apply(configure).build()
 
 fun func(
     name: String,
-    returnType: GDScriptType = GDScriptBuiltIns.VOID,
+    returnType: GDScriptType = GDVoid,
     configure: FunctionBuilder.() -> Unit
 ): GDScriptFunction {
     return FunctionBuilder(name, returnType).apply(configure).build()
 }
 fun func(
     name: String,
-    returnType: GDScriptType = GDScriptBuiltIns.VOID,
+    returnType: GDScriptType = GDVoid,
     vararg parameters: GDScriptParameter
 ): GDScriptFunction {
     return FunctionBuilder(name, returnType).apply { parameters.forEach { name(it.type) } }.build()
@@ -35,8 +37,8 @@ class TypeBuilder internal constructor(val name: String) {
 
     fun func(
         name: String,
-        returnType: GDScriptType = GDScriptBuiltIns.VOID,
-        configure: FunctionBuilder.() -> Unit
+        returnType: GDScriptType = GDVoid,
+        configure: FunctionBuilder.() -> Unit = { }
     ): GDScriptFunction {
         val func = FunctionBuilder(name, returnType).apply(configure).build()
         functions.add(func)
@@ -53,6 +55,12 @@ class TypeBuilder internal constructor(val name: String) {
         return field
     }
 
+    operator fun String.invoke(type: GDScriptType? = null): GDScriptField {
+        val field = field(this, type)
+        fields.add(field)
+        return field
+    }
+
     fun build(): GDScriptType {
         return GDScriptType(name, constructors, fields, functions, superType)
     }
@@ -60,6 +68,10 @@ class TypeBuilder internal constructor(val name: String) {
 
 class FunctionBuilder internal constructor(val name: String, var returnType: GDScriptType) {
     private val parameters = mutableListOf<GDScriptParameter>()
+
+    fun returns(type: GDScriptType) {
+        this.returnType = type
+    }
 
     operator fun String.invoke(type: GDScriptType? = null): GDScriptParameter {
         val param = GDScriptParameter(this, type)
