@@ -98,9 +98,12 @@ val PsiElement.nextNonWhitespaceSibling: PsiElement?
         return current
     }
 
-private fun GDScriptId.isMember() =
+fun GDScriptId.isMember() =
     prevNonWhitespaceSibling.elementType == GDScriptTypes.DOT
 
-private fun GDScriptId.isFunctionName() =
+fun GDScriptId.isFunctionName() =
     nextNonWhitespaceSibling.elementType == GDScriptTypes.L_PAREN
+
+fun GDScriptId.isVariable() =
+    !isMember() && !isFunctionName()
 
