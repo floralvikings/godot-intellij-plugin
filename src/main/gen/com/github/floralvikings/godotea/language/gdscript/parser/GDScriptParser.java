@@ -37,7 +37,7 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
     create_token_set_(ARRAY_EXPRESSION, DICTIONARY_EXPRESSION, EXPRESSION, INVOCATION_EXPRESSION,
-      LAMBDA_EXPRESSION, LUA_DICTIONARY_EXPRESSION),
+      LAMBDA_EXPRESSION, LUA_DICTIONARY_EXPRESSION, PAREN_EXPRESSION),
   };
 
   /* ********************************************************** */
@@ -2627,7 +2627,8 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // array_expression
+  // paren_expression
+  //     | array_expression
   //     | dictionary_expression
   //     | lua_dictionary_expression
   //     | invocation_expression
@@ -2645,7 +2646,8 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   static boolean operand(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "operand")) return false;
     boolean r;
-    r = array_expression(b, l + 1);
+    r = paren_expression(b, l + 1);
+    if (!r) r = array_expression(b, l + 1);
     if (!r) r = dictionary_expression(b, l + 1);
     if (!r) r = lua_dictionary_expression(b, l + 1);
     if (!r) r = invocation_expression(b, l + 1);
@@ -2739,6 +2741,20 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeToken(b, IDENTIFIER);
     exit_section_(b, m, PARAMETER_NAME, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // L_PAREN expression R_PAREN
+  public static boolean paren_expression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "paren_expression")) return false;
+    if (!nextTokenIs(b, L_PAREN)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, L_PAREN);
+    r = r && expression(b, l + 1);
+    r = r && consumeToken(b, R_PAREN);
+    exit_section_(b, m, PAREN_EXPRESSION, r);
     return r;
   }
 

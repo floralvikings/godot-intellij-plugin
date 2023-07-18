@@ -55,6 +55,7 @@ public interface GDScriptTypes {
   IElementType MATCH_BLOCK = new GDScriptElementType("MATCH_BLOCK");
   IElementType MATCH_STATEMENT = new GDScriptElementType("MATCH_STATEMENT");
   IElementType PARAMETER_NAME = new GDScriptElementType("PARAMETER_NAME");
+  IElementType PAREN_EXPRESSION = new GDScriptElementType("PAREN_EXPRESSION");
   IElementType PATTERN = new GDScriptElementType("PATTERN");
   IElementType PATTERN_LIST = new GDScriptElementType("PATTERN_LIST");
   IElementType RETURN_STATEMENT = new GDScriptElementType("RETURN_STATEMENT");
@@ -337,6 +338,9 @@ public interface GDScriptTypes {
       }
       else if (type == PARAMETER_NAME) {
         return new GDScriptParameterNameImpl(node);
+      }
+      else if (type == PAREN_EXPRESSION) {
+        return new GDScriptParenExpressionImpl(node);
       }
       else if (type == PATTERN) {
         return new GDScriptPatternImpl(node);

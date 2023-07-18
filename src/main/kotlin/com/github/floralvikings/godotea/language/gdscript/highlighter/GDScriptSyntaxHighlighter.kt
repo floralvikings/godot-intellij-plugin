@@ -58,6 +58,7 @@ class GDScriptSyntaxHighlighter : SyntaxHighlighterBase() {
             createTextAttributesKey("GDSCRIPT_NUMBER_LITERAL", DefaultLanguageHighlighterColors.NUMBER)
         val ANNOTATION_KEY = createTextAttributesKey("GDSCRIPT_ANNOTATION", DefaultLanguageHighlighterColors.METADATA)
         val FUNCTION_DECLARATION = createTextAttributesKey("GDSCRIPT_FUNCTION_DECLARATION", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION)
+        val BUILT_IN_FUNCTION = createTextAttributesKey("GDSCRIPT_BUILT_IN_FUNCTION")
         val CLASS_NAME = createTextAttributesKey("GDSCRIPT_CLASS_DECLARATION", DefaultLanguageHighlighterColors.CLASS_NAME)
         val BAD_CHARACTER_KEY = createTextAttributesKey("GDSCRIPT_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER)
 

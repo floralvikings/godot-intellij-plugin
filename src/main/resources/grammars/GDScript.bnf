@@ -341,7 +341,8 @@ await_statement ::= AWAIT expression
 
 // region expression
 expression ::= (operand | operator)+
-private operand ::= array_expression
+private operand ::= paren_expression
+    | array_expression
     | dictionary_expression
     | lua_dictionary_expression
     | invocation_expression
@@ -386,6 +387,8 @@ private operator ::= LESS
     | NOT
     | IF
     | ELSE
+
+paren_expression ::= L_PAREN expression R_PAREN
 
 array_expression ::= id? L_BRACKET LINE_BREAK* array_argument? LINE_BREAK* (COMMA LINE_BREAK* array_argument LINE_BREAK*)* COMMA? LINE_BREAK* R_BRACKET
 array_argument ::= (VAR? expression) | DOT_DOT | UNDERSCORE
