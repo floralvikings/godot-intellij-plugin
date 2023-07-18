@@ -38,5 +38,13 @@
                 language="GDScript"
                 implementationClass="com.github.floralvikings.godotea.language.gdscript.navigation.GDScriptFindUsagesProvider"
         />
+        <additionalTextAttributes
+            scheme="Darcula"
+            file="colorSchemes/GDScriptDark.xml"
+            />
+        <additionalTextAttributes
+                scheme="Dark"
+                file="colorSchemes/GDScriptDark.xml"
+        />
     </extensions>
 </idea-plugin>

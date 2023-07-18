@@ -1,0 +1,13 @@
+<?xml version='1.0'?>
+<list>
+    <option name="GDSCRIPT_BUILT_IN_FUNCTION">
+        <value>
+            <option name="FOREGROUND" value="A3A3F5"/>
+        </value>
+    </option>
+    <option name="GDSCRIPT_BUILT_IN_CLASS">
+        <value>
+            <option name="FOREGROUND" value="43FFC2"/>
+        </value>
+    </option>
+</list>

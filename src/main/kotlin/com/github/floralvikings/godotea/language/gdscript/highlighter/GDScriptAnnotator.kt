@@ -3,6 +3,7 @@ package com.github.floralvikings.godotea.language.gdscript.highlighter
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptClassNameDeclaration
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFunctionDeclaration
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptInvocationExpression
+import com.github.floralvikings.godotea.language.gdscript.typification.GDScriptBuiltIns
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
@@ -34,5 +35,20 @@ class GDScriptAnnotator : Annotator {
     }
 
     private fun annotateInvocationExpression(element: GDScriptInvocationExpression, holder: AnnotationHolder) {
+        val isBuiltIn = GDScriptBuiltIns.functionNames.contains(element.id.text)
+        if(isBuiltIn) {
+            holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+                .range(element.id.textRange)
+                .textAttributes(GDScriptSyntaxHighlighter.BUILT_IN_FUNCTION)
+                .create()
+        }
+
+        val isConstructor = GDScriptBuiltIns.constructorNames.contains(element.id.text)
+        if(isConstructor) {
+            holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+                .range(element.id.textRange)
+                .textAttributes(GDScriptSyntaxHighlighter.BUILT_IN_CLASS)
+                .create()
+        }
     }
 }
