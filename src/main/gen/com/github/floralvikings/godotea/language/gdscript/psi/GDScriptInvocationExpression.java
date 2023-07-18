@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface GDScriptInvocationExpression extends GDScriptExpression {
 
-  @Nullable
+  @NotNull
   GDScriptId getId();
 
 }
