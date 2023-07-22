@@ -2,25 +2,15 @@ package com.github.floralvikings.godotea.language.gdscript.typification.structur
 
 import com.github.floralvikings.godotea.language.gdscript.typification.builtins.basic.GDVoid
 
-open class GDScriptFunction(
+open class GDFunction(
     val name: String,
-    val parameters: List<GDScriptParameter>,
-    val returnType: GDScriptType = GDVoid
-) {
-    constructor(function: GDScriptFunction) : this(function.name, function.parameters, function.returnType)
+    val parameters: List<GDParameter>,
+    val returnType: GDType = GDVoid
+) : GDDeclaration {
+    constructor(function: GDFunction) : this(function.name, function.parameters, function.returnType)
 
-    constructor(
-        name: String,
-        configure: FunctionBuilder.() -> Unit
-    ) : this(
-        FunctionBuilder(name, GDVoid).apply(configure).build()
-    )
-
-    constructor(name: String, returnType: GDScriptType = GDVoid, vararg params: GDScriptParameter) : this(
-        name,
-        params.toList(),
-        returnType
-    )
+    constructor(name: String, configure: FunctionBuilder.() -> Unit)
+            : this(FunctionBuilder(name).apply(configure).build())
 
     override fun toString(): String {
         return "GDScriptFunction(name='$name', parameters=$parameters, returnType=$returnType)"
@@ -28,7 +18,7 @@ open class GDScriptFunction(
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is GDScriptFunction) return false
+        if (other !is GDFunction) return false
 
         if (name != other.name) return false
         if (parameters != other.parameters) return false

@@ -2,34 +2,32 @@ package com.github.floralvikings.godotea.language.gdscript.typification.structur
 
 import com.github.floralvikings.godotea.language.gdscript.typification.builtins.basic.GDVoid
 
-fun type(name: String, configure: TypeBuilder.() -> Unit): GDScriptType = TypeBuilder(name).apply(configure).build()
+fun type(name: String, configure: TypeBuilder.() -> Unit): GDType = TypeBuilder(name).apply(configure).build()
 
 fun func(
     name: String,
-    returnType: GDScriptType = GDVoid,
     configure: FunctionBuilder.() -> Unit
-): GDScriptFunction {
-    return FunctionBuilder(name, returnType).apply(configure).build()
+): GDFunction {
+    return FunctionBuilder(name).apply(configure).build()
 }
 fun func(
     name: String,
-    returnType: GDScriptType = GDVoid,
-    vararg parameters: GDScriptParameter
-): GDScriptFunction {
-    return FunctionBuilder(name, returnType).apply { parameters.forEach { name(it.type) } }.build()
+    vararg parameters: GDParameter
+): GDFunction {
+    return FunctionBuilder(name).apply { parameters.forEach { name(it.type) } }.build()
 }
 
 class TypeBuilder internal constructor(val name: String) {
-    private val constructors = mutableListOf<GDScriptConstructor>()
-    private val functions = mutableListOf<GDScriptFunction>()
-    private val fields = mutableListOf<GDScriptField>()
-    private var superType: GDScriptType? = null
+    private val constructors = mutableListOf<GDConstructor>()
+    private val functions = mutableListOf<GDFunction>()
+    private val fields = mutableListOf<GDField>()
+    private var superType: GDType? = null
 
-    fun extends(type: GDScriptType?) {
+    fun extends(type: GDType?) {
         this.superType = type
     }
 
-    fun constructor(configure: ConstructorBuilder.() -> Unit): GDScriptConstructor {
+    fun constructor(configure: ConstructorBuilder.() -> Unit): GDConstructor {
         val constructor = ConstructorBuilder().apply(configure).build()
         constructors.add(constructor)
         return constructor
@@ -37,67 +35,71 @@ class TypeBuilder internal constructor(val name: String) {
 
     fun func(
         name: String,
-        returnType: GDScriptType = GDVoid,
         configure: FunctionBuilder.() -> Unit = { }
-    ): GDScriptFunction {
-        val func = FunctionBuilder(name, returnType).apply(configure).build()
+    ): GDFunction {
+        val func = FunctionBuilder(name).apply(configure).build()
         functions.add(func)
         return func
     }
 
     fun field(
         name: String,
-        type: GDScriptType? = null,
+        type: GDType? = null,
         configure: FieldBuilder.() -> Unit = { }
-    ): GDScriptField {
+    ): GDField {
         val field = FieldBuilder(name, type).apply(configure).build()
         fields.add(field)
         return field
     }
 
-    operator fun String.invoke(type: GDScriptType? = null): GDScriptField {
+    operator fun String.invoke(type: GDType? = null): GDField {
         val field = field(this, type)
         fields.add(field)
         return field
     }
 
-    fun build(): GDScriptType {
-        return GDScriptType(name, constructors, fields, functions, superType)
+    fun build(): GDType {
+        return GDType(name, constructors, fields, functions, superType)
     }
 }
 
-class FunctionBuilder internal constructor(val name: String, var returnType: GDScriptType) {
-    private val parameters = mutableListOf<GDScriptParameter>()
+class FunctionBuilder internal constructor(val name: String) {
+    private var returnType:GDType = GDVoid
+    private val parameters = mutableListOf<GDParameter>()
 
-    fun returns(type: GDScriptType) {
+    fun returns(type: GDType) {
         this.returnType = type
     }
 
-    operator fun String.invoke(type: GDScriptType? = null): GDScriptParameter {
-        val param = GDScriptParameter(this, type)
+    operator fun String.invoke(type: GDType? = null): GDParameter {
+        val param = GDParameter(this, type)
         parameters.add(param)
         return param
     }
 
-    fun build(): GDScriptFunction {
-        return GDScriptFunction(name, parameters, returnType)
+    fun param(parameter: GDParameter) {
+        parameters.add(parameter)
+    }
+
+    fun build(): GDFunction {
+        return GDFunction(name, parameters, returnType)
     }
 }
 
 class ConstructorBuilder internal constructor() {
-    private val parameters = mutableListOf<GDScriptParameter>()
+    private val parameters = mutableListOf<GDParameter>()
 
-    operator fun String.invoke(type: GDScriptType? = null): GDScriptParameter {
-        val param = GDScriptParameter(this, type)
+    operator fun String.invoke(type: GDType? = null): GDParameter {
+        val param = GDParameter(this, type)
         parameters.add(param)
         return param
     }
 
-    fun build(): GDScriptConstructor {
-        return GDScriptConstructor(parameters)
+    fun build(): GDConstructor {
+        return GDConstructor(parameters)
     }
 }
 
-class FieldBuilder internal constructor(val name: String, val type: GDScriptType?) {
-    fun build(): GDScriptField = GDScriptField(name, type)
+class FieldBuilder internal constructor(val name: String, val type: GDType?) {
+    fun build(): GDField = GDField(name, type)
 }

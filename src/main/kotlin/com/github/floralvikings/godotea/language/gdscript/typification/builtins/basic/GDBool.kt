@@ -1,5 +1,5 @@
 package com.github.floralvikings.godotea.language.gdscript.typification.builtins.basic
 
-import com.github.floralvikings.godotea.language.gdscript.typification.structure.GDScriptType
+import com.github.floralvikings.godotea.language.gdscript.typification.structure.GDType
 
-object GDBool: GDScriptType("bool")
+object GDBool: GDType("bool")

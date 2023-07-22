@@ -1,10 +1,9 @@
 package com.github.floralvikings.godotea.language.gdscript.typification.structure
 
-class GDScriptParameter(val name: String, val type: GDScriptType? = null) {
-
+class GDField(val name: String, val type: GDType?) : GDDeclaration {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is GDScriptParameter) return false
+        if (other !is GDField) return false
 
         if (name != other.name) return false
         return type == other.type
@@ -17,6 +16,6 @@ class GDScriptParameter(val name: String, val type: GDScriptType? = null) {
     }
 
     override fun toString(): String {
-        return "GDScriptParameter(name='$name', type=${type?.name})"
+        return "GDScriptField(name='$name', type=${type?.name})"
     }
 }

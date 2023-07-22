@@ -1651,28 +1651,22 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (operand | operator)+
+  // operator? <<listOf operand operator>>
   public static boolean expression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "expression")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _COLLAPSE_, EXPRESSION, "<expression>");
     r = expression_0(b, l + 1);
-    while (r) {
-      int c = current_position_(b);
-      if (!expression_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "expression", c)) break;
-    }
+    r = r && listOf(b, l + 1, GDScriptParser::operand, GDScriptParser::operator);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // operand | operator
+  // operator?
   private static boolean expression_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "expression_0")) return false;
-    boolean r;
-    r = operand(b, l + 1);
-    if (!r) r = operator(b, l + 1);
-    return r;
+    operator(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */

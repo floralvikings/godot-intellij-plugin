@@ -340,7 +340,7 @@ await_statement ::= AWAIT expression
 
 
 // region expression
-expression ::= (operand | operator)+
+expression ::= operator? <<listOf operand operator>>
 private operand ::= paren_expression
     | array_expression
     | dictionary_expression

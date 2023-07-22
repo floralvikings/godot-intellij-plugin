@@ -1,28 +1,28 @@
 @file:JvmName("GDScriptUtil")
 
-package com.github.floralvikings.godotea.language.gdscript
+package com.github.floralvikings.godotea.language.gdscript.util
 
 import com.github.floralvikings.godotea.language.gdscript.psi.*
-import com.intellij.openapi.diagnostic.Logger
+import com.github.floralvikings.godotea.language.gdscript.typification.GDScriptBuiltIns
+import com.github.floralvikings.godotea.language.gdscript.typification.builtins.placeholder.GDUnknownType
+import com.github.floralvikings.godotea.language.gdscript.typification.structure.GDType
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.util.childrenOfType
 import com.intellij.psi.util.elementType
 
-private val log = Logger.getInstance("com.github.floralvikings.godotea.language.gdscript.GDScriptUtil")
-
-fun findDeclaration(id: GDScriptId): PsiElement? {
+fun resolveReference(id: GDScriptId): PsiElement? {
     return if (id.isMember()) {
         null
     } else if (id.isFunctionName()) {
-        resolveFunctionDeclaration(id)
+        resolveFunctionReference(id)
     } else {
-        resolveVarDeclaration(id)
+        resolveVarReference(id)
     }
 }
 
-private fun resolveFunctionDeclaration(id: GDScriptId): PsiElement? {
+private fun resolveFunctionReference(id: GDScriptId): PsiElement? {
     var current: PsiElement? = id
     // Search for functions in the same class
     while (current != null) {
@@ -36,7 +36,7 @@ private fun resolveFunctionDeclaration(id: GDScriptId): PsiElement? {
         } else if (current is GDScriptFile) {
             val topLevelFunctionDeclaration = current.childrenOfType<GDScriptFunctionDeclaration>()
                 .firstOrNull { it.functionName.text == id.text }
-            if(topLevelFunctionDeclaration != null) {
+            if (topLevelFunctionDeclaration != null) {
                 return topLevelFunctionDeclaration
             }
         }
@@ -44,7 +44,7 @@ private fun resolveFunctionDeclaration(id: GDScriptId): PsiElement? {
     return null
 }
 
-private fun resolveVarDeclaration(id: GDScriptId): PsiElement? {
+private fun resolveVarReference(id: GDScriptId): PsiElement? {
     var current: PsiElement? = id
     while (current != null) {
         if (current is GDScriptBlock && current.parent is GDScriptFunctionDeclaration) {
@@ -104,6 +104,54 @@ fun GDScriptId.isMember() =
 fun GDScriptId.isFunctionName() =
     nextNonWhitespaceSibling.elementType == GDScriptTypes.L_PAREN
 
-fun GDScriptId.isVariable() =
-    !isMember() && !isFunctionName()
+fun GDScriptId.getSurroundingFunction(): GDScriptFunctionDeclaration? {
+    var current: PsiElement? = this
+    while (current != null && current !is GDScriptFunctionDeclaration) {
+        current = current.parent
+    }
+    return current as? GDScriptFunctionDeclaration
+}
+
+fun GDScriptId.getSurroundingClass(): GDScriptInnerClassDeclaration? {
+    var current: PsiElement? = this
+    while (current != null && current !is GDScriptInnerClassDeclaration) {
+        current = current.parent
+    }
+    return current as? GDScriptInnerClassDeclaration
+}
+
+fun GDScriptInnerClassDeclaration.getVarDeclarations(): List<GDScriptClassVarDeclaration> = classBlock.childrenOfType()
+
+fun GDScriptInnerClassDeclaration.getFunctionDeclarations(): List<GDScriptFunctionDeclaration> =
+    classBlock.childrenOfType()
+
+fun GDScriptFile.getVarDeclarations(): List<GDScriptClassVarDeclaration> = childrenOfType()
+
+fun GDScriptFile.getFunctionDeclarations(): List<GDScriptFunctionDeclaration> = childrenOfType()
+
+
+
+fun GDScriptFunctionDeclaration.getVariableDeclarations(): List<GDScriptVarStatement> {
+    return block.childrenOfType<GDScriptVarStatement>()
+}
+
+fun GDScriptVarStatement.resolveType(): GDType {
+    // Short-circuit if we have a declared type; trust it for now
+    if (type != null) {
+        return type!!.resolveType()
+    }
+    // TODO Expression type inference
+    return GDUnknownType
+}
+
+fun GDScriptType.resolveType(): GDType {
+    if (GDScriptBuiltIns.types.containsKey(text)) {
+        val builtInType = GDScriptBuiltIns.types[text]
+        if (builtInType != null) {
+            return builtInType
+        }
+    }
+    // TODO Resolve project types
+    return GDUnknownType
+}
 

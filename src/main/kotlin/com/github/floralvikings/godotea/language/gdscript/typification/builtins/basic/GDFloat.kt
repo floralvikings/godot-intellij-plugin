@@ -1,5 +1,5 @@
 package com.github.floralvikings.godotea.language.gdscript.typification.builtins.basic
 
-import com.github.floralvikings.godotea.language.gdscript.typification.structure.GDScriptType
+import com.github.floralvikings.godotea.language.gdscript.typification.structure.GDType
 
-object GDFloat: GDScriptType("float")
+object GDFloat: GDType("float")
