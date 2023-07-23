@@ -3,11 +3,9 @@ package com.github.floralvikings.godotea.language.gdscript.reference
 import com.github.floralvikings.godotea.language.gdscript.cache.GDScriptIDReferenceResolver
 import com.github.floralvikings.godotea.language.gdscript.psi.*
 import com.github.floralvikings.godotea.language.gdscript.typification.GDScriptBuiltIns
-import com.github.floralvikings.godotea.language.gdscript.typification.builtins.placeholder.GDUnknownType
-import com.github.floralvikings.godotea.language.gdscript.typification.structure.GDDeclaration
+import com.github.floralvikings.godotea.language.gdscript.typification.TypeInferenceService
 import com.github.floralvikings.godotea.language.gdscript.typification.structure.GDType
 import com.github.floralvikings.godotea.language.gdscript.util.*
-import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
@@ -42,21 +40,22 @@ class GDScriptIDReference(private val id: GDScriptId) : PsiReferenceBase<GDScrip
     }
 
     override fun getVariants(): Array<out Any> {
+        val inferenceService = id.project.getService(TypeInferenceService::class.java)
+        val type = inferenceService.inferType(id)
         val parent = id.parent
         if (parent is GDScriptExpression && parent.idList.isNotEmpty()) {
             val idIndex = parent.idList.indexOf(id)
             return if (idIndex == 0) {
                 getPrimaryReferenceVariants()
             } else {
-                getMemberReferenceVariants(parent)
+                getMemberReferenceVariants(type)
             }
         }
         return super.getVariants()
     }
 
-    private fun getMemberReferenceVariants(expression: GDScriptExpression): Array<String> {
-        val currentType: GDType = expression.idList.inferType()
-        return currentType.fields.map { it.name }.toTypedArray() + currentType.functions.map { it.name }
+    private fun getMemberReferenceVariants(type: GDType): Array<String> {
+        return type.fields.map { it.name }.toTypedArray() + type.functions.map { it.name }
     }
 
     private fun getPrimaryReferenceVariants(): Array<String> {
@@ -92,8 +91,8 @@ class GDScriptIDReference(private val id: GDScriptId) : PsiReferenceBase<GDScrip
 
         val file = id.containingFile
         if (file is GDScriptFile) {
-            variants.addAll(file.getVarDeclarations().map { it.classVarName.text })
-            variants.addAll(file.getFunctionDeclarations().map { it.functionName.text })
+            variants.addAll(file.getTopLevelVarDeclarations().map { it.classVarName.text })
+            variants.addAll(file.getTopLevelFunctionDeclarations().map { it.functionName.text })
         }
         // TODO Declared autoload properties
         return variants

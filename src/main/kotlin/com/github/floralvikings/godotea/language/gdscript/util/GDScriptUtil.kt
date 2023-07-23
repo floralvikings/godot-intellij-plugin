@@ -3,9 +3,6 @@
 package com.github.floralvikings.godotea.language.gdscript.util
 
 import com.github.floralvikings.godotea.language.gdscript.psi.*
-import com.github.floralvikings.godotea.language.gdscript.typification.GDScriptBuiltIns
-import com.github.floralvikings.godotea.language.gdscript.typification.builtins.placeholder.GDUnknownType
-import com.github.floralvikings.godotea.language.gdscript.typification.structure.GDType
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiWhiteSpace
@@ -125,63 +122,13 @@ fun GDScriptInnerClassDeclaration.getVarDeclarations(): List<GDScriptClassVarDec
 fun GDScriptInnerClassDeclaration.getFunctionDeclarations(): List<GDScriptFunctionDeclaration> =
     classBlock.childrenOfType()
 
-fun GDScriptFile.getVarDeclarations(): List<GDScriptClassVarDeclaration> = childrenOfType()
+fun GDScriptFile.getTopLevelVarDeclarations(): List<GDScriptClassVarDeclaration> = childrenOfType()
 
-fun GDScriptFile.getFunctionDeclarations(): List<GDScriptFunctionDeclaration> = childrenOfType()
+fun GDScriptFile.getTopLevelFunctionDeclarations(): List<GDScriptFunctionDeclaration> = childrenOfType()
 
-
+fun GDScriptFile.findTopLevelVarNamed(name: String): GDScriptClassVarDeclaration? =
+    childrenOfType<GDScriptClassVarDeclaration>().firstOrNull { it.classVarName.text == name }
 
 fun GDScriptFunctionDeclaration.getVariableDeclarations(): List<GDScriptVarStatement> {
     return block.childrenOfType<GDScriptVarStatement>()
 }
-
-fun GDScriptVarStatement.inferType(): GDType {
-    // Short-circuit if we have a declared type; trust it for now
-    if (type != null) {
-        return type!!.inferType()
-    }
-    if(expression != null) {
-        return expression!!.inferType()
-    }
-    return GDUnknownType
-}
-
-fun GDScriptExpression.inferType(): GDType {
-    if(idList.isNotEmpty()) {
-        return idList.inferType()
-    }
-    // TODO function inference
-    return GDUnknownType
-}
-
-fun List<GDScriptId>.inferType(): GDType {
-    var currentType = first().inferType()
-    for(i in 1 until size) {
-        val currentId = this[i]
-        val matchedField = currentType.fields.firstOrNull { it.name == currentId.text }
-        if (matchedField != null) {
-            currentType = matchedField.type ?: GDUnknownType
-        }
-    }
-    return GDUnknownType
-}
-
-fun GDScriptId.inferType(): GDType {
-    val declaration = reference.resolve() ?: return GDUnknownType
-    return when(declaration) {
-        is GDScriptVarStatement -> declaration.inferType()
-        else -> GDUnknownType
-    }
-}
-
-fun GDScriptType.inferType(): GDType {
-    if (GDScriptBuiltIns.types.containsKey(text)) {
-        val builtInType = GDScriptBuiltIns.types[text]
-        if (builtInType != null) {
-            return builtInType
-        }
-    }
-    // TODO Resolve project types
-    return GDUnknownType
-}
-

@@ -5,7 +5,7 @@ import com.github.floralvikings.godotea.language.gdscript.typification.builtins.
 import com.github.floralvikings.godotea.language.gdscript.typification.builtins.placeholder.GDSameType
 import com.github.floralvikings.godotea.language.gdscript.typification.structure.GDType
 
-object GDVector2: GDType("Vector2i", {
+object GDVector2: GDType("Vector2", {
     "x"(GDFloat)
     "y"(GDFloat)
 

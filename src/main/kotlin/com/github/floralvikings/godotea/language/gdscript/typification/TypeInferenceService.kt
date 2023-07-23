@@ -3,6 +3,7 @@ package com.github.floralvikings.godotea.language.gdscript.typification
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptClassVarDeclaration
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptExpression
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptId
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptInvocationExpression
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptType
 import com.github.floralvikings.godotea.language.gdscript.typification.GDScriptBuiltIns
 import com.github.floralvikings.godotea.language.gdscript.typification.builtins.placeholder.GDUnknownType
@@ -19,6 +20,7 @@ class TypeInferenceService(private val project: Project) {
             is GDScriptId -> inferType(psiElement)
             is GDScriptType -> inferType(psiElement)
             is GDScriptClassVarDeclaration -> inferType(psiElement)
+            is GDScriptInvocationExpression -> inferType(psiElement)
             is GDScriptExpression -> inferType(psiElement)
             else -> GDUnknownType
         }
@@ -63,7 +65,7 @@ class TypeInferenceService(private val project: Project) {
             return inferType(classVarDeclaration.type!!)
         }
         if(classVarDeclaration.expression != null) {
-            return inferType(classVarDeclaration.expression!!)
+            return inferType(classVarDeclaration.expression!! as PsiElement)
         }
         return GDUnknownType
     }
@@ -74,6 +76,24 @@ class TypeInferenceService(private val project: Project) {
         }
         // TODO function invocation inference?
         // TODO Other types of expressions?
+        return GDUnknownType
+    }
+
+    fun inferType(invocationExpression: GDScriptInvocationExpression): GDType {
+        if(invocationExpression.parent !is GDScriptExpression) {
+            // Top-level function or constructor
+            val builtInConstructor = GDScriptBuiltIns.types[invocationExpression.id.text]
+            if(builtInConstructor != null) {
+                return builtInConstructor
+            }
+
+            val builtInFunction = GDScriptBuiltIns.functions.firstOrNull { it.name == invocationExpression.id.text }
+            if(builtInFunction != null) {
+                return builtInFunction.returnType
+            }
+        }
+        // TODO Declared constructors
+        // TODO Declared functions
         return GDUnknownType
     }
 }
