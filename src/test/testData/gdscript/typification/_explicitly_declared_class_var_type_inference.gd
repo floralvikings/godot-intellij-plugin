@@ -1,0 +1,1 @@
+var test: Vector2 = Vector2()

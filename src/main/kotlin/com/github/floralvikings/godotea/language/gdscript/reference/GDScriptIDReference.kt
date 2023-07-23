@@ -5,7 +5,9 @@ import com.github.floralvikings.godotea.language.gdscript.psi.*
 import com.github.floralvikings.godotea.language.gdscript.typification.GDScriptBuiltIns
 import com.github.floralvikings.godotea.language.gdscript.typification.builtins.placeholder.GDUnknownType
 import com.github.floralvikings.godotea.language.gdscript.typification.structure.GDDeclaration
+import com.github.floralvikings.godotea.language.gdscript.typification.structure.GDType
 import com.github.floralvikings.godotea.language.gdscript.util.*
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
@@ -15,13 +17,6 @@ import com.intellij.psi.util.CachedValuesManager
 import com.intellij.refactoring.suggested.startOffset
 
 class GDScriptIDReference(private val id: GDScriptId) : PsiReferenceBase<GDScriptId>(id, id.textRange) {
-
-    val declaration: GDDeclaration by lazy {
-        when (val psiDeclaration = resolve()) {
-            is GDScriptVarStatement -> psiDeclaration.resolveType()
-            else -> GDUnknownType
-        }
-    }
 
     override fun resolve(): PsiElement? {
         return CachedValuesManager.getCachedValue(
@@ -48,23 +43,30 @@ class GDScriptIDReference(private val id: GDScriptId) : PsiReferenceBase<GDScrip
 
     override fun getVariants(): Array<out Any> {
         val parent = id.parent
-        if(parent is GDScriptExpression && parent.idList.isNotEmpty()) {
+        if (parent is GDScriptExpression && parent.idList.isNotEmpty()) {
             val idIndex = parent.idList.indexOf(id)
-            if(idIndex == 0) {
-                return getPrimaryReferenceVariants()
+            return if (idIndex == 0) {
+                getPrimaryReferenceVariants()
+            } else {
+                getMemberReferenceVariants(parent)
             }
         }
         return super.getVariants()
     }
 
+    private fun getMemberReferenceVariants(expression: GDScriptExpression): Array<String> {
+        val currentType: GDType = expression.idList.inferType()
+        return currentType.fields.map { it.name }.toTypedArray() + currentType.functions.map { it.name }
+    }
+
     private fun getPrimaryReferenceVariants(): Array<String> {
-        val declaredVariants = getDeclaredVariants()
-        val builtInVariants = getBuiltInVariants()
+        val declaredVariants = getDeclaredPrimaryReferenceVariants()
+        val builtInVariants = getBuiltInPrimaryReferenceVariants()
 
         return (declaredVariants + builtInVariants).toTypedArray()
     }
 
-    private fun getBuiltInVariants(): List<String> {
+    private fun getBuiltInPrimaryReferenceVariants(): List<String> {
         val variants = mutableListOf<String>()
 
         variants.addAll(GDScriptBuiltIns.functionNames)
@@ -73,7 +75,7 @@ class GDScriptIDReference(private val id: GDScriptId) : PsiReferenceBase<GDScrip
         return variants
     }
 
-    private fun getDeclaredVariants(): List<String> {
+    private fun getDeclaredPrimaryReferenceVariants(): List<String> {
         val variants = mutableListOf<String>()
 
         val surroundingFunction = id.getSurroundingFunction()

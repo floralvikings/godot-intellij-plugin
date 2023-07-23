@@ -135,16 +135,46 @@ fun GDScriptFunctionDeclaration.getVariableDeclarations(): List<GDScriptVarState
     return block.childrenOfType<GDScriptVarStatement>()
 }
 
-fun GDScriptVarStatement.resolveType(): GDType {
+fun GDScriptVarStatement.inferType(): GDType {
     // Short-circuit if we have a declared type; trust it for now
     if (type != null) {
-        return type!!.resolveType()
+        return type!!.inferType()
     }
-    // TODO Expression type inference
+    if(expression != null) {
+        return expression!!.inferType()
+    }
     return GDUnknownType
 }
 
-fun GDScriptType.resolveType(): GDType {
+fun GDScriptExpression.inferType(): GDType {
+    if(idList.isNotEmpty()) {
+        return idList.inferType()
+    }
+    // TODO function inference
+    return GDUnknownType
+}
+
+fun List<GDScriptId>.inferType(): GDType {
+    var currentType = first().inferType()
+    for(i in 1 until size) {
+        val currentId = this[i]
+        val matchedField = currentType.fields.firstOrNull { it.name == currentId.text }
+        if (matchedField != null) {
+            currentType = matchedField.type ?: GDUnknownType
+        }
+    }
+    return GDUnknownType
+}
+
+fun GDScriptId.inferType(): GDType {
+    val declaration = reference.resolve() ?: return GDUnknownType
+    return when(declaration) {
+        is GDScriptVarStatement -> declaration.inferType()
+        else -> GDUnknownType
+    }
+}
+
+fun GDScriptType.inferType(): GDType {
     if (GDScriptBuiltIns.types.containsKey(text)) {
         val builtInType = GDScriptBuiltIns.types[text]
         if (builtInType != null) {
