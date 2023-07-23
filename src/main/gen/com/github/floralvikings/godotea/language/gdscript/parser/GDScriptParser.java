@@ -501,7 +501,7 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // L_PAREN LINE_BREAK* expression? LINE_BREAK* (COMMA LINE_BREAK* expression LINE_BREAK*)* R_PAREN
-  static boolean call(PsiBuilder b, int l) {
+  public static boolean call(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "call")) return false;
     if (!nextTokenIs(b, L_PAREN)) return false;
     boolean r;
@@ -512,7 +512,7 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     r = r && call_3(b, l + 1);
     r = r && call_4(b, l + 1);
     r = r && consumeToken(b, R_PAREN);
-    exit_section_(b, m, null, r);
+    exit_section_(b, m, CALL, r);
     return r;
   }
 

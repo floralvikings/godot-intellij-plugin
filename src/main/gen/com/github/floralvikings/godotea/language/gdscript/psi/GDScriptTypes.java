@@ -20,6 +20,7 @@ public interface GDScriptTypes {
   IElementType BLOCK_GET = new GDScriptElementType("BLOCK_GET");
   IElementType BLOCK_SET = new GDScriptElementType("BLOCK_SET");
   IElementType BREAK_STATEMENT = new GDScriptElementType("BREAK_STATEMENT");
+  IElementType CALL = new GDScriptElementType("CALL");
   IElementType CLASS_BLOCK = new GDScriptElementType("CLASS_BLOCK");
   IElementType CLASS_CONST_DECLARATION = new GDScriptElementType("CLASS_CONST_DECLARATION");
   IElementType CLASS_NAME_DECLARATION = new GDScriptElementType("CLASS_NAME_DECLARATION");
@@ -233,6 +234,9 @@ public interface GDScriptTypes {
       }
       else if (type == BREAK_STATEMENT) {
         return new GDScriptBreakStatementImpl(node);
+      }
+      else if (type == CALL) {
+        return new GDScriptCallImpl(node);
       }
       else if (type == CLASS_BLOCK) {
         return new GDScriptClassBlockImpl(node);

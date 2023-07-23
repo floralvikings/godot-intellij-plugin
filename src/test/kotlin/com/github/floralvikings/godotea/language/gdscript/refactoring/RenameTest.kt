@@ -14,6 +14,7 @@ class RenameTest : BasePlatformTestCase() {
             childrenOfType<GDScriptFunctionDeclaration>()[0]
                 .block.childrenOfType<GDScriptExpressionStatement>()[0]
                 .childrenOfType<GDScriptInvocationExpression>()[0]
+                .childrenOfType<GDScriptCall>()[0]
                 .childrenOfType<GDScriptExpression>()[0]
                 .childrenOfType<GDScriptId>()[0]
         )
@@ -24,6 +25,7 @@ class RenameTest : BasePlatformTestCase() {
             childrenOfType<GDScriptFunctionDeclaration>()[0]
                 .block.childrenOfType<GDScriptExpressionStatement>()[0]
                 .childrenOfType<GDScriptInvocationExpression>()[0]
+                .childrenOfType<GDScriptCall>()[0]
                 .childrenOfType<GDScriptExpression>()[0]
                 .childrenOfType<GDScriptId>()[0]
         )
@@ -43,6 +45,7 @@ class RenameTest : BasePlatformTestCase() {
             childrenOfType<GDScriptFunctionDeclaration>()[0]
                 .block.childrenOfType<GDScriptExpressionStatement>()[0]
                 .childrenOfType<GDScriptInvocationExpression>()[0]
+                .childrenOfType<GDScriptCall>()[0]
                 .childrenOfType<GDScriptExpression>()[0]
                 .childrenOfType<GDScriptId>()[0]
         )

@@ -36,7 +36,7 @@ class TypeInferenceService(private val project: Project) {
 
     fun inferType(idList: List<GDScriptId>, index: Int = idList.lastIndex): GDType {
         val primary = idList.firstOrNull() ?: return GDUnknownType
-        val primaryDeclaration = primary.reference.resolve() ?: return GDUnknownType
+        val primaryDeclaration = primary.reference?.resolve() ?: return GDUnknownType
         var currentType = inferType(primaryDeclaration)
         for(i in 1 .. index) {
             val currentId = idList[i]

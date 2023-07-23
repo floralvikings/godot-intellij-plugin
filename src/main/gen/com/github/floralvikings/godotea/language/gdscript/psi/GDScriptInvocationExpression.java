@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface GDScriptInvocationExpression extends GDScriptExpression {
 
   @NotNull
+  GDScriptCall getCall();
+
+  @NotNull
   GDScriptId getId();
 
 }

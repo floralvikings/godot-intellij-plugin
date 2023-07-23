@@ -11,14 +11,14 @@ import static com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTyp
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.github.floralvikings.godotea.language.gdscript.psi.*;
 
-public class GDScriptVarExportImpl extends ASTWrapperPsiElement implements GDScriptVarExport {
+public class GDScriptCallImpl extends ASTWrapperPsiElement implements GDScriptCall {
 
-  public GDScriptVarExportImpl(@NotNull ASTNode node) {
+  public GDScriptCallImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull GDScriptVisitor visitor) {
-    visitor.visitVarExport(this);
+    visitor.visitCall(this);
   }
 
   @Override
@@ -28,9 +28,9 @@ public class GDScriptVarExportImpl extends ASTWrapperPsiElement implements GDScr
   }
 
   @Override
-  @Nullable
-  public GDScriptCall getCall() {
-    return findChildByClass(GDScriptCall.class);
+  @NotNull
+  public List<GDScriptExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GDScriptExpression.class);
   }
 
 }
