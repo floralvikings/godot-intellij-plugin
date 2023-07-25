@@ -1,11 +1,11 @@
 package com.github.floralvikings.godotea.language.gdscript.cache
 
 import com.github.floralvikings.godotea.language.gdscript.psi.*
-import com.github.floralvikings.godotea.language.gdscript.util.*
+import com.github.floralvikings.godotea.language.gdscript.util.isFunctionName
+import com.github.floralvikings.godotea.language.gdscript.util.isMember
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.diagnostic.debug
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiFile
 import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.childrenOfType
 

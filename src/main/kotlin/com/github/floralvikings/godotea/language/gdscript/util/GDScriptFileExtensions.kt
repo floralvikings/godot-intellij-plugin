@@ -11,3 +11,6 @@ fun GDScriptFile.getTopLevelFunctionDeclarations(): List<GDScriptFunctionDeclara
 
 fun GDScriptFile.findTopLevelVarNamed(name: String): GDScriptClassVarDeclaration? =
     childrenOfType<GDScriptClassVarDeclaration>().firstOrNull { it.classVarName.text == name }
+
+fun GDScriptFile.findTopLevelFunctionsNamed(name: String): List<GDScriptFunctionDeclaration> =
+    childrenOfType<GDScriptFunctionDeclaration>().filter { it.functionName.text == name }

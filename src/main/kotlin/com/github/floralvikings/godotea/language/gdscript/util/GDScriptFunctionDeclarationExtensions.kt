@@ -7,3 +7,7 @@ import com.intellij.psi.util.childrenOfType
 fun GDScriptFunctionDeclaration.getVariableDeclarations(): List<GDScriptVarStatement> {
     return block.childrenOfType<GDScriptVarStatement>()
 }
+
+fun GDScriptFunctionDeclaration.getVariableDeclaration(name: String): GDScriptVarStatement? {
+    return getVariableDeclarations().firstOrNull { it.name == name }
+}
