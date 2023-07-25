@@ -36,8 +36,8 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
-    create_token_set_(ARRAY_EXPRESSION, DICTIONARY_EXPRESSION, EXPRESSION, INVOCATION_EXPRESSION,
-      LAMBDA_EXPRESSION, LUA_DICTIONARY_EXPRESSION, PAREN_EXPRESSION),
+    create_token_set_(ARRAY_EXPRESSION, DICTIONARY_EXPRESSION, DOT_QUALIFIED_EXPRESSION, EXPRESSION,
+      INVOCATION_EXPRESSION, LAMBDA_EXPRESSION, LUA_DICTIONARY_EXPRESSION, PAREN_EXPRESSION),
   };
 
   /* ********************************************************** */
@@ -1266,6 +1266,62 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
       if (!empty_element_parsed_guard_(b, "dictionary_expression_6", c)) break;
     }
     return true;
+  }
+
+  /* ********************************************************** */
+  // (invocation_expression | id) (DOT (invocation_expression | id))+
+  public static boolean dot_qualified_expression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dot_qualified_expression")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, DOT_QUALIFIED_EXPRESSION, "<dot qualified expression>");
+    r = dot_qualified_expression_0(b, l + 1);
+    r = r && dot_qualified_expression_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // invocation_expression | id
+  private static boolean dot_qualified_expression_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dot_qualified_expression_0")) return false;
+    boolean r;
+    r = invocation_expression(b, l + 1);
+    if (!r) r = id(b, l + 1);
+    return r;
+  }
+
+  // (DOT (invocation_expression | id))+
+  private static boolean dot_qualified_expression_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dot_qualified_expression_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = dot_qualified_expression_1_0(b, l + 1);
+    while (r) {
+      int c = current_position_(b);
+      if (!dot_qualified_expression_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "dot_qualified_expression_1", c)) break;
+    }
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // DOT (invocation_expression | id)
+  private static boolean dot_qualified_expression_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dot_qualified_expression_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, DOT);
+    r = r && dot_qualified_expression_1_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // invocation_expression | id
+  private static boolean dot_qualified_expression_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dot_qualified_expression_1_0_1")) return false;
+    boolean r;
+    r = invocation_expression(b, l + 1);
+    if (!r) r = id(b, l + 1);
+    return r;
   }
 
   /* ********************************************************** */
@@ -2618,10 +2674,11 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   //     | array_expression
   //     | dictionary_expression
   //     | lua_dictionary_expression
-  //     | invocation_expression
   //     | lambda_expression
   //     | string
   //     | multiline_string
+  //     | dot_qualified_expression
+  //     | invocation_expression
   //     | id
   //     | REAL_NUMBER
   //     | BINARY_NUMBER
@@ -2637,10 +2694,11 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     if (!r) r = array_expression(b, l + 1);
     if (!r) r = dictionary_expression(b, l + 1);
     if (!r) r = lua_dictionary_expression(b, l + 1);
-    if (!r) r = invocation_expression(b, l + 1);
     if (!r) r = lambda_expression(b, l + 1);
     if (!r) r = string(b, l + 1);
     if (!r) r = multiline_string(b, l + 1);
+    if (!r) r = dot_qualified_expression(b, l + 1);
+    if (!r) r = invocation_expression(b, l + 1);
     if (!r) r = id(b, l + 1);
     if (!r) r = consumeToken(b, REAL_NUMBER);
     if (!r) r = consumeToken(b, BINARY_NUMBER);

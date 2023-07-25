@@ -99,6 +99,10 @@ public class GDScriptVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitDotQualifiedExpression(@NotNull GDScriptDotQualifiedExpression o) {
+    visitExpression(o);
+  }
+
   public void visitElifStatement(@NotNull GDScriptElifStatement o) {
     visitPsiElement(o);
   }

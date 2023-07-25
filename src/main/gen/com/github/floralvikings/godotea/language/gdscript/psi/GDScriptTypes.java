@@ -31,6 +31,7 @@ public interface GDScriptTypes {
   IElementType DICTIONARY_ENTRY = new GDScriptElementType("DICTIONARY_ENTRY");
   IElementType DICTIONARY_EXPRESSION = new GDScriptElementType("DICTIONARY_EXPRESSION");
   IElementType DICT_PATTERN = new GDScriptElementType("DICT_PATTERN");
+  IElementType DOT_QUALIFIED_EXPRESSION = new GDScriptElementType("DOT_QUALIFIED_EXPRESSION");
   IElementType ELIF_STATEMENT = new GDScriptElementType("ELIF_STATEMENT");
   IElementType ELSE_STATEMENT = new GDScriptElementType("ELSE_STATEMENT");
   IElementType ENUM_DECLARATION = new GDScriptElementType("ENUM_DECLARATION");
@@ -267,6 +268,9 @@ public interface GDScriptTypes {
       }
       else if (type == DICT_PATTERN) {
         return new GDScriptDictPatternImpl(node);
+      }
+      else if (type == DOT_QUALIFIED_EXPRESSION) {
+        return new GDScriptDotQualifiedExpressionImpl(node);
       }
       else if (type == ELIF_STATEMENT) {
         return new GDScriptElifStatementImpl(node);

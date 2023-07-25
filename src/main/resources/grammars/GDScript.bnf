@@ -345,10 +345,11 @@ private operand ::= paren_expression
     | array_expression
     | dictionary_expression
     | lua_dictionary_expression
-    | invocation_expression
     | lambda_expression
     | string
     | multiline_string
+    | dot_qualified_expression
+    | invocation_expression
     | id
     | REAL_NUMBER
     | BINARY_NUMBER
@@ -398,6 +399,8 @@ dictionary_entry ::= (key LINE_BREAK* (COLON LINE_BREAK* VAR? expression)?) | DO
 
 lua_dictionary_expression ::= L_BRACE LINE_BREAK* lua_dictionary_entry? LINE_BREAK* (COMMA LINE_BREAK* lua_dictionary_entry LINE_BREAK*)* COMMA? LINE_BREAK* R_BRACE
 lua_dictionary_entry ::= (key EQUAL expression) | DOT_DOT
+
+dot_qualified_expression ::= (invocation_expression | id) (DOT (invocation_expression | id))+
 
 invocation_expression ::= id call
 call ::= L_PAREN LINE_BREAK* expression? LINE_BREAK* (COMMA LINE_BREAK* expression LINE_BREAK*)* R_PAREN
