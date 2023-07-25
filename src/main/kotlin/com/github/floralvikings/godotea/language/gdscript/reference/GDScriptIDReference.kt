@@ -12,6 +12,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReferenceBase
 import com.intellij.psi.util.CachedValue
 import com.intellij.psi.util.CachedValuesManager
+import com.intellij.psi.util.childrenOfType
 import com.intellij.refactoring.suggested.startOffset
 
 class GDScriptIDReference(private val id: GDScriptId) : PsiReferenceBase<GDScriptId>(id, id.textRange) {
@@ -40,22 +41,22 @@ class GDScriptIDReference(private val id: GDScriptId) : PsiReferenceBase<GDScrip
     }
 
     override fun getVariants(): Array<out Any> {
-        val inferenceService = id.project.getService(TypeInferenceService::class.java)
-        val type = inferenceService.inferType(id)
-        val parent = id.parent
-        if (parent is GDScriptExpression && parent.idList.isNotEmpty()) {
-            val idIndex = parent.idList.indexOf(id)
-            return if (idIndex == 0) {
-                getPrimaryReferenceVariants()
-            } else {
-                getMemberReferenceVariants(type)
-            }
+        return if(id.parent is GDScriptDotQualifiedExpression) {
+            getMemberReferenceVariants()
+        } else {
+            getPrimaryReferenceVariants()
         }
-        return super.getVariants()
     }
 
-    private fun getMemberReferenceVariants(type: GDType): Array<String> {
-        return type.fields.map { it.name }.toTypedArray() + type.functions.map { it.name }
+    private fun getMemberReferenceVariants(): Array<String> {
+        val inferenceService = id.project.getService(TypeInferenceService::class.java)
+        val qualifiedExpression = id.parent as GDScriptDotQualifiedExpression
+        val ownerIndex = qualifiedExpression.children.indexOf(id) - 1
+        if(ownerIndex < 0) {
+            return getPrimaryReferenceVariants()
+        }
+        val ownerType = inferenceService.inferDotQualifiedExpressionType(qualifiedExpression, ownerIndex)
+        return ownerType.fields.map { it.name }.toTypedArray() + ownerType.functions.map { it.name }.toSet()
     }
 
     private fun getPrimaryReferenceVariants(): Array<String> {
@@ -80,19 +81,19 @@ class GDScriptIDReference(private val id: GDScriptId) : PsiReferenceBase<GDScrip
         val surroundingFunction = id.getSurroundingFunction()
         if (surroundingFunction != null) {
             variants.addAll(surroundingFunction.functionParameterList.map { it.parameterName.text })
-            variants.addAll(surroundingFunction.getVariableDeclarations().map { it.localVarName.text })
+            variants.addAll(surroundingFunction.variableDeclarations.map { it.localVarName.text })
         }
 
         val surroundingClass = id.getSurroundingClass()
         if (surroundingClass != null) {
-            variants.addAll(surroundingClass.getVarDeclarations().map { it.classVarName.text })
-            variants.addAll(surroundingClass.getFunctionDeclarations().map() { it.functionName.text })
+            variants.addAll(surroundingClass.varDeclarations.map { it.classVarName.text })
+            variants.addAll(surroundingClass.functionDeclarations.map() { it.functionName.text })
         }
 
         val file = id.containingFile
         if (file is GDScriptFile) {
-            variants.addAll(file.getTopLevelVarDeclarations().map { it.classVarName.text })
-            variants.addAll(file.getTopLevelFunctionDeclarations().map { it.functionName.text })
+            variants.addAll(file.topLevelVarDeclarations.map { it.classVarName.text })
+            variants.addAll(file.topLevelFunctionDeclarations.map { it.functionName.text })
         }
         // TODO Declared autoload properties
         return variants

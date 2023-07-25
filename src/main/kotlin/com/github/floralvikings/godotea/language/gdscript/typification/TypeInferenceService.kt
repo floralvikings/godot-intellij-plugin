@@ -3,8 +3,8 @@ package com.github.floralvikings.godotea.language.gdscript.typification
 import com.github.floralvikings.godotea.language.gdscript.psi.*
 import com.github.floralvikings.godotea.language.gdscript.typification.builtins.placeholder.GDSameType
 import com.github.floralvikings.godotea.language.gdscript.typification.builtins.placeholder.GDUnknownType
-import com.github.floralvikings.godotea.language.gdscript.typification.structure.GDType
-import com.github.floralvikings.godotea.language.gdscript.util.findTopLevelFunctionsNamed
+import com.github.floralvikings.godotea.language.gdscript.typification.structure.*
+import com.github.floralvikings.godotea.language.gdscript.util.*
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
@@ -51,12 +51,17 @@ class TypeInferenceService(private val project: Project) {
     }
 
     fun inferExplicitlyDeclaredType(type: GDScriptType): GDType {
-        val builtInType = GDScriptBuiltIns.types[type.text]
+        val typeName = type.text
+        return inferTypeFromName(typeName)
+    }
+
+    fun inferTypeFromName(typeName: String): GDType {
+        val builtInType = GDScriptBuiltIns.types[typeName]
         if (builtInType != null) {
             return builtInType
         }
         // TODO Declared types
-        TODO("Not yet implemented")
+        return GDUnknownType
     }
 
     fun inferClassVarDeclarationType(declaration: GDScriptClassVarDeclaration): GDType {
@@ -116,22 +121,84 @@ class TypeInferenceService(private val project: Project) {
             return builtInFunction.returnType
         }
 
-        val declaredFunctions = (invocation.containingFile as GDScriptFile).findTopLevelFunctionsNamed(functionName)
+        val gdScriptFile = invocation.containingFile as GDScriptFile
+        val declaredFunctions = gdScriptFile.findTopLevelFunctionsNamed(functionName)
         if (declaredFunctions.isNotEmpty()) {
             return inferFunctionDeclarationReturnType(declaredFunctions, invocation)
         }
 
-        // TODO Declared constructors
-        TODO("Not implemented")
+        val localMatchingInnerClass = gdScriptFile.findInnerClassDeclaration(functionName)
+        if(localMatchingInnerClass != null) {
+            return inferInnerClassDeclarationType(localMatchingInnerClass)
+        }
+
+        return GDUnknownType
+    }
+
+    private fun inferInnerClassDeclarationType(innerClass: GDScriptInnerClassDeclaration): GDType {
+        val functions = innerClass.functionDeclarations
+            .filter { it.functionName.text != "_init" }
+            .map(this::createGDFunctionFromDeclaration)
+        val constructors = innerClass.functionDeclarations
+            .filter { it.functionName.text == "_init" }
+            .map(this::createGDConstructorFromDeclaration)
+        val fields = innerClass.varDeclarations.map(this::createGDFieldFromDeclaration)
+        val superType = getTypeFromExtendsDeclaration(innerClass.extendsDeclaration)
+
+        return GDType(innerClass.id.text, constructors, fields, functions, superType)
+    }
+
+    private fun getTypeFromExtendsDeclaration(declaration: GDScriptExtendsDeclaration?): GDType? {
+        if(declaration == null) {
+            return null
+        }
+        val typeName = if(declaration.type == null) {
+            declaration.string!!.text
+        } else {
+            declaration.type!!.text
+        }
+        return inferTypeFromName(typeName)
+    }
+
+    private fun createGDFunctionFromDeclaration(declaration: GDScriptFunctionDeclaration): GDFunction {
+        return GDFunction(declaration.functionName.text) {
+            declaration.functionParameterList.forEach { param ->
+                if(param.type != null) {
+                    param.parameterName.text(inferExplicitlyDeclaredType(param.type!!))
+                } else if(param.expression != null) {
+                    param.parameterName.text()
+                } else {
+                    param.parameterName.text()
+                }
+            }
+            // TODO Return type
+        }
     }
 
     fun inferPrimaryIdType(id: GDScriptId): GDType {
-        // TODO Built-in constants/fields
-
         val declaration = id.reference.resolve()
         if (declaration != null) {
             return inferType(declaration)
         }
-        TODO("Not implemented")
+
+        // TODO Built-in constants/fields
+        return GDUnknownType
+    }
+
+    private fun createGDConstructorFromDeclaration(declaration: GDScriptFunctionDeclaration): GDConstructor {
+        val parameters = declaration.functionParameterList.map {param ->
+            val type = if(param.type != null) {
+                inferExplicitlyDeclaredType(param.type!!)
+            } else {
+                GDUnknownType
+            }
+            GDParameter(param.parameterName.text, type)
+        }
+        return GDConstructor(parameters)
+    }
+
+    private fun createGDFieldFromDeclaration(declaration: GDScriptClassVarDeclaration): GDField {
+        val type = inferClassVarDeclarationType(declaration)
+        return GDField(declaration.classVarName.text, type)
     }
 }

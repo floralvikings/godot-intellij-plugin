@@ -4,10 +4,8 @@ import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFunctionDe
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptVarStatement
 import com.intellij.psi.util.childrenOfType
 
-fun GDScriptFunctionDeclaration.getVariableDeclarations(): List<GDScriptVarStatement> {
-    return block.childrenOfType<GDScriptVarStatement>()
-}
+val GDScriptFunctionDeclaration.variableDeclarations: List<GDScriptVarStatement>
+    get() = block.childrenOfType<GDScriptVarStatement>()
 
-fun GDScriptFunctionDeclaration.getVariableDeclaration(name: String): GDScriptVarStatement? {
-    return getVariableDeclarations().firstOrNull { it.name == name }
-}
+fun GDScriptFunctionDeclaration.getVariableDeclaration(name: String): GDScriptVarStatement? =
+    variableDeclarations.firstOrNull { it.name == name }
