@@ -7,5 +7,5 @@ import com.intellij.psi.util.childrenOfType
 val GDScriptFunctionDeclaration.variableDeclarations: List<GDScriptVarStatement>
     get() = block.childrenOfType<GDScriptVarStatement>()
 
-fun GDScriptFunctionDeclaration.getVariableDeclaration(name: String): GDScriptVarStatement? =
+fun GDScriptFunctionDeclaration.findVariableDeclaration(name: String): GDScriptVarStatement? =
     variableDeclarations.firstOrNull { it.name == name }

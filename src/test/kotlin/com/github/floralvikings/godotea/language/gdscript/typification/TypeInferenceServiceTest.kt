@@ -9,7 +9,7 @@ import com.github.floralvikings.godotea.language.gdscript.typification.builtins.
 import com.github.floralvikings.godotea.language.gdscript.typification.builtins.vector.GDVector2
 import com.github.floralvikings.godotea.language.gdscript.util.findTopLevelFunctionsNamed
 import com.github.floralvikings.godotea.language.gdscript.util.findTopLevelVarNamed
-import com.github.floralvikings.godotea.language.gdscript.util.getVariableDeclaration
+import com.github.floralvikings.godotea.language.gdscript.util.findVariableDeclaration
 import com.intellij.psi.util.childrenOfType
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import junit.framework.TestCase
@@ -45,7 +45,7 @@ class TypeInferenceServiceTest : BasePlatformTestCase() {
 
     fun test_explicitly_declared_return_type_inference() = doTest { service ->
         val declaration = findTopLevelFunctionsNamed("another_test")[0]
-            .getVariableDeclaration("x")
+            .findVariableDeclaration("x")
         assertNotNull(declaration)
         assertEquals(GDInt, service.inferType(declaration!!))
     }
@@ -53,7 +53,19 @@ class TypeInferenceServiceTest : BasePlatformTestCase() {
     fun test_member_field_class_var_type_inference() = doTest { service ->
         val declaration = findTopLevelVarNamed("another_test")
         assertNotNull(declaration)
-        TestCase.assertEquals(GDFloat, service.inferType(declaration!!))
+        assertEquals(GDFloat, service.inferType(declaration!!))
+    }
+
+    fun test_type_inference_propagation() = doTest {service ->
+        val functionDeclaration = findTopLevelFunctionsNamed("test_propagation")[0]
+
+        val reassignedVarDeclaration = functionDeclaration.findVariableDeclaration("v2_reassigned")
+        val reassignedType = service.inferLocalVarDeclarationType(reassignedVarDeclaration!!)
+        TestCase.assertEquals(GDVector2, reassignedType)
+
+        val absVarDeclaration = functionDeclaration.findVariableDeclaration("v2_reassigned_abs")
+        val absType = service.inferLocalVarDeclarationType(absVarDeclaration!!)
+        assertEquals(GDVector2, absType)
     }
 
     private fun configFile(): GDScriptFile {

@@ -11,9 +11,6 @@ public interface GDScriptExpression extends PsiElement {
   List<GDScriptExpression> getExpressionList();
 
   @NotNull
-  List<GDScriptId> getIdList();
-
-  @NotNull
   List<GDScriptString> getStringList();
 
 }

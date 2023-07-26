@@ -8,17 +8,17 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.github.floralvikings.godotea.language.gdscript.psi.*;
 
-public class GDScriptExpressionImpl extends ASTWrapperPsiElement implements GDScriptExpression {
+public class GDScriptIdExpressionImpl extends GDScriptExpressionImpl implements GDScriptIdExpression {
 
-  public GDScriptExpressionImpl(@NotNull ASTNode node) {
+  public GDScriptIdExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull GDScriptVisitor visitor) {
-    visitor.visitExpression(this);
+    visitor.visitIdExpression(this);
   }
 
   @Override
@@ -29,14 +29,8 @@ public class GDScriptExpressionImpl extends ASTWrapperPsiElement implements GDSc
 
   @Override
   @NotNull
-  public List<GDScriptExpression> getExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GDScriptExpression.class);
-  }
-
-  @Override
-  @NotNull
-  public List<GDScriptString> getStringList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GDScriptString.class);
+  public GDScriptId getId() {
+    return findNotNullChildByClass(GDScriptId.class);
   }
 
 }

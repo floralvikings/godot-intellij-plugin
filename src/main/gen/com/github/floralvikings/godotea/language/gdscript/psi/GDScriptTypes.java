@@ -45,6 +45,7 @@ public interface GDScriptTypes {
   IElementType FUNCTION_PARAMETER = new GDScriptElementType("FUNCTION_PARAMETER");
   IElementType FUNCTION_RETURN_TYPE = new GDScriptElementType("FUNCTION_RETURN_TYPE");
   IElementType ID = new GDScriptElementType("ID");
+  IElementType ID_EXPRESSION = new GDScriptElementType("ID_EXPRESSION");
   IElementType IF_STATEMENT = new GDScriptElementType("IF_STATEMENT");
   IElementType INNER_CLASS_DECLARATION = new GDScriptElementType("INNER_CLASS_DECLARATION");
   IElementType INVOCATION_EXPRESSION = new GDScriptElementType("INVOCATION_EXPRESSION");
@@ -310,6 +311,9 @@ public interface GDScriptTypes {
       }
       else if (type == ID) {
         return new GDScriptIdImpl(node);
+      }
+      else if (type == ID_EXPRESSION) {
+        return new GDScriptIdExpressionImpl(node);
       }
       else if (type == IF_STATEMENT) {
         return new GDScriptIfStatementImpl(node);

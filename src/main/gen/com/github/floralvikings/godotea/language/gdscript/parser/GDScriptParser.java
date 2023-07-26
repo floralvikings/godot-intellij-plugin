@@ -37,7 +37,8 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
     create_token_set_(ARRAY_EXPRESSION, DICTIONARY_EXPRESSION, DOT_QUALIFIED_EXPRESSION, EXPRESSION,
-      INVOCATION_EXPRESSION, LAMBDA_EXPRESSION, LUA_DICTIONARY_EXPRESSION, PAREN_EXPRESSION),
+      ID_EXPRESSION, INVOCATION_EXPRESSION, LAMBDA_EXPRESSION, LUA_DICTIONARY_EXPRESSION,
+      PAREN_EXPRESSION),
   };
 
   /* ********************************************************** */
@@ -2086,6 +2087,17 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // id
+  public static boolean id_expression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "id_expression")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, ID_EXPRESSION, "<id expression>");
+    r = id(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
   // IF expression COLON statement_or_block (LINE_BREAK* elif_statement)* [LINE_BREAK* else_statement]
   public static boolean if_statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "if_statement")) return false;
@@ -2679,7 +2691,7 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   //     | multiline_string
   //     | dot_qualified_expression
   //     | invocation_expression
-  //     | id
+  //     | id_expression
   //     | REAL_NUMBER
   //     | BINARY_NUMBER
   //     | HEXADECIMAL_NUMBER
@@ -2699,7 +2711,7 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     if (!r) r = multiline_string(b, l + 1);
     if (!r) r = dot_qualified_expression(b, l + 1);
     if (!r) r = invocation_expression(b, l + 1);
-    if (!r) r = id(b, l + 1);
+    if (!r) r = id_expression(b, l + 1);
     if (!r) r = consumeToken(b, REAL_NUMBER);
     if (!r) r = consumeToken(b, BINARY_NUMBER);
     if (!r) r = consumeToken(b, HEXADECIMAL_NUMBER);

@@ -350,7 +350,7 @@ private operand ::= paren_expression
     | multiline_string
     | dot_qualified_expression
     | invocation_expression
-    | id
+    | id_expression
     | REAL_NUMBER
     | BINARY_NUMBER
     | HEXADECIMAL_NUMBER
@@ -406,6 +406,8 @@ invocation_expression ::= id call
 call ::= L_PAREN LINE_BREAK* expression? LINE_BREAK* (COMMA LINE_BREAK* expression LINE_BREAK*)* R_PAREN
 
 lambda_expression ::= FUNC id? L_PAREN id? (COMMA id)* R_PAREN COLON (inline_statement | function_body)
+
+id_expression ::= id
 
 key ::= expression
 type ::= array_type | nested_type

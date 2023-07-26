@@ -29,6 +29,12 @@ public class GDScriptDotQualifiedExpressionImpl extends GDScriptExpressionImpl i
 
   @Override
   @NotNull
+  public List<GDScriptId> getIdList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GDScriptId.class);
+  }
+
+  @Override
+  @NotNull
   public List<GDScriptInvocationExpression> getInvocationExpressionList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GDScriptInvocationExpression.class);
   }

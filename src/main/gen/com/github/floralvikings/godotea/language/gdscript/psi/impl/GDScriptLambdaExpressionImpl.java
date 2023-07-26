@@ -82,6 +82,12 @@ public class GDScriptLambdaExpressionImpl extends GDScriptExpressionImpl impleme
   }
 
   @Override
+  @NotNull
+  public List<GDScriptId> getIdList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GDScriptId.class);
+  }
+
+  @Override
   @Nullable
   public GDScriptIfStatement getIfStatement() {
     return findChildByClass(GDScriptIfStatement.class);

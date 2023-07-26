@@ -5,12 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GDScriptDotQualifiedExpression extends GDScriptExpression {
+public interface GDScriptIdExpression extends GDScriptExpression {
 
   @NotNull
-  List<GDScriptId> getIdList();
-
-  @NotNull
-  List<GDScriptInvocationExpression> getInvocationExpressionList();
+  GDScriptId getId();
 
 }

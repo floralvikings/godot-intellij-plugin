@@ -19,6 +19,7 @@ class TypeInferenceService(private val project: Project) {
             is GDScriptClassVarDeclaration -> inferClassVarDeclarationType(psiElement)
             is GDScriptVarStatement -> inferLocalVarDeclarationType(psiElement)
             is GDScriptInvocationExpression -> inferPrimaryInvocationType(psiElement)
+            is GDScriptIdExpression -> inferPrimaryIdType(psiElement.id)
             else -> GDUnknownType
         }
     }
@@ -131,6 +132,8 @@ class TypeInferenceService(private val project: Project) {
         if(localMatchingInnerClass != null) {
             return inferInnerClassDeclarationType(localMatchingInnerClass)
         }
+
+        // TODO non-local declared classes
 
         return GDUnknownType
     }

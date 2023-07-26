@@ -34,6 +34,9 @@ public interface GDScriptLambdaExpression extends GDScriptExpression {
   @Nullable
   GDScriptForStatement getForStatement();
 
+  @NotNull
+  List<GDScriptId> getIdList();
+
   @Nullable
   GDScriptIfStatement getIfStatement();
 
