@@ -174,7 +174,10 @@ class TypeInferenceService(private val project: Project) {
                     param.parameterName.text()
                 }
             }
-            // TODO Return type
+            if(declaration.functionReturnType != null) {
+                returns(inferExplicitlyDeclaredType(declaration.functionReturnType!!.type))
+            }
+            // TODO Infer return type from return statements?
         }
     }
 
@@ -183,7 +186,6 @@ class TypeInferenceService(private val project: Project) {
         if (declaration != null) {
             return inferType(declaration)
         }
-
         // TODO Built-in constants/fields
         return GDUnknownType
     }

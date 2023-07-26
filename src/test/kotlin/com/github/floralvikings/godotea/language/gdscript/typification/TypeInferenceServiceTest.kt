@@ -43,6 +43,13 @@ class TypeInferenceServiceTest : BasePlatformTestCase() {
         assertEquals(GDVector2, service.inferType(declaration!!))
     }
 
+    fun test_explicitly_declared_inner_class_return_type_inference() = doTest { service ->
+        val declaration = findTopLevelFunctionsNamed("another_test")[0]
+            .findVariableDeclaration("x")
+        assertNotNull(declaration)
+        assertEquals(GDInt, service.inferType(declaration!!))
+    }
+
     fun test_explicitly_declared_return_type_inference() = doTest { service ->
         val declaration = findTopLevelFunctionsNamed("another_test")[0]
             .findVariableDeclaration("x")
