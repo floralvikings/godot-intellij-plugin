@@ -10,7 +10,7 @@ class GDScriptIDNavigationProvider : DirectNavigationProvider {
     override fun getNavigationElement(element: PsiElement): PsiElement? {
         if(element !is GDScriptId) return null
 
-        val declaration = element.reference.resolve()
+        val declaration = element.reference?.resolve()
 
         if(declaration is GDScriptClassVarDeclaration) {
             return declaration.classVarName

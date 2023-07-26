@@ -36,8 +36,9 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
-    create_token_set_(ARRAY_EXPRESSION, DICTIONARY_EXPRESSION, EXPRESSION, INVOCATION_EXPRESSION,
-      LAMBDA_EXPRESSION, LUA_DICTIONARY_EXPRESSION),
+    create_token_set_(ARRAY_EXPRESSION, DICTIONARY_EXPRESSION, DOT_QUALIFIED_EXPRESSION, EXPRESSION,
+      ID_EXPRESSION, INVOCATION_EXPRESSION, LAMBDA_EXPRESSION, LUA_DICTIONARY_EXPRESSION,
+      PAREN_EXPRESSION),
   };
 
   /* ********************************************************** */
@@ -501,7 +502,7 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // L_PAREN LINE_BREAK* expression? LINE_BREAK* (COMMA LINE_BREAK* expression LINE_BREAK*)* R_PAREN
-  static boolean call(PsiBuilder b, int l) {
+  public static boolean call(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "call")) return false;
     if (!nextTokenIs(b, L_PAREN)) return false;
     boolean r;
@@ -512,7 +513,7 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     r = r && call_3(b, l + 1);
     r = r && call_4(b, l + 1);
     r = r && consumeToken(b, R_PAREN);
-    exit_section_(b, m, null, r);
+    exit_section_(b, m, CALL, r);
     return r;
   }
 
@@ -1269,6 +1270,62 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // (invocation_expression | id) (DOT (invocation_expression | id))+
+  public static boolean dot_qualified_expression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dot_qualified_expression")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, DOT_QUALIFIED_EXPRESSION, "<dot qualified expression>");
+    r = dot_qualified_expression_0(b, l + 1);
+    r = r && dot_qualified_expression_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // invocation_expression | id
+  private static boolean dot_qualified_expression_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dot_qualified_expression_0")) return false;
+    boolean r;
+    r = invocation_expression(b, l + 1);
+    if (!r) r = id(b, l + 1);
+    return r;
+  }
+
+  // (DOT (invocation_expression | id))+
+  private static boolean dot_qualified_expression_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dot_qualified_expression_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = dot_qualified_expression_1_0(b, l + 1);
+    while (r) {
+      int c = current_position_(b);
+      if (!dot_qualified_expression_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "dot_qualified_expression_1", c)) break;
+    }
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // DOT (invocation_expression | id)
+  private static boolean dot_qualified_expression_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dot_qualified_expression_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, DOT);
+    r = r && dot_qualified_expression_1_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // invocation_expression | id
+  private static boolean dot_qualified_expression_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "dot_qualified_expression_1_0_1")) return false;
+    boolean r;
+    r = invocation_expression(b, l + 1);
+    if (!r) r = id(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
   // ELIF expression COLON statement_or_block
   public static boolean elif_statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "elif_statement")) return false;
@@ -1651,28 +1708,22 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (operand | operator)+
+  // operator? <<listOf operand operator>>
   public static boolean expression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "expression")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _COLLAPSE_, EXPRESSION, "<expression>");
     r = expression_0(b, l + 1);
-    while (r) {
-      int c = current_position_(b);
-      if (!expression_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "expression", c)) break;
-    }
+    r = r && listOf(b, l + 1, GDScriptParser::operand, GDScriptParser::operator);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // operand | operator
+  // operator?
   private static boolean expression_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "expression_0")) return false;
-    boolean r;
-    r = operand(b, l + 1);
-    if (!r) r = operator(b, l + 1);
-    return r;
+    operator(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -2036,6 +2087,17 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // id
+  public static boolean id_expression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "id_expression")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, ID_EXPRESSION, "<id expression>");
+    r = id(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
   // IF expression COLON statement_or_block (LINE_BREAK* elif_statement)* [LINE_BREAK* else_statement]
   public static boolean if_statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "if_statement")) return false;
@@ -2173,22 +2235,15 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // id? call
+  // id call
   public static boolean invocation_expression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "invocation_expression")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, INVOCATION_EXPRESSION, "<invocation expression>");
-    r = invocation_expression_0(b, l + 1);
+    r = id(b, l + 1);
     r = r && call(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
-  }
-
-  // id?
-  private static boolean invocation_expression_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "invocation_expression_0")) return false;
-    id(b, l + 1);
-    return true;
   }
 
   /* ********************************************************** */
@@ -2627,14 +2682,16 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // array_expression
+  // paren_expression
+  //     | array_expression
   //     | dictionary_expression
   //     | lua_dictionary_expression
-  //     | invocation_expression
   //     | lambda_expression
   //     | string
   //     | multiline_string
-  //     | id
+  //     | dot_qualified_expression
+  //     | invocation_expression
+  //     | id_expression
   //     | REAL_NUMBER
   //     | BINARY_NUMBER
   //     | HEXADECIMAL_NUMBER
@@ -2645,14 +2702,16 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   static boolean operand(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "operand")) return false;
     boolean r;
-    r = array_expression(b, l + 1);
+    r = paren_expression(b, l + 1);
+    if (!r) r = array_expression(b, l + 1);
     if (!r) r = dictionary_expression(b, l + 1);
     if (!r) r = lua_dictionary_expression(b, l + 1);
-    if (!r) r = invocation_expression(b, l + 1);
     if (!r) r = lambda_expression(b, l + 1);
     if (!r) r = string(b, l + 1);
     if (!r) r = multiline_string(b, l + 1);
-    if (!r) r = id(b, l + 1);
+    if (!r) r = dot_qualified_expression(b, l + 1);
+    if (!r) r = invocation_expression(b, l + 1);
+    if (!r) r = id_expression(b, l + 1);
     if (!r) r = consumeToken(b, REAL_NUMBER);
     if (!r) r = consumeToken(b, BINARY_NUMBER);
     if (!r) r = consumeToken(b, HEXADECIMAL_NUMBER);
@@ -2739,6 +2798,20 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeToken(b, IDENTIFIER);
     exit_section_(b, m, PARAMETER_NAME, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // L_PAREN expression R_PAREN
+  public static boolean paren_expression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "paren_expression")) return false;
+    if (!nextTokenIs(b, L_PAREN)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, L_PAREN);
+    r = r && expression(b, l + 1);
+    r = r && consumeToken(b, R_PAREN);
+    exit_section_(b, m, PAREN_EXPRESSION, r);
     return r;
   }
 

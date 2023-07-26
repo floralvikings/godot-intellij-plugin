@@ -1,6 +1,7 @@
 package com.github.floralvikings.godotea.language.gdscript.highlighter
 
 import com.github.floralvikings.godotea.language.gdscript.lexer.GDScriptLexerAdapter
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes.*
 import com.intellij.lexer.Lexer
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
@@ -8,7 +9,7 @@ import com.intellij.openapi.editor.HighlighterColors
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase
-import com.intellij.psi.TokenType.BAD_CHARACTER
+import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
 
 class GDScriptSyntaxHighlighter : SyntaxHighlighterBase() {
@@ -17,7 +18,7 @@ class GDScriptSyntaxHighlighter : SyntaxHighlighterBase() {
     override fun getTokenHighlights(tokenType: IElementType?): Array<TextAttributesKey> {
         val keywords = setOf(
             VAR, CONST, CLASS, ENUM, FUNC, IF, ELIF, ELSE, FOR, WHILE, CONTINUE, PASS, RETURN, MATCH, ASSERT, AWAIT,
-            BREAKPOINT, CLASS_NAME, EXTENDS, SUPER, SELF, SIGNAL, STATIC, SET, GET, TRUE, FALSE, NULL, AND, OR, NOT,
+            BREAKPOINT, EXTENDS, SUPER, SELF, SIGNAL, STATIC, SET, GET, TRUE, FALSE, NULL, AND, OR, NOT,
             INT, FLOAT, BOOL, VOID, IN, IS, AS
         )
         val stringLiterals = setOf(
@@ -36,33 +37,36 @@ class GDScriptSyntaxHighlighter : SyntaxHighlighterBase() {
             AT_WARNING_IGNORE
         )
         return when (tokenType) {
-            in keywords -> KEYWORD_KEYS
-            in stringLiterals -> STRING_LITERAL_KEYS
-            in numberLiterals -> NUMBER_LITERAL_KEYS
-            in annotations    -> ANNOTATION_KEYS
-            LINE_COMMENT -> LINE_COMMENT_KEYS
-            BAD_CHARACTER -> BAD_CHARACTER_KEYS
-            else -> EMPTY_KEYS
+            in keywords -> arrayOf(KEYWORD_KEY)
+            in stringLiterals -> arrayOf(STRING_LITERAL)
+            in numberLiterals -> arrayOf(NUMBER_LITERAL)
+            in annotations -> arrayOf(ANNOTATION)
+            GDScriptTypes.LINE_COMMENT -> arrayOf(LINE_COMMENT)
+            TokenType.BAD_CHARACTER -> arrayOf(BAD_CHARACTER)
+            else -> arrayOf()
         }
     }
 
     companion object {
         val KEYWORD_KEY = createTextAttributesKey("GDSCRIPT_KEYWORD", DefaultLanguageHighlighterColors.KEYWORD)
-        val LINE_COMMENT_KEY =
+        val LINE_COMMENT =
             createTextAttributesKey("GDSCRIPT_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT)
-        val STRING_LITERAL_KEY =
+        val STRING_LITERAL =
             createTextAttributesKey("GDSCRIPT_STRING_LITERAL", DefaultLanguageHighlighterColors.STRING)
-        val NUMBER_LITERAL_KEY =
+        val NUMBER_LITERAL =
             createTextAttributesKey("GDSCRIPT_NUMBER_LITERAL", DefaultLanguageHighlighterColors.NUMBER)
-        val ANNOTATION_KEY = createTextAttributesKey("GDSCRIPT_ANNOTATION", DefaultLanguageHighlighterColors.METADATA)
-        val BAD_CHARACTER_KEY = createTextAttributesKey("GDSCRIPT_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER)
-
-        val KEYWORD_KEYS = arrayOf(KEYWORD_KEY)
-        val LINE_COMMENT_KEYS = arrayOf(LINE_COMMENT_KEY)
-        val STRING_LITERAL_KEYS = arrayOf(STRING_LITERAL_KEY)
-        val NUMBER_LITERAL_KEYS = arrayOf(NUMBER_LITERAL_KEY)
-        val BAD_CHARACTER_KEYS = arrayOf(BAD_CHARACTER_KEY)
-        val ANNOTATION_KEYS = arrayOf(ANNOTATION_KEY)
-        val EMPTY_KEYS = arrayOf<TextAttributesKey>()
+        val ANNOTATION = createTextAttributesKey("GDSCRIPT_ANNOTATION", DefaultLanguageHighlighterColors.METADATA)
+        val FUNCTION_DECLARATION =
+            createTextAttributesKey(
+                "GDSCRIPT_FUNCTION_DECLARATION",
+                DefaultLanguageHighlighterColors.FUNCTION_DECLARATION
+            )
+        val BUILT_IN_FUNCTION =
+            createTextAttributesKey("GDSCRIPT_BUILT_IN_FUNCTION", DefaultLanguageHighlighterColors.PREDEFINED_SYMBOL)
+        val BUILT_IN_CLASS =
+            createTextAttributesKey("GDSCRIPT_BUILT_IN_CLASS", DefaultLanguageHighlighterColors.PREDEFINED_SYMBOL)
+        val CLASS_NAME =
+            createTextAttributesKey("GDSCRIPT_CLASS_DECLARATION", DefaultLanguageHighlighterColors.CLASS_NAME)
+        val BAD_CHARACTER = createTextAttributesKey("GDSCRIPT_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER)
     }
 }

@@ -340,15 +340,17 @@ await_statement ::= AWAIT expression
 
 
 // region expression
-expression ::= (operand | operator)+
-private operand ::= array_expression
+expression ::= operator? <<listOf operand operator>>
+private operand ::= paren_expression
+    | array_expression
     | dictionary_expression
     | lua_dictionary_expression
-    | invocation_expression
     | lambda_expression
     | string
     | multiline_string
-    | id
+    | dot_qualified_expression
+    | invocation_expression
+    | id_expression
     | REAL_NUMBER
     | BINARY_NUMBER
     | HEXADECIMAL_NUMBER
@@ -387,6 +389,8 @@ private operator ::= LESS
     | IF
     | ELSE
 
+paren_expression ::= L_PAREN expression R_PAREN
+
 array_expression ::= id? L_BRACKET LINE_BREAK* array_argument? LINE_BREAK* (COMMA LINE_BREAK* array_argument LINE_BREAK*)* COMMA? LINE_BREAK* R_BRACKET
 array_argument ::= (VAR? expression) | DOT_DOT | UNDERSCORE
 
@@ -396,10 +400,14 @@ dictionary_entry ::= (key LINE_BREAK* (COLON LINE_BREAK* VAR? expression)?) | DO
 lua_dictionary_expression ::= L_BRACE LINE_BREAK* lua_dictionary_entry? LINE_BREAK* (COMMA LINE_BREAK* lua_dictionary_entry LINE_BREAK*)* COMMA? LINE_BREAK* R_BRACE
 lua_dictionary_entry ::= (key EQUAL expression) | DOT_DOT
 
-invocation_expression ::= id? call
-private call ::= L_PAREN LINE_BREAK* expression? LINE_BREAK* (COMMA LINE_BREAK* expression LINE_BREAK*)* R_PAREN
+dot_qualified_expression ::= (invocation_expression | id) (DOT (invocation_expression | id))+
+
+invocation_expression ::= id call
+call ::= L_PAREN LINE_BREAK* expression? LINE_BREAK* (COMMA LINE_BREAK* expression LINE_BREAK*)* R_PAREN
 
 lambda_expression ::= FUNC id? L_PAREN id? (COMMA id)* R_PAREN COLON (inline_statement | function_body)
+
+id_expression ::= id
 
 key ::= expression
 type ::= array_type | nested_type

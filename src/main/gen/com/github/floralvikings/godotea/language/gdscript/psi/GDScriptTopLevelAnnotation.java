@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface GDScriptTopLevelAnnotation extends PsiElement {
 
-  @NotNull
-  List<GDScriptExpression> getExpressionList();
+  @Nullable
+  GDScriptCall getCall();
 
 }

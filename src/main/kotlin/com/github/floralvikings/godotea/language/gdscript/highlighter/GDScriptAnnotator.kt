@@ -1,31 +1,54 @@
 package com.github.floralvikings.godotea.language.gdscript.highlighter
 
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes.*
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptClassNameDeclaration
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFunctionDeclaration
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptInvocationExpression
+import com.github.floralvikings.godotea.language.gdscript.typification.GDScriptBuiltIns
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
-import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.psi.PsiElement
-import com.intellij.psi.util.elementType
 
 class GDScriptAnnotator : Annotator {
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
-        val isIdentifier = element.elementType == ID
-        if (isIdentifier) {
-            annotateIdentifier(element, holder)
+        if (element is GDScriptFunctionDeclaration) {
+            annotateFunctionDeclarationName(element, holder)
+        } else if (element is GDScriptClassNameDeclaration) {
+            annotateClassNameDeclaration(element, holder)
+        } else if (element is GDScriptInvocationExpression) {
+            annotateInvocationExpression(element, holder)
         }
     }
 
-    private fun annotateIdentifier(element: PsiElement, holder: AnnotationHolder) {
-        when(element.parent.elementType) {
-            FUNCTION_DECLARATION -> annotateFunctionDeclarationName(holder, element)
-        }
-    }
-
-    private fun annotateFunctionDeclarationName(holder: AnnotationHolder, element: PsiElement) {
+    private fun annotateClassNameDeclaration(element: GDScriptClassNameDeclaration, holder: AnnotationHolder) {
         holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
-            .range(element.textRange)
-            .textAttributes(DefaultLanguageHighlighterColors.FUNCTION_DECLARATION)
+            .range(element.id.textRange)
+            .textAttributes(GDScriptSyntaxHighlighter.CLASS_NAME)
             .create()
+    }
+
+    private fun annotateFunctionDeclarationName(element: GDScriptFunctionDeclaration, holder: AnnotationHolder) {
+        holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+            .range(element.functionName.textRange)
+            .textAttributes(GDScriptSyntaxHighlighter.FUNCTION_DECLARATION)
+            .create()
+    }
+
+    private fun annotateInvocationExpression(element: GDScriptInvocationExpression, holder: AnnotationHolder) {
+        val isBuiltIn = GDScriptBuiltIns.functionNames.contains(element.id.text)
+        if(isBuiltIn) {
+            holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+                .range(element.id.textRange)
+                .textAttributes(GDScriptSyntaxHighlighter.BUILT_IN_FUNCTION)
+                .create()
+        }
+
+        val isConstructor = GDScriptBuiltIns.constructorNames.contains(element.id.text)
+        if(isConstructor) {
+            holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+                .range(element.id.textRange)
+                .textAttributes(GDScriptSyntaxHighlighter.BUILT_IN_CLASS)
+                .create()
+        }
     }
 }

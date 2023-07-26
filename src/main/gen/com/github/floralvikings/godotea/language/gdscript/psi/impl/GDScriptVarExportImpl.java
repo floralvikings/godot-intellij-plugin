@@ -28,9 +28,9 @@ public class GDScriptVarExportImpl extends ASTWrapperPsiElement implements GDScr
   }
 
   @Override
-  @NotNull
-  public List<GDScriptExpression> getExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GDScriptExpression.class);
+  @Nullable
+  public GDScriptCall getCall() {
+    return findChildByClass(GDScriptCall.class);
   }
 
 }

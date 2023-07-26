@@ -35,12 +35,6 @@ public class GDScriptExpressionImpl extends ASTWrapperPsiElement implements GDSc
 
   @Override
   @NotNull
-  public List<GDScriptId> getIdList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GDScriptId.class);
-  }
-
-  @Override
-  @NotNull
   public List<GDScriptString> getStringList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, GDScriptString.class);
   }

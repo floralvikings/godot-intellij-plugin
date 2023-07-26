@@ -20,6 +20,7 @@ public interface GDScriptTypes {
   IElementType BLOCK_GET = new GDScriptElementType("BLOCK_GET");
   IElementType BLOCK_SET = new GDScriptElementType("BLOCK_SET");
   IElementType BREAK_STATEMENT = new GDScriptElementType("BREAK_STATEMENT");
+  IElementType CALL = new GDScriptElementType("CALL");
   IElementType CLASS_BLOCK = new GDScriptElementType("CLASS_BLOCK");
   IElementType CLASS_CONST_DECLARATION = new GDScriptElementType("CLASS_CONST_DECLARATION");
   IElementType CLASS_NAME_DECLARATION = new GDScriptElementType("CLASS_NAME_DECLARATION");
@@ -30,6 +31,7 @@ public interface GDScriptTypes {
   IElementType DICTIONARY_ENTRY = new GDScriptElementType("DICTIONARY_ENTRY");
   IElementType DICTIONARY_EXPRESSION = new GDScriptElementType("DICTIONARY_EXPRESSION");
   IElementType DICT_PATTERN = new GDScriptElementType("DICT_PATTERN");
+  IElementType DOT_QUALIFIED_EXPRESSION = new GDScriptElementType("DOT_QUALIFIED_EXPRESSION");
   IElementType ELIF_STATEMENT = new GDScriptElementType("ELIF_STATEMENT");
   IElementType ELSE_STATEMENT = new GDScriptElementType("ELSE_STATEMENT");
   IElementType ENUM_DECLARATION = new GDScriptElementType("ENUM_DECLARATION");
@@ -43,6 +45,7 @@ public interface GDScriptTypes {
   IElementType FUNCTION_PARAMETER = new GDScriptElementType("FUNCTION_PARAMETER");
   IElementType FUNCTION_RETURN_TYPE = new GDScriptElementType("FUNCTION_RETURN_TYPE");
   IElementType ID = new GDScriptElementType("ID");
+  IElementType ID_EXPRESSION = new GDScriptElementType("ID_EXPRESSION");
   IElementType IF_STATEMENT = new GDScriptElementType("IF_STATEMENT");
   IElementType INNER_CLASS_DECLARATION = new GDScriptElementType("INNER_CLASS_DECLARATION");
   IElementType INVOCATION_EXPRESSION = new GDScriptElementType("INVOCATION_EXPRESSION");
@@ -55,6 +58,7 @@ public interface GDScriptTypes {
   IElementType MATCH_BLOCK = new GDScriptElementType("MATCH_BLOCK");
   IElementType MATCH_STATEMENT = new GDScriptElementType("MATCH_STATEMENT");
   IElementType PARAMETER_NAME = new GDScriptElementType("PARAMETER_NAME");
+  IElementType PAREN_EXPRESSION = new GDScriptElementType("PAREN_EXPRESSION");
   IElementType PATTERN = new GDScriptElementType("PATTERN");
   IElementType PATTERN_LIST = new GDScriptElementType("PATTERN_LIST");
   IElementType RETURN_STATEMENT = new GDScriptElementType("RETURN_STATEMENT");
@@ -233,6 +237,9 @@ public interface GDScriptTypes {
       else if (type == BREAK_STATEMENT) {
         return new GDScriptBreakStatementImpl(node);
       }
+      else if (type == CALL) {
+        return new GDScriptCallImpl(node);
+      }
       else if (type == CLASS_BLOCK) {
         return new GDScriptClassBlockImpl(node);
       }
@@ -262,6 +269,9 @@ public interface GDScriptTypes {
       }
       else if (type == DICT_PATTERN) {
         return new GDScriptDictPatternImpl(node);
+      }
+      else if (type == DOT_QUALIFIED_EXPRESSION) {
+        return new GDScriptDotQualifiedExpressionImpl(node);
       }
       else if (type == ELIF_STATEMENT) {
         return new GDScriptElifStatementImpl(node);
@@ -302,6 +312,9 @@ public interface GDScriptTypes {
       else if (type == ID) {
         return new GDScriptIdImpl(node);
       }
+      else if (type == ID_EXPRESSION) {
+        return new GDScriptIdExpressionImpl(node);
+      }
       else if (type == IF_STATEMENT) {
         return new GDScriptIfStatementImpl(node);
       }
@@ -337,6 +350,9 @@ public interface GDScriptTypes {
       }
       else if (type == PARAMETER_NAME) {
         return new GDScriptParameterNameImpl(node);
+      }
+      else if (type == PAREN_EXPRESSION) {
+        return new GDScriptParenExpressionImpl(node);
       }
       else if (type == PATTERN) {
         return new GDScriptPatternImpl(node);

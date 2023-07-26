@@ -1,21 +1,28 @@
 package com.github.floralvikings.godotea.language.gdscript.reference
 
-import com.github.floralvikings.godotea.language.gdscript.findDeclaration
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptElementFactory
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptId
-import com.intellij.openapi.diagnostic.Logger
-import com.intellij.openapi.diagnostic.debug
+import com.github.floralvikings.godotea.language.gdscript.cache.GDScriptIDReferenceResolver
+import com.github.floralvikings.godotea.language.gdscript.psi.*
+import com.github.floralvikings.godotea.language.gdscript.typification.GDScriptBuiltIns
+import com.github.floralvikings.godotea.language.gdscript.typification.TypeInferenceService
+import com.github.floralvikings.godotea.language.gdscript.typification.structure.GDType
+import com.github.floralvikings.godotea.language.gdscript.util.*
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.TextRange
-import com.intellij.psi.*
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiReferenceBase
 import com.intellij.psi.util.CachedValue
-import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
+import com.intellij.psi.util.childrenOfType
 import com.intellij.refactoring.suggested.startOffset
 
 class GDScriptIDReference(private val id: GDScriptId) : PsiReferenceBase<GDScriptId>(id, id.textRange) {
+
     override fun resolve(): PsiElement? {
-        return CachedValuesManager.getCachedValue(id, Key.create<CachedValue<PsiElement>>(id.toString()), GDScriptIDReferenceCachedValueProvider(id))
+        return CachedValuesManager.getCachedValue(
+            id,
+            Key.create<CachedValue<PsiElement>>(id.toString()),
+            GDScriptIDReferenceResolver(id)
+        )
     }
 
     override fun isReferenceTo(element: PsiElement): Boolean {
@@ -33,15 +40,62 @@ class GDScriptIDReference(private val id: GDScriptId) : PsiReferenceBase<GDScrip
         return id
     }
 
-    class GDScriptIDReferenceCachedValueProvider(val id: GDScriptId) : CachedValueProvider<PsiElement?> {
-        private val log = Logger.getInstance(GDScriptIDReferenceCachedValueProvider::class.java)
-        override fun compute(): CachedValueProvider.Result<PsiElement?> {
-            return CachedValueProvider.Result.create(resolve(), id.containingFile)
+    override fun getVariants(): Array<out Any> {
+        return if(id.parent is GDScriptDotQualifiedExpression) {
+            getMemberReferenceVariants()
+        } else {
+            getPrimaryReferenceVariants()
+        }
+    }
+
+    private fun getMemberReferenceVariants(): Array<String> {
+        val inferenceService = id.project.getService(TypeInferenceService::class.java)
+        val qualifiedExpression = id.parent as GDScriptDotQualifiedExpression
+        val ownerIndex = qualifiedExpression.children.indexOf(id) - 1
+        if(ownerIndex < 0) {
+            return getPrimaryReferenceVariants()
+        }
+        val ownerType = inferenceService.inferDotQualifiedExpressionType(qualifiedExpression, ownerIndex)
+        return ownerType.fields.map { it.name }.toTypedArray() + ownerType.functions.map { it.name }.toSet()
+    }
+
+    private fun getPrimaryReferenceVariants(): Array<String> {
+        val declaredVariants = getDeclaredPrimaryReferenceVariants()
+        val builtInVariants = getBuiltInPrimaryReferenceVariants()
+
+        return (declaredVariants + builtInVariants).toTypedArray()
+    }
+
+    private fun getBuiltInPrimaryReferenceVariants(): List<String> {
+        val variants = mutableListOf<String>()
+
+        variants.addAll(GDScriptBuiltIns.functionNames)
+        variants.addAll(GDScriptBuiltIns.constructorNames)
+
+        return variants
+    }
+
+    private fun getDeclaredPrimaryReferenceVariants(): List<String> {
+        val variants = mutableListOf<String>()
+
+        val surroundingFunction = id.getSurroundingFunction()
+        if (surroundingFunction != null) {
+            variants.addAll(surroundingFunction.functionParameterList.map { it.parameterName.text })
+            variants.addAll(surroundingFunction.variableDeclarations.map { it.localVarName.text })
         }
 
-        fun resolve(): PsiElement? {
-            log.debug { "Resolving $id" }
-            return findDeclaration(id)
+        val surroundingClass = id.getSurroundingClass()
+        if (surroundingClass != null) {
+            variants.addAll(surroundingClass.varDeclarations.map { it.classVarName.text })
+            variants.addAll(surroundingClass.functionDeclarations.map() { it.functionName.text })
         }
+
+        val file = id.containingFile
+        if (file is GDScriptFile) {
+            variants.addAll(file.topLevelVarDeclarations.map { it.classVarName.text })
+            variants.addAll(file.topLevelFunctionDeclarations.map { it.functionName.text })
+        }
+        // TODO Declared autoload properties
+        return variants
     }
 }
