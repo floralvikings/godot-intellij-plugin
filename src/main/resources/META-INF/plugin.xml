@@ -50,5 +50,11 @@
                 language="GDScript"
                 implementationClass="com.github.floralvikings.godotea.language.gdscript.formatting.GDScriptFormattingModelBuilder"
         />
+        <codeStyleSettingsProvider
+                implementation="com.github.floralvikings.godotea.language.gdscript.formatting.style.GDScriptCodeStyleSettingsProvider"
+        />
+        <langCodeStyleSettingsProvider
+                implementation="com.github.floralvikings.godotea.language.gdscript.formatting.style.GDScriptLanguageCodeStyleSettingsProvider"
+        />
     </extensions>
 </idea-plugin>

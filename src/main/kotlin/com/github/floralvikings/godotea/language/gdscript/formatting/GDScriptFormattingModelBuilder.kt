@@ -3,6 +3,7 @@ package com.github.floralvikings.godotea.language.gdscript.formatting
 import com.github.floralvikings.godotea.language.gdscript.GDScriptLanguage
 import com.github.floralvikings.godotea.language.gdscript.formatting.blocks.GDScriptBlock
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes
+import com.github.floralvikings.godotea.language.gdscript.util.ASSIGNMENT_OPERATORS
 import com.intellij.formatting.*
 import com.intellij.psi.codeStyle.CodeStyleSettings
 
@@ -21,9 +22,10 @@ class GDScriptFormattingModelBuilder : FormattingModelBuilder {
 
     companion object {
         fun createSpacingBuilder(codeStyleSettings: CodeStyleSettings): SpacingBuilder {
+            val commonGDScriptStyleSettings = codeStyleSettings.getCommonSettings(GDScriptLanguage.INSTANCE.id)
             return SpacingBuilder(codeStyleSettings, GDScriptLanguage.INSTANCE)
-                .around(GDScriptTypes.ASSIGN_OPERATOR)
-                .spaceIf(codeStyleSettings.getCommonSettings(GDScriptLanguage.INSTANCE.id).SPACE_AROUND_ASSIGNMENT_OPERATORS)
+                .around(ASSIGNMENT_OPERATORS)
+                .spaceIf(commonGDScriptStyleSettings.SPACE_AROUND_ASSIGNMENT_OPERATORS)
         }
     }
 }

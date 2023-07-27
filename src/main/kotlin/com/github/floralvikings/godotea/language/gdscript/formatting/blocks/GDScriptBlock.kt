@@ -10,13 +10,11 @@ import com.intellij.psi.formatter.common.AbstractBlock
 open class GDScriptBlock(node: ASTNode, wrap: Wrap?, alignment: Alignment?, val spacingBuilder: SpacingBuilder) :
     AbstractBlock(node, wrap, alignment) {
 
-    override fun getSpacing(child1: Block?, child2: Block): Spacing? {
-        return spacingBuilder.getSpacing(this, child2, child2)
-    }
+    override fun getSpacing(child1: Block?, child2: Block): Spacing? = spacingBuilder.getSpacing(this, child1, child2)
 
-    override fun isLeaf(): Boolean {
-        return myNode.firstChildNode == null
-    }
+    override fun isLeaf(): Boolean = myNode.firstChildNode == null
+
+    override fun getIndent(): Indent? = Indent.getNoneIndent()
 
     override fun buildChildren(): MutableList<Block> {
         val blocks: MutableList<Block> = ArrayList()
