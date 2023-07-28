@@ -34,14 +34,14 @@ public class GDScriptFunctionDeclarationImpl extends GDScriptNamedElementImpl im
 
   @Override
   @NotNull
-  public GDScriptFunctionName getFunctionName() {
-    return findNotNullChildByClass(GDScriptFunctionName.class);
+  public GDScriptFunctionDeclarationParameters getFunctionDeclarationParameters() {
+    return findNotNullChildByClass(GDScriptFunctionDeclarationParameters.class);
   }
 
   @Override
   @NotNull
-  public List<GDScriptFunctionParameter> getFunctionParameterList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GDScriptFunctionParameter.class);
+  public GDScriptFunctionName getFunctionName() {
+    return findNotNullChildByClass(GDScriptFunctionName.class);
   }
 
   @Override

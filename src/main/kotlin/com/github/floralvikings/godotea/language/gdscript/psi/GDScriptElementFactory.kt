@@ -7,6 +7,12 @@ import com.intellij.psi.PsiFileFactory
 
 class GDScriptElementFactory {
     companion object {
+        fun createNewLine(project: Project): PsiElement {
+            val text = "var foo\n"
+            val gdScriptFile = createFile(project, text)
+            return gdScriptFile.lastChild
+        }
+
         @JvmStatic
         fun createIdentifier(project: Project, id: String): PsiElement {
             val text = "var $id"

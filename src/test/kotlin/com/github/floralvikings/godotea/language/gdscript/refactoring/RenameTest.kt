@@ -12,7 +12,8 @@ class RenameTest : BasePlatformTestCase() {
     fun test_rename_local_var() = doTest("new_name") {
         listOf(
             childrenOfType<GDScriptFunctionDeclaration>()[0]
-                .block.childrenOfType<GDScriptExpressionStatement>()[0]
+                .block.childrenOfType<GDScriptScriptStatement>()
+                .mapNotNull { it.expressionStatement }[0]
                 .childrenOfType<GDScriptInvocationExpression>()[0]
                 .childrenOfType<GDScriptCall>()[0]
                 .childrenOfType<GDScriptExpression>()[0]
@@ -23,7 +24,8 @@ class RenameTest : BasePlatformTestCase() {
     fun test_rename_class_var() = doTest("something") {
         listOf(
             childrenOfType<GDScriptFunctionDeclaration>()[0]
-                .block.childrenOfType<GDScriptExpressionStatement>()[0]
+                .block.childrenOfType<GDScriptScriptStatement>()
+                .mapNotNull { it.expressionStatement }[0]
                 .childrenOfType<GDScriptInvocationExpression>()[0]
                 .childrenOfType<GDScriptCall>()[0]
                 .childrenOfType<GDScriptExpression>()[0]
@@ -34,7 +36,8 @@ class RenameTest : BasePlatformTestCase() {
     fun test_rename_function() = doTest("new_function_name") {
         listOf (
             childrenOfType<GDScriptFunctionDeclaration>()[1]
-                .block.childrenOfType<GDScriptExpressionStatement>()[0]
+                .block.childrenOfType<GDScriptScriptStatement>()
+                .mapNotNull { it.expressionStatement }[0]
                 .childrenOfType<GDScriptInvocationExpression>()[0]
                 .childrenOfType<GDScriptId>()[0]
         )
@@ -43,7 +46,8 @@ class RenameTest : BasePlatformTestCase() {
     fun test_rename_parameter() = doTest("new_parameter_name") {
         listOf(
             childrenOfType<GDScriptFunctionDeclaration>()[0]
-                .block.childrenOfType<GDScriptExpressionStatement>()[0]
+                .block.childrenOfType<GDScriptScriptStatement>()
+                .mapNotNull { it.expressionStatement }[0]
                 .childrenOfType<GDScriptInvocationExpression>()[0]
                 .childrenOfType<GDScriptCall>()[0]
                 .childrenOfType<GDScriptExpression>()[0]

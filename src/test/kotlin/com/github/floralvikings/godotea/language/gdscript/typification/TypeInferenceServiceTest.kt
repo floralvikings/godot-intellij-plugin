@@ -4,6 +4,7 @@ import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptClassVarDe
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptExpressionStatement
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFile
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFunctionDeclaration
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptScriptStatement
 import com.github.floralvikings.godotea.language.gdscript.typification.builtins.basic.GDFloat
 import com.github.floralvikings.godotea.language.gdscript.typification.builtins.basic.GDInt
 import com.github.floralvikings.godotea.language.gdscript.typification.builtins.vector.GDVector2
@@ -20,7 +21,7 @@ class TypeInferenceServiceTest : BasePlatformTestCase() {
     fun test_built_in_constructor_type_inference() = doTest {service ->
         val expression = childrenOfType<GDScriptFunctionDeclaration>()[0]
             .block
-            .childrenOfType<GDScriptExpressionStatement>()[0]
+            .childrenOfType<GDScriptScriptStatement>().mapNotNull { it.expressionStatement }[0]
             .expression
         TestCase.assertEquals(GDVector2, service.inferType(expression))
     }

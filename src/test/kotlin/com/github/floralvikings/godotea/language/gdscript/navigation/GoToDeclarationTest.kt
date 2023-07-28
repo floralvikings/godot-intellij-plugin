@@ -1,10 +1,7 @@
 package com.github.floralvikings.godotea.language.gdscript.navigation
 
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptClassVarDeclaration
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFile
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFunctionDeclaration
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptInnerClassDeclaration
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptVarStatement
+import com.github.floralvikings.godotea.language.gdscript.psi.*
+import com.github.floralvikings.godotea.language.gdscript.util.findTopLevelFunctionsNamed
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.childrenOfType
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
@@ -17,13 +14,14 @@ class GoToDeclarationTest : BasePlatformTestCase() {
     fun test_go_to_class_var_from_reference() = doTest { childrenOfType<GDScriptClassVarDeclaration>()[0] }
 
     fun test_go_to_local_var() = doTest {
-        childrenOfType<GDScriptFunctionDeclaration>()[0].block.childrenOfType<GDScriptVarStatement>()[0]
+        childrenOfType<GDScriptFunctionDeclaration>()[0].block.childrenOfType<GDScriptScriptStatement>()
+            .mapNotNull { it.varStatement }[0]
     }
 
     fun test_go_to_member_var() = doTest { null }
 
     fun test_go_to_parameter_declaration() = doTest {
-        childrenOfType<GDScriptFunctionDeclaration>()[0].functionParameterList[0]
+        childrenOfType<GDScriptFunctionDeclaration>()[0].functionDeclarationParameters.functionParameterList[0]
     }
 
     fun test_go_to_inner_class_var() = doTest {
@@ -35,7 +33,8 @@ class GoToDeclarationTest : BasePlatformTestCase() {
     }
 
     fun test_go_to_shadowed_local_var() = doTest {
-        childrenOfType<GDScriptFunctionDeclaration>()[0].block.childrenOfType<GDScriptVarStatement>()[0]
+        childrenOfType<GDScriptFunctionDeclaration>()[0].block.childrenOfType<GDScriptScriptStatement>()
+            .mapNotNull { it.varStatement }[0]
     }
 
     fun test_go_to_top_level_function_declaration() = doTest {

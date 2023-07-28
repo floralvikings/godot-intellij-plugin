@@ -246,7 +246,7 @@ function_declaration ::= function_annotations? STATIC? FUNC function_name functi
 
 private function_annotations ::= AT_RPC LINE_BREAK*
 private function_body ::= LINE_BREAK* block
-private function_declaration_parameters ::= L_PAREN LINE_BREAK* function_parameter_list LINE_BREAK* R_PAREN
+function_declaration_parameters ::= L_PAREN LINE_BREAK* function_parameter_list LINE_BREAK* R_PAREN
 private function_parameter_list ::= function_parameter? LINE_BREAK* (COMMA LINE_BREAK* function_parameter LINE_BREAK*)* COMMA?
 function_parameter ::= parameter_name (COLON type)? ((EQUAL | INFER) expression)? {
     mixin="GDScriptNamedElementImpl"
@@ -262,9 +262,9 @@ private inner_class_body ::= LINE_BREAK*  class_block
 block        ::= <<indented <<listOf (&INDEQ script_statement) end_of_block_statement>>>>
 class_block  ::= <<indented <<listOf (&INDEQ class_statement) end_of_block_statement>>>>
 
-private end_of_block_statement ::= end_of_statement (((&INDNONE | &INDEQ) LINE_BREAK+)+ | (&INDEQ))
+end_of_block_statement ::= end_of_statement (((&INDNONE | &INDEQ) LINE_BREAK+)+ | (&INDEQ))
 
-private script_statement ::= var_statement
+script_statement ::= var_statement
     | const_statement
     | if_statement
     | for_statement

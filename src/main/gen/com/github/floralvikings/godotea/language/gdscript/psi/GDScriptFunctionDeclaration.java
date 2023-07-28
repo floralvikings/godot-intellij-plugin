@@ -11,10 +11,10 @@ public interface GDScriptFunctionDeclaration extends GDScriptNamedElement {
   GDScriptBlock getBlock();
 
   @NotNull
-  GDScriptFunctionName getFunctionName();
+  GDScriptFunctionDeclarationParameters getFunctionDeclarationParameters();
 
   @NotNull
-  List<GDScriptFunctionParameter> getFunctionParameterList();
+  GDScriptFunctionName getFunctionName();
 
   @Nullable
   GDScriptFunctionReturnType getFunctionReturnType();

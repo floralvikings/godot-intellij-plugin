@@ -11,38 +11,20 @@ import static com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTyp
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.github.floralvikings.godotea.language.gdscript.psi.*;
 
-public class GDScriptMatchBlockImpl extends ASTWrapperPsiElement implements GDScriptMatchBlock {
+public class GDScriptEndOfBlockStatementImpl extends ASTWrapperPsiElement implements GDScriptEndOfBlockStatement {
 
-  public GDScriptMatchBlockImpl(@NotNull ASTNode node) {
+  public GDScriptEndOfBlockStatementImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull GDScriptVisitor visitor) {
-    visitor.visitMatchBlock(this);
+    visitor.visitEndOfBlockStatement(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof GDScriptVisitor) accept((GDScriptVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @NotNull
-  public List<GDScriptBlock> getBlockList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GDScriptBlock.class);
-  }
-
-  @Override
-  @NotNull
-  public List<GDScriptPatternList> getPatternListList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GDScriptPatternList.class);
-  }
-
-  @Override
-  @NotNull
-  public List<GDScriptScriptStatement> getScriptStatementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GDScriptScriptStatement.class);
   }
 
 }
