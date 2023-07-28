@@ -11,7 +11,15 @@ import com.intellij.util.containers.ContainerUtil
 class GDScriptFormattingTest : BasePlatformTestCase() {
     override fun getTestDataPath(): String = "src/test/testData/gdscript/formatting/"
 
+    fun test_new_line_after_function_body() = doInsertTextTest("\n")
+
     fun test_new_line_after_function_declaration_indent() = doInsertTextTest("\n")
+    
+    fun test_new_line_before_function_body() = doInsertTextTest("\n")
+    
+    fun test_new_line_in_function_body() = doInsertTextTest("\n")
+
+    fun test_second_new_line_after_function_declaration_indent() = doInsertTextTest("\n")
 
     private fun doInsertTextTest(text: String, configureSettings: CommonCodeStyleSettings.() -> Unit = {}) {
         val testFile = configFile()!!
