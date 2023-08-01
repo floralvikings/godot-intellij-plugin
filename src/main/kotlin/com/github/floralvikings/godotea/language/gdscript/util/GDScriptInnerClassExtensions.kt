@@ -6,7 +6,7 @@ import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptInnerClass
 import com.intellij.psi.util.childrenOfType
 
 val GDScriptInnerClassDeclaration.varDeclarations: List<GDScriptClassVarDeclaration>
-    get() = classBlock.childrenOfType()
+    get() = classBlock?.childrenOfType() ?: emptyList()
 
 val GDScriptInnerClassDeclaration.functionDeclarations: List<GDScriptFunctionDeclaration>
-    get() = classBlock.childrenOfType<GDScriptFunctionDeclaration>()
+    get() = classBlock?.childrenOfType<GDScriptFunctionDeclaration>() ?: emptyList()

@@ -28,9 +28,9 @@ public class GDScriptInnerClassDeclarationImpl extends ASTWrapperPsiElement impl
   }
 
   @Override
-  @NotNull
+  @Nullable
   public GDScriptClassBlock getClassBlock() {
-    return findNotNullChildByClass(GDScriptClassBlock.class);
+    return findChildByClass(GDScriptClassBlock.class);
   }
 
   @Override

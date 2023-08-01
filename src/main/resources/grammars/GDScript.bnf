@@ -239,6 +239,7 @@ enum_declaration ::= ENUM id? (L_BRACE LINE_BREAK* enum_entry? LINE_BREAK* (COMM
 enum_entry ::= id (EQUAL expression)?
 
 function_declaration ::= function_annotations? STATIC? FUNC function_name function_declaration_parameters function_return_type? COLON function_body {
+    pin=7
     mixin="GDScriptNamedElementImpl"
     implements=["GDScriptNamedElement"]
     methods=[getName setName getNameIdentifier getTextOffset]
@@ -255,7 +256,9 @@ function_parameter ::= parameter_name (COLON type)? ((EQUAL | INFER) expression)
 }
 function_return_type ::= ARROW type
 
-inner_class_declaration ::= CLASS id extends_declaration? COLON inner_class_body
+inner_class_declaration ::= CLASS id extends_declaration? COLON inner_class_body {
+    pin=4
+}
 private inner_class_body ::= LINE_BREAK*  class_block
 
 

@@ -27,9 +27,9 @@ public class GDScriptFunctionDeclarationImpl extends GDScriptNamedElementImpl im
   }
 
   @Override
-  @NotNull
+  @Nullable
   public GDScriptBlock getBlock() {
-    return findNotNullChildByClass(GDScriptBlock.class);
+    return findChildByClass(GDScriptBlock.class);
   }
 
   @Override

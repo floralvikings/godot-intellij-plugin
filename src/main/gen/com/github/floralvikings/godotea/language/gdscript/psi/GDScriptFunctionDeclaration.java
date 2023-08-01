@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface GDScriptFunctionDeclaration extends GDScriptNamedElement {
 
-  @NotNull
+  @Nullable
   GDScriptBlock getBlock();
 
   @NotNull

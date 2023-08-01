@@ -1,7 +1,6 @@
 package com.github.floralvikings.godotea.language.gdscript.navigation
 
 import com.github.floralvikings.godotea.language.gdscript.psi.*
-import com.github.floralvikings.godotea.language.gdscript.util.findTopLevelFunctionsNamed
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.childrenOfType
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
@@ -14,8 +13,8 @@ class GoToDeclarationTest : BasePlatformTestCase() {
     fun test_go_to_class_var_from_reference() = doTest { childrenOfType<GDScriptClassVarDeclaration>()[0] }
 
     fun test_go_to_local_var() = doTest {
-        childrenOfType<GDScriptFunctionDeclaration>()[0].block.childrenOfType<GDScriptScriptStatement>()
-            .mapNotNull { it.varStatement }[0]
+        childrenOfType<GDScriptFunctionDeclaration>()[0].block?.childrenOfType<GDScriptScriptStatement>()
+            ?.mapNotNull { it.varStatement }!![0]
     }
 
     fun test_go_to_member_var() = doTest { null }
@@ -25,15 +24,15 @@ class GoToDeclarationTest : BasePlatformTestCase() {
     }
 
     fun test_go_to_inner_class_var() = doTest {
-        childrenOfType<GDScriptInnerClassDeclaration>()[0].classBlock.childrenOfType<GDScriptClassVarDeclaration>()[0]
+        childrenOfType<GDScriptInnerClassDeclaration>()[0].classBlock!!.childrenOfType<GDScriptClassVarDeclaration>()[0]
     }
 
     fun test_go_to_shadowed_inner_class_var() = doTest {
-        childrenOfType<GDScriptInnerClassDeclaration>()[0].classBlock.childrenOfType<GDScriptClassVarDeclaration>()[0]
+        childrenOfType<GDScriptInnerClassDeclaration>()[0].classBlock!!.childrenOfType<GDScriptClassVarDeclaration>()[0]
     }
 
     fun test_go_to_shadowed_local_var() = doTest {
-        childrenOfType<GDScriptFunctionDeclaration>()[0].block.childrenOfType<GDScriptScriptStatement>()
+        childrenOfType<GDScriptFunctionDeclaration>()[0].block!!.childrenOfType<GDScriptScriptStatement>()
             .mapNotNull { it.varStatement }[0]
     }
 
@@ -42,7 +41,7 @@ class GoToDeclarationTest : BasePlatformTestCase() {
     }
 
     fun test_go_to_inner_class_function_declaration() = doTest {
-        childrenOfType<GDScriptInnerClassDeclaration>()[0].classBlock.childrenOfType<GDScriptFunctionDeclaration>()[0]
+        childrenOfType<GDScriptInnerClassDeclaration>()[0].classBlock!!.childrenOfType<GDScriptFunctionDeclaration>()[0]
     }
 
     fun test_go_to_top_level_function_declaration_from_inner_class() = doTest {

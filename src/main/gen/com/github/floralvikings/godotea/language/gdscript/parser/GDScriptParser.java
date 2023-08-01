@@ -1827,7 +1827,7 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   // function_annotations? STATIC? FUNC function_name function_declaration_parameters function_return_type? COLON function_body
   public static boolean function_declaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "function_declaration")) return false;
-    boolean r;
+    boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, FUNCTION_DECLARATION, "<function declaration>");
     r = function_declaration_0(b, l + 1);
     r = r && function_declaration_1(b, l + 1);
@@ -1836,9 +1836,10 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     r = r && function_declaration_parameters(b, l + 1);
     r = r && function_declaration_5(b, l + 1);
     r = r && consumeToken(b, COLON);
+    p = r; // pin = 7
     r = r && function_body(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // function_annotations?
@@ -2216,15 +2217,16 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   public static boolean inner_class_declaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "inner_class_declaration")) return false;
     if (!nextTokenIs(b, CLASS)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, INNER_CLASS_DECLARATION, null);
     r = consumeToken(b, CLASS);
     r = r && id(b, l + 1);
     r = r && inner_class_declaration_2(b, l + 1);
     r = r && consumeToken(b, COLON);
+    p = r; // pin = 4
     r = r && inner_class_body(b, l + 1);
-    exit_section_(b, m, INNER_CLASS_DECLARATION, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // extends_declaration?

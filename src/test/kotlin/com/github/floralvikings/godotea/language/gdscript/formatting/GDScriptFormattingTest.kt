@@ -10,6 +10,10 @@ import com.intellij.util.containers.ContainerUtil
 
 class GDScriptFormattingTest : BasePlatformTestCase() {
     override fun getTestDataPath(): String = "src/test/testData/gdscript/formatting/"
+    
+    fun test_inner_class_block_indent() = doInsertTextTest("\n")
+    
+    fun test_inner_class_function_body_indent() = doInsertTextTest("\n")
 
     fun test_new_line_after_function_body() = doInsertTextTest("\n")
 

@@ -97,7 +97,7 @@ class TypeInferenceService(private val project: Project) {
             0 -> null
             1 -> declaredFunctions[0]
             // TODO filter based on parameter types
-            else -> declaredFunctions.firstOrNull { it.functionDeclarationParameters.functionParameterList.size == invocation.call.expressionList.size }
+            else -> declaredFunctions.firstOrNull { it.functionDeclarationParameters?.functionParameterList?.size == invocation.call.expressionList.size }
         } ?: return GDUnknownType
 
         val functionReturnType = overload.functionReturnType
@@ -165,7 +165,7 @@ class TypeInferenceService(private val project: Project) {
 
     private fun createGDFunctionFromDeclaration(declaration: GDScriptFunctionDeclaration): GDFunction {
         return GDFunction(declaration.functionName.text) {
-            declaration.functionDeclarationParameters.functionParameterList.forEach { param ->
+            declaration.functionDeclarationParameters?.functionParameterList?.forEach { param ->
                 if(param.type != null) {
                     param.parameterName.text(inferExplicitlyDeclaredType(param.type!!))
                 } else if(param.expression != null) {
@@ -191,14 +191,14 @@ class TypeInferenceService(private val project: Project) {
     }
 
     private fun createGDConstructorFromDeclaration(declaration: GDScriptFunctionDeclaration): GDConstructor {
-        val parameters = declaration.functionDeclarationParameters.functionParameterList.map {param ->
+        val parameters = declaration.functionDeclarationParameters?.functionParameterList?.map {param ->
             val type = if(param.type != null) {
                 inferExplicitlyDeclaredType(param.type!!)
             } else {
                 GDUnknownType
             }
             GDParameter(param.parameterName.text, type)
-        }
+        } ?: emptyList()
         return GDConstructor(parameters)
     }
 
