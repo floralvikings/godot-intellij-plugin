@@ -27,7 +27,6 @@ class GDScriptDedentEnterHandler : EnterHandlerDelegateAdapter() {
         if(element?.prevSibling?.elementType == GDScriptTypes.ELSE) {
             val elseStatement = element!!.parent
             val ifStatement = elseStatement.parent as GDScriptIfStatement
-            val codeStyleManager = CodeStyleManager.getInstance(file.project)
             
             val elseLineNumber = editor.document.getLineNumber(elseStatement.startOffset)
             val elseLineOffset = editor.document.getLineStartOffset(elseLineNumber)
