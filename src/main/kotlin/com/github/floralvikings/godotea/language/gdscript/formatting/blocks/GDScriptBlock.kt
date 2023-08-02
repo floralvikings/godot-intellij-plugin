@@ -255,7 +255,9 @@ class GDScriptIfStatementBlock(
             val prevType = prevBlock.node.elementType
             if (prevType == GDScriptTypes.COLON) {
                 return ChildAttributes(Indent.getNormalIndent(), null)
-            } else if(prevType == GDScriptTypes.BLOCK) { 
+            } else if(prevType == GDScriptTypes.BLOCK) {
+                return ChildAttributes(Indent.getNormalIndent(), null)
+            } else if(prevType == GDScriptTypes.ELSE_STATEMENT) {
                 return ChildAttributes(Indent.getNormalIndent(), null)
             }else if (prevType == TokenType.ERROR_ELEMENT) {
                 return getPostBlockChildAttributes(prevBlock)

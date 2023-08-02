@@ -1,8 +1,10 @@
 package com.github.floralvikings.godotea.language.gdscript.formatting
 
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptIfStatement
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes
 import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegate
 import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegateAdapter
+import com.intellij.formatting.FormattingMode
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.actionSystem.EditorActionHandler
@@ -24,11 +26,24 @@ class GDScriptDedentEnterHandler : EnterHandlerDelegateAdapter() {
         val element = file.findElementAt(caretOffset.get() - 1)
         if(element?.prevSibling?.elementType == GDScriptTypes.ELSE) {
             val elseStatement = element!!.parent
-            val elseIndent = CodeStyleManager.getInstance(file.project)
-                .getLineIndent(file, elseStatement.textOffset) ?: ""
-            editor.document.deleteString(elseStatement.startOffset - elseIndent.length, elseStatement.startOffset)
-            editor.caretModel.moveToOffset(caretOffset.get() - elseIndent.length)
-            caretOffset.set(caretOffset.get() - elseIndent.length)
+            val ifStatement = elseStatement.parent as GDScriptIfStatement
+            val codeStyleManager = CodeStyleManager.getInstance(file.project)
+            
+            val elseLineNumber = editor.document.getLineNumber(elseStatement.startOffset)
+            val elseLineOffset = editor.document.getLineStartOffset(elseLineNumber)
+            val elseIndent = elseStatement.startOffset - elseLineOffset
+            
+            val ifLineNumber = editor.document.getLineNumber(ifStatement.startOffset)
+            val ifLineOffset = editor.document.getLineStartOffset(ifLineNumber)
+            val ifIndent = ifStatement.startOffset - ifLineOffset
+            
+            if(elseIndent > ifIndent) {
+                val numToDelete = elseIndent - ifIndent
+                val deleteOffset = elseStatement.textOffset - numToDelete
+                editor.document.deleteString(deleteOffset, deleteOffset + numToDelete)
+                editor.caretModel.moveToOffset(caretOffset.get() - numToDelete)
+                caretOffset.set(caretOffset.get() - numToDelete)
+            }
         }
         return super.preprocessEnter(file, editor, caretOffset, caretAdvance, dataContext, originalHandler)
     }
