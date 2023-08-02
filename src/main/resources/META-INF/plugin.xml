@@ -56,5 +56,8 @@
         <langCodeStyleSettingsProvider
                 implementation="com.github.floralvikings.godotea.language.gdscript.formatting.style.GDScriptLanguageCodeStyleSettingsProvider"
         />
+        <enterHandlerDelegate
+                implementation="com.github.floralvikings.godotea.language.gdscript.formatting.GDScriptDedentEnterHandler"
+        />
     </extensions>
 </idea-plugin>

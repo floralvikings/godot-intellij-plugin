@@ -1,19 +1,15 @@
 package com.github.floralvikings.godotea.language.gdscript.formatting.blocks
 
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFunctionDeclaration
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptElseStatement
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptScriptStatement
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes
-import com.github.floralvikings.godotea.language.gdscript.util.containingInnerClass
 import com.github.floralvikings.godotea.language.gdscript.util.nextNonWhitespaceSibling
-import com.github.floralvikings.godotea.language.lastNonWhitespaceChildNode
-import com.github.floralvikings.godotea.language.treePrevNonLineBreak
 import com.intellij.formatting.*
 import com.intellij.lang.ASTNode
 import com.intellij.openapi.diagnostic.Logger
-import com.intellij.openapi.util.TextRange
 import com.intellij.psi.TokenType
 import com.intellij.psi.formatter.common.AbstractBlock
 import com.intellij.psi.util.elementType
-import com.jetbrains.rd.framework.base.deepClonePolymorphic
 
 private val log = Logger.getInstance(GDScriptBlock::class.java)
 
@@ -44,7 +40,7 @@ open class GDScriptBlock(
                         Alignment.createAlignment(),
                         spacingBuilder
                     )
-                    
+
                     GDScriptTypes.FUNCTION_DECLARATION -> GDScriptFunctionDeclarationBlock(
                         child,
                         Wrap.createWrap(WrapType.NONE, false),
@@ -52,13 +48,13 @@ open class GDScriptBlock(
                         spacingBuilder
                     )
 
-                    GDScriptTypes.BLOCK -> GDScriptFunctionBodyBlock(
+                    GDScriptTypes.BLOCK -> GDScriptBlockBlock(
                         child,
                         Wrap.createWrap(WrapType.NONE, false),
                         Alignment.createAlignment(),
                         spacingBuilder
                     )
-                    
+
                     GDScriptTypes.INNER_CLASS_DECLARATION -> GDScriptClassDeclarationBlock(
                         child,
                         Wrap.createWrap(WrapType.NONE, false),
@@ -67,6 +63,20 @@ open class GDScriptBlock(
                     )
 
                     GDScriptTypes.CLASS_BLOCK -> GDScriptClassBodyBlock(
+                        child,
+                        Wrap.createWrap(WrapType.NONE, false),
+                        Alignment.createAlignment(),
+                        spacingBuilder
+                    )
+                    
+                    GDScriptTypes.SCRIPT_STATEMENT -> GDScriptStatementBlock(
+                        child,
+                        Wrap.createWrap(WrapType.NONE, false),
+                        Alignment.createAlignment(),
+                        spacingBuilder
+                    )
+
+                    GDScriptTypes.IF_STATEMENT -> GDScriptIfStatementBlock(
                         child,
                         Wrap.createWrap(WrapType.NONE, false),
                         Alignment.createAlignment(),
@@ -85,6 +95,11 @@ open class GDScriptBlock(
             child = child.treeNext
         }
         return blocks
+    }
+
+    override fun getChildAttributes(newChildIndex: Int): ChildAttributes {
+        log.warn("Retrieving GDScriptBlock(${node.elementType}) child attributes")
+        return super.getChildAttributes(newChildIndex)
     }
 
     override fun isIncomplete(): Boolean {
@@ -119,24 +134,14 @@ class GDScriptFunctionDeclarationBlock(
             val prevType = prevBlock.node.elementType
             if (prevType == GDScriptTypes.FUNCTION_RETURN_TYPE || prevType == GDScriptTypes.COLON) {
                 return ChildAttributes(Indent.getNormalIndent(), null)
-            } else if(prevType == TokenType.ERROR_ELEMENT) {
+            } else if (prevType == TokenType.ERROR_ELEMENT) {
                 // If text immediately preceding previous node is two blank lines, don't indent
-                val prevPsi = prevBlock.node.psi
-                val parent = prevPsi.parent
-                val afterParent = parent.nextNonWhitespaceSibling
-                val afterAfterParent = afterParent?.nextNonWhitespaceSibling
-                val afterThat = afterAfterParent?.nextNonWhitespaceSibling
-                if(afterParent?.elementType == GDScriptTypes.LINE_BREAK 
-                    && afterAfterParent?.elementType == GDScriptTypes.LINE_BREAK 
-                    && afterThat?.elementType == GDScriptTypes.LINE_BREAK
-                    ) {
-                    return ChildAttributes(Indent.getNoneIndent(), null)
-                }
-                return ChildAttributes(Indent.getNormalIndent(), null)
+                return getPostBlockChildAttributes(prevBlock)
             }
         }
         return ChildAttributes(Indent.getNoneIndent(), null)
     }
+
 
     override fun isIncomplete(): Boolean {
         val lastOrNull = this.subBlocks.lastOrNull()
@@ -147,14 +152,15 @@ class GDScriptFunctionDeclarationBlock(
         }
 
         val incomplete = lastBlock.node?.elementType != GDScriptTypes.BLOCK
-        
+
         log.warn("Incomplete GDScriptFunctionDeclarationBlock: $incomplete")
         return incomplete
     }
 }
 
-class GDScriptFunctionBodyBlock(node: ASTNode, wrap: Wrap?, alignment: Alignment?, spacingBuilder: SpacingBuilder) :
+class GDScriptBlockBlock(node: ASTNode, wrap: Wrap?, alignment: Alignment?, spacingBuilder: SpacingBuilder) :
     GDScriptBlock(node, wrap, alignment, spacingBuilder, Indent.getNormalIndent()) {
+        
     override fun isIncomplete(): Boolean {
         val psi = node.psi
         val declaration = psi.parent
@@ -168,7 +174,7 @@ class GDScriptFunctionBodyBlock(node: ASTNode, wrap: Wrap?, alignment: Alignment
                 true
             }
         }
-        log.warn("Incomplete GDScriptFunctionBodyBlock: $incomplete")
+        log.warn("Incomplete GDScriptBlockBlock: $incomplete")
         return incomplete
     }
 }
@@ -188,16 +194,8 @@ class GDScriptClassDeclarationBlock(
             val prevType = prevBlock.node.elementType
             if (prevType == GDScriptTypes.COLON) {
                 return ChildAttributes(Indent.getNormalIndent(), null)
-            } else if(prevType == TokenType.ERROR_ELEMENT) {
-                // If text immediately preceding previous node is two blank lines, don't indent
-                val prevPsi = prevBlock.node.psi
-                val parent = prevPsi.parent
-                val afterParent = parent.nextNonWhitespaceSibling
-                val afterAfterParent = afterParent?.nextNonWhitespaceSibling
-                if(afterParent?.elementType == GDScriptTypes.LINE_BREAK && afterAfterParent?.elementType == GDScriptTypes.LINE_BREAK) {
-                    return ChildAttributes(Indent.getNoneIndent(), null)
-                }
-                return ChildAttributes(Indent.getNormalIndent(), null)
+            } else if (prevType == TokenType.ERROR_ELEMENT) {
+                return getPostBlockChildAttributes(prevBlock)
             }
         }
         return ChildAttributes(Indent.getNoneIndent(), null)
@@ -241,4 +239,93 @@ class GDScriptClassBodyBlock(
         log.warn("Incomplete GDScriptClassBodyBlock: $incomplete")
         return incomplete
     }
+}
+
+class GDScriptIfStatementBlock(
+    node: ASTNode,
+    wrap: Wrap?,
+    alignment: Alignment?,
+    spacingBuilder: SpacingBuilder
+) : GDScriptBlock(node, wrap, alignment, spacingBuilder) {
+
+    override fun getChildAttributes(newChildIndex: Int): ChildAttributes {
+        log.warn("Retrieving GDScriptIfStatementBlock child attributes")
+        if (newChildIndex > 0) {
+            val prevBlock = this.subBlocks[newChildIndex - 1] as GDScriptBlock
+            val prevType = prevBlock.node.elementType
+            if (prevType == GDScriptTypes.COLON) {
+                return ChildAttributes(Indent.getNormalIndent(), null)
+            } else if(prevType == GDScriptTypes.BLOCK) { 
+                return ChildAttributes(Indent.getNormalIndent(), null)
+            }else if (prevType == TokenType.ERROR_ELEMENT) {
+                return getPostBlockChildAttributes(prevBlock)
+            }
+        }
+        return ChildAttributes(Indent.getNoneIndent(), null)
+    }
+    override fun isIncomplete(): Boolean {
+        val lastOrNull = this.subBlocks.lastOrNull()
+        val lastBlock = if (lastOrNull is ASTBlock) {
+            lastOrNull
+        } else {
+            return true
+        }
+
+        val incomplete = lastBlock.node?.elementType != GDScriptTypes.BLOCK
+
+        log.warn("Incomplete GDScriptIfStatementBlock: $incomplete")
+        return incomplete
+    }
+}
+
+class GDScriptStatementBlock(
+    node: ASTNode,
+    wrap: Wrap?,
+    alignment: Alignment?,
+    spacingBuilder: SpacingBuilder,
+    indent: Indent = Indent.getNoneIndent()
+) : GDScriptBlock(node, wrap, alignment, spacingBuilder, indent) {
+    
+    override fun getChildAttributes(newChildIndex: Int): ChildAttributes {
+        log.warn("Retrieving GDScriptStatementBlock child attributes")
+        val psi = node.psi as? GDScriptScriptStatement ?: return ChildAttributes(Indent.getNoneIndent(), null)
+        val ifStatement = psi.ifStatement
+        if(ifStatement != null) {
+            val lastChild = ifStatement.lastChild
+            if(lastChild.elementType == GDScriptTypes.COLON) {
+                return ChildAttributes(Indent.getNormalIndent(), null)
+            } else if(lastChild.elementType == GDScriptTypes.ELSE_STATEMENT) {
+                val elseStatement = lastChild as GDScriptElseStatement
+                val elseLastChild = elseStatement.lastChild
+                if(elseLastChild.elementType == GDScriptTypes.COLON) {
+                    return ChildAttributes(Indent.getNormalIndent(), null)
+                }
+            }
+        }
+        
+        return super.getChildAttributes(newChildIndex)
+    }
+    override fun isIncomplete(): Boolean {
+        val incomplete = false
+        log.warn("Incomplete GDScriptStatementBlock: $incomplete")
+        return incomplete
+    }
+}
+
+fun getPostBlockChildAttributes(prevBlock: GDScriptBlock): ChildAttributes {
+    val prevPsi = prevBlock.node.psi
+    val parent = prevPsi.parent
+    val afterParent = parent.nextNonWhitespaceSibling
+    val afterAfterParent = afterParent?.nextNonWhitespaceSibling
+    val afterThat = afterAfterParent?.nextNonWhitespaceSibling
+    val attributes: ChildAttributes =
+        if (afterParent?.elementType == GDScriptTypes.LINE_BREAK
+            && afterAfterParent?.elementType == GDScriptTypes.LINE_BREAK
+            && afterThat?.elementType == GDScriptTypes.LINE_BREAK
+        ) {
+            ChildAttributes(Indent.getNoneIndent(), null)
+        } else {
+            ChildAttributes(Indent.getNormalIndent(), null)
+        }
+    return attributes
 }

@@ -282,9 +282,15 @@ script_statement ::= var_statement
     | await_statement
     | PASS
 
-if_statement ::= IF expression COLON statement_or_block (LINE_BREAK* elif_statement)* [LINE_BREAK* else_statement]
-elif_statement ::= ELIF expression COLON statement_or_block
-else_statement ::= ELSE COLON statement_or_block
+if_statement ::= IF expression COLON statement_or_block (LINE_BREAK* elif_statement)* [LINE_BREAK* else_statement] {
+    pin=3
+}
+elif_statement ::= ELIF expression COLON statement_or_block {
+    pin = 3
+}
+else_statement ::= ELSE COLON statement_or_block {
+    pin = 2
+}
 
 for_statement ::= FOR id IN expression COLON statement_or_block
 
