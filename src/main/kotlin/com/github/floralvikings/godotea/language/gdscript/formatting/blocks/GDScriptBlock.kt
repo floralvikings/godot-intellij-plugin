@@ -125,7 +125,11 @@ class GDScriptFunctionDeclarationBlock(
                 val parent = prevPsi.parent
                 val afterParent = parent.nextNonWhitespaceSibling
                 val afterAfterParent = afterParent?.nextNonWhitespaceSibling
-                if(afterParent?.elementType == GDScriptTypes.LINE_BREAK && afterAfterParent?.elementType == GDScriptTypes.LINE_BREAK) {
+                val afterThat = afterAfterParent?.nextNonWhitespaceSibling
+                if(afterParent?.elementType == GDScriptTypes.LINE_BREAK 
+                    && afterAfterParent?.elementType == GDScriptTypes.LINE_BREAK 
+                    && afterThat?.elementType == GDScriptTypes.LINE_BREAK
+                    ) {
                     return ChildAttributes(Indent.getNoneIndent(), null)
                 }
                 return ChildAttributes(Indent.getNormalIndent(), null)

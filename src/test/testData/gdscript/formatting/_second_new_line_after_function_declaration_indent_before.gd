@@ -1,3 +1,2 @@
 func test():
-    
     <caret>
