@@ -22,7 +22,7 @@ class GDScriptIfStatementBlock(
             if (prevType == GDScriptTypes.COLON) {
                 return ChildAttributes(Indent.getNormalIndent(), null)
             } else if(prevType == GDScriptTypes.BLOCK) {
-                return ChildAttributes(Indent.getNormalIndent(), null)
+                return getPostBlockChildAttributes(this)
             } else if(prevType == GDScriptTypes.ELSE_STATEMENT) {
                 return ChildAttributes(Indent.getNormalIndent(), null)
             }else if (prevType == TokenType.ERROR_ELEMENT) {

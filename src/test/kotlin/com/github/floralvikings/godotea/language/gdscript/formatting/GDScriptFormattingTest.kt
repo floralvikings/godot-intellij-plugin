@@ -41,6 +41,8 @@ class GDScriptFormattingTest : BasePlatformTestCase() {
     
     fun test_third_new_line_after_if_statement_indent() = doInsertTextTest("\n")
     
+    fun test_third_new_line_after_complete_if_statement_dedent() = doInsertTextTest("\n")
+    
     private fun doInsertTextTest(text: String, configureSettings: CommonCodeStyleSettings.() -> Unit = {}) {
         val testFile = configFile()!!
         CodeStyle.getLanguageSettings(testFile).configureSettings()
