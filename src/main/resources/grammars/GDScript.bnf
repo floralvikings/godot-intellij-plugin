@@ -267,7 +267,7 @@ class_block  ::= <<indented <<listOf (&INDEQ class_statement) end_of_block_state
 
 end_of_block_statement ::= end_of_statement (((&INDNONE | &INDEQ) LINE_BREAK+)+ | (&INDEQ))
 
-script_statement ::= var_statement
+private script_statement ::= var_statement
     | const_statement
     | if_statement
     | for_statement

@@ -3056,10 +3056,9 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   //     | assert_statement
   //     | await_statement
   //     | PASS
-  public static boolean script_statement(PsiBuilder b, int l) {
+  static boolean script_statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "script_statement")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, SCRIPT_STATEMENT, "<script statement>");
     r = var_statement(b, l + 1);
     if (!r) r = const_statement(b, l + 1);
     if (!r) r = if_statement(b, l + 1);
@@ -3074,7 +3073,6 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     if (!r) r = assert_statement(b, l + 1);
     if (!r) r = await_statement(b, l + 1);
     if (!r) r = consumeToken(b, PASS);
-    exit_section_(b, l, m, r, false, null);
     return r;
   }
 

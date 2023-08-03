@@ -39,6 +39,8 @@ class GDScriptFormattingTest : BasePlatformTestCase() {
     
     fun test_new_line_after_unindented_else_statement() = doInsertTextTest("\n")
     
+    fun test_third_new_line_after_if_statement_indent() = doInsertTextTest("\n")
+    
     private fun doInsertTextTest(text: String, configureSettings: CommonCodeStyleSettings.() -> Unit = {}) {
         val testFile = configFile()!!
         CodeStyle.getLanguageSettings(testFile).configureSettings()

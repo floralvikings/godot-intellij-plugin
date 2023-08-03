@@ -64,7 +64,6 @@ public interface GDScriptTypes {
   IElementType PATTERN = new GDScriptElementType("PATTERN");
   IElementType PATTERN_LIST = new GDScriptElementType("PATTERN_LIST");
   IElementType RETURN_STATEMENT = new GDScriptElementType("RETURN_STATEMENT");
-  IElementType SCRIPT_STATEMENT = new GDScriptElementType("SCRIPT_STATEMENT");
   IElementType SET_GET = new GDScriptElementType("SET_GET");
   IElementType SET_OR_GET = new GDScriptElementType("SET_OR_GET");
   IElementType SIGNAL_DECLARATION = new GDScriptElementType("SIGNAL_DECLARATION");
@@ -371,9 +370,6 @@ public interface GDScriptTypes {
       }
       else if (type == RETURN_STATEMENT) {
         return new GDScriptReturnStatementImpl(node);
-      }
-      else if (type == SCRIPT_STATEMENT) {
-        return new GDScriptScriptStatementImpl(node);
       }
       else if (type == SET_GET) {
         return new GDScriptSetGetImpl(node);

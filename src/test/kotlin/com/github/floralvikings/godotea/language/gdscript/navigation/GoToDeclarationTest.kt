@@ -13,8 +13,7 @@ class GoToDeclarationTest : BasePlatformTestCase() {
     fun test_go_to_class_var_from_reference() = doTest { childrenOfType<GDScriptClassVarDeclaration>()[0] }
 
     fun test_go_to_local_var() = doTest {
-        childrenOfType<GDScriptFunctionDeclaration>()[0].block?.childrenOfType<GDScriptScriptStatement>()
-            ?.mapNotNull { it.varStatement }!![0]
+        childrenOfType<GDScriptFunctionDeclaration>()[0].block?.childrenOfType<GDScriptVarStatement>()!![0]
     }
 
     fun test_go_to_member_var() = doTest { null }
@@ -32,8 +31,7 @@ class GoToDeclarationTest : BasePlatformTestCase() {
     }
 
     fun test_go_to_shadowed_local_var() = doTest {
-        childrenOfType<GDScriptFunctionDeclaration>()[0].block!!.childrenOfType<GDScriptScriptStatement>()
-            .mapNotNull { it.varStatement }[0]
+        childrenOfType<GDScriptFunctionDeclaration>()[0].block!!.childrenOfType<GDScriptVarStatement>()[0]
     }
 
     fun test_go_to_top_level_function_declaration() = doTest {

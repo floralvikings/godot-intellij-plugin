@@ -58,7 +58,7 @@ class GDScriptIDReferenceResolver(val id: GDScriptId) : CachedValueProvider<PsiE
         val idText = id.text
         while (current != null) {
             if (current is GDScriptBlock && current.parent is GDScriptFunctionDeclaration) {
-                val varStatements = current.childrenOfType<GDScriptScriptStatement>().mapNotNull { it.varStatement }
+                val varStatements = current.childrenOfType<GDScriptVarStatement>()
                 val localVarDeclaration = varStatements
                     .firstOrNull { it.localVarName.text == idText }
                 if (localVarDeclaration != null) {

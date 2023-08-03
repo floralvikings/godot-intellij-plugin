@@ -8,12 +8,48 @@ import com.intellij.psi.PsiElement;
 public interface GDScriptLambdaExpression extends GDScriptExpression {
 
   @Nullable
+  GDScriptAssertStatement getAssertStatement();
+
+  @Nullable
+  GDScriptAssignStatement getAssignStatement();
+
+  @Nullable
+  GDScriptAwaitStatement getAwaitStatement();
+
+  @Nullable
   GDScriptBlock getBlock();
+
+  @Nullable
+  GDScriptBreakStatement getBreakStatement();
+
+  @Nullable
+  GDScriptConstStatement getConstStatement();
+
+  @Nullable
+  GDScriptContinueStatement getContinueStatement();
+
+  @Nullable
+  GDScriptExpressionStatement getExpressionStatement();
+
+  @Nullable
+  GDScriptForStatement getForStatement();
 
   @NotNull
   List<GDScriptId> getIdList();
 
   @Nullable
-  GDScriptScriptStatement getScriptStatement();
+  GDScriptIfStatement getIfStatement();
+
+  @Nullable
+  GDScriptMatchStatement getMatchStatement();
+
+  @Nullable
+  GDScriptReturnStatement getReturnStatement();
+
+  @Nullable
+  GDScriptVarStatement getVarStatement();
+
+  @Nullable
+  GDScriptWhileStatement getWhileStatement();
 
 }

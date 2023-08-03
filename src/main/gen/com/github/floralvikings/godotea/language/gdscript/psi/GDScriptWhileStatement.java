@@ -8,12 +8,48 @@ import com.intellij.psi.PsiElement;
 public interface GDScriptWhileStatement extends PsiElement {
 
   @Nullable
+  GDScriptAssertStatement getAssertStatement();
+
+  @Nullable
+  GDScriptAssignStatement getAssignStatement();
+
+  @Nullable
+  GDScriptAwaitStatement getAwaitStatement();
+
+  @Nullable
   GDScriptBlock getBlock();
+
+  @Nullable
+  GDScriptBreakStatement getBreakStatement();
+
+  @Nullable
+  GDScriptConstStatement getConstStatement();
+
+  @Nullable
+  GDScriptContinueStatement getContinueStatement();
 
   @NotNull
   GDScriptExpression getExpression();
 
   @Nullable
-  GDScriptScriptStatement getScriptStatement();
+  GDScriptExpressionStatement getExpressionStatement();
+
+  @Nullable
+  GDScriptForStatement getForStatement();
+
+  @Nullable
+  GDScriptIfStatement getIfStatement();
+
+  @Nullable
+  GDScriptMatchStatement getMatchStatement();
+
+  @Nullable
+  GDScriptReturnStatement getReturnStatement();
+
+  @Nullable
+  GDScriptVarStatement getVarStatement();
+
+  @Nullable
+  GDScriptWhileStatement getWhileStatement();
 
 }
