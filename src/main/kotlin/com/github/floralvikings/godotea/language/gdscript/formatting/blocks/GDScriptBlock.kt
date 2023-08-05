@@ -67,16 +67,16 @@ open class GDScriptBlock(
                         Alignment.createAlignment(),
                         spacingBuilder
                     )
-//                    
-//                    GDScriptTypes.SCRIPT_STATEMENT -> GDScriptStatementBlock(
-//                        child,
-//                        Wrap.createWrap(WrapType.NONE, false),
-//                        Alignment.createAlignment(),
-//                        spacingBuilder
-//                    )
 
                     GDScriptTypes.IF_STATEMENT -> GDScriptIfStatementBlock(
                         child,
+                        Wrap.createWrap(WrapType.NONE, false),
+                        Alignment.createAlignment(),
+                        spacingBuilder
+                    )
+                    
+                    GDScriptTypes.ELSE_STATEMENT -> GDScriptElseStatementBlock(
+                        child, 
                         Wrap.createWrap(WrapType.NONE, false),
                         Alignment.createAlignment(),
                         spacingBuilder
