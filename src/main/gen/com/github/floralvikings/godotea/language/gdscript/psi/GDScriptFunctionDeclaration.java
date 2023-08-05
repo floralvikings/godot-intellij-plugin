@@ -7,14 +7,14 @@ import com.intellij.psi.PsiElement;
 
 public interface GDScriptFunctionDeclaration extends GDScriptNamedElement {
 
-  @NotNull
+  @Nullable
   GDScriptBlock getBlock();
 
   @NotNull
-  GDScriptFunctionName getFunctionName();
+  GDScriptFunctionDeclarationParameters getFunctionDeclarationParameters();
 
   @NotNull
-  List<GDScriptFunctionParameter> getFunctionParameterList();
+  GDScriptFunctionName getFunctionName();
 
   @Nullable
   GDScriptFunctionReturnType getFunctionReturnType();

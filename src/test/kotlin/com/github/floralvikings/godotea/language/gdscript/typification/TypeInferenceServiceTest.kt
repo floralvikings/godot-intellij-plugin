@@ -19,7 +19,7 @@ class TypeInferenceServiceTest : BasePlatformTestCase() {
 
     fun test_built_in_constructor_type_inference() = doTest {service ->
         val expression = childrenOfType<GDScriptFunctionDeclaration>()[0]
-            .block
+            .block!!
             .childrenOfType<GDScriptExpressionStatement>()[0]
             .expression
         TestCase.assertEquals(GDVector2, service.inferType(expression))

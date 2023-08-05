@@ -34,6 +34,7 @@ public interface GDScriptTypes {
   IElementType DOT_QUALIFIED_EXPRESSION = new GDScriptElementType("DOT_QUALIFIED_EXPRESSION");
   IElementType ELIF_STATEMENT = new GDScriptElementType("ELIF_STATEMENT");
   IElementType ELSE_STATEMENT = new GDScriptElementType("ELSE_STATEMENT");
+  IElementType END_OF_BLOCK_STATEMENT = new GDScriptElementType("END_OF_BLOCK_STATEMENT");
   IElementType ENUM_DECLARATION = new GDScriptElementType("ENUM_DECLARATION");
   IElementType ENUM_ENTRY = new GDScriptElementType("ENUM_ENTRY");
   IElementType EXPRESSION = new GDScriptElementType("EXPRESSION");
@@ -41,6 +42,7 @@ public interface GDScriptTypes {
   IElementType EXTENDS_DECLARATION = new GDScriptElementType("EXTENDS_DECLARATION");
   IElementType FOR_STATEMENT = new GDScriptElementType("FOR_STATEMENT");
   IElementType FUNCTION_DECLARATION = new GDScriptElementType("FUNCTION_DECLARATION");
+  IElementType FUNCTION_DECLARATION_PARAMETERS = new GDScriptElementType("FUNCTION_DECLARATION_PARAMETERS");
   IElementType FUNCTION_NAME = new GDScriptElementType("FUNCTION_NAME");
   IElementType FUNCTION_PARAMETER = new GDScriptElementType("FUNCTION_PARAMETER");
   IElementType FUNCTION_RETURN_TYPE = new GDScriptElementType("FUNCTION_RETURN_TYPE");
@@ -279,6 +281,9 @@ public interface GDScriptTypes {
       else if (type == ELSE_STATEMENT) {
         return new GDScriptElseStatementImpl(node);
       }
+      else if (type == END_OF_BLOCK_STATEMENT) {
+        return new GDScriptEndOfBlockStatementImpl(node);
+      }
       else if (type == ENUM_DECLARATION) {
         return new GDScriptEnumDeclarationImpl(node);
       }
@@ -299,6 +304,9 @@ public interface GDScriptTypes {
       }
       else if (type == FUNCTION_DECLARATION) {
         return new GDScriptFunctionDeclarationImpl(node);
+      }
+      else if (type == FUNCTION_DECLARATION_PARAMETERS) {
+        return new GDScriptFunctionDeclarationParametersImpl(node);
       }
       else if (type == FUNCTION_NAME) {
         return new GDScriptFunctionNameImpl(node);

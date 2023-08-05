@@ -2,6 +2,7 @@
 
 package com.github.floralvikings.godotea.language.gdscript.util
 
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFunctionDeclaration
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
 
@@ -23,3 +24,14 @@ val PsiElement.nextNonWhitespaceSibling: PsiElement?
         return current
     }
 
+val PsiElement.containingFunctionDeclaration: GDScriptFunctionDeclaration?
+    get() {
+        var current = parent
+        while(current != null) {
+            if(current is GDScriptFunctionDeclaration) {
+                return current
+            }
+            current = current.parent
+        }
+        return null
+    }

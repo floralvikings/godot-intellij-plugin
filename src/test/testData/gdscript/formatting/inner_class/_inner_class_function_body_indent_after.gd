@@ -1,0 +1,4 @@
+class SomeClass:
+    
+    func someFunc():
+        

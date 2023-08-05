@@ -111,6 +111,10 @@ public class GDScriptVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitEndOfBlockStatement(@NotNull GDScriptEndOfBlockStatement o) {
+    visitPsiElement(o);
+  }
+
   public void visitEnumDeclaration(@NotNull GDScriptEnumDeclaration o) {
     visitPsiElement(o);
   }
@@ -137,6 +141,10 @@ public class GDScriptVisitor extends PsiElementVisitor {
 
   public void visitFunctionDeclaration(@NotNull GDScriptFunctionDeclaration o) {
     visitNamedElement(o);
+  }
+
+  public void visitFunctionDeclarationParameters(@NotNull GDScriptFunctionDeclarationParameters o) {
+    visitPsiElement(o);
   }
 
   public void visitFunctionName(@NotNull GDScriptFunctionName o) {

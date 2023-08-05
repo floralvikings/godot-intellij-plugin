@@ -239,6 +239,7 @@ enum_declaration ::= ENUM id? (L_BRACE LINE_BREAK* enum_entry? LINE_BREAK* (COMM
 enum_entry ::= id (EQUAL expression)?
 
 function_declaration ::= function_annotations? STATIC? FUNC function_name function_declaration_parameters function_return_type? COLON function_body {
+    pin=7
     mixin="GDScriptNamedElementImpl"
     implements=["GDScriptNamedElement"]
     methods=[getName setName getNameIdentifier getTextOffset]
@@ -246,7 +247,7 @@ function_declaration ::= function_annotations? STATIC? FUNC function_name functi
 
 private function_annotations ::= AT_RPC LINE_BREAK*
 private function_body ::= LINE_BREAK* block
-private function_declaration_parameters ::= L_PAREN LINE_BREAK* function_parameter_list LINE_BREAK* R_PAREN
+function_declaration_parameters ::= L_PAREN LINE_BREAK* function_parameter_list LINE_BREAK* R_PAREN
 private function_parameter_list ::= function_parameter? LINE_BREAK* (COMMA LINE_BREAK* function_parameter LINE_BREAK*)* COMMA?
 function_parameter ::= parameter_name (COLON type)? ((EQUAL | INFER) expression)? {
     mixin="GDScriptNamedElementImpl"
@@ -255,14 +256,16 @@ function_parameter ::= parameter_name (COLON type)? ((EQUAL | INFER) expression)
 }
 function_return_type ::= ARROW type
 
-inner_class_declaration ::= CLASS id extends_declaration? COLON inner_class_body
+inner_class_declaration ::= CLASS id extends_declaration? COLON inner_class_body {
+    pin=4
+}
 private inner_class_body ::= LINE_BREAK*  class_block
 
 
 block        ::= <<indented <<listOf (&INDEQ script_statement) end_of_block_statement>>>>
 class_block  ::= <<indented <<listOf (&INDEQ class_statement) end_of_block_statement>>>>
 
-private end_of_block_statement ::= end_of_statement (((&INDNONE | &INDEQ) LINE_BREAK+)+ | (&INDEQ))
+end_of_block_statement ::= end_of_statement (((&INDNONE | &INDEQ) LINE_BREAK+)+ | (&INDEQ))
 
 private script_statement ::= var_statement
     | const_statement
@@ -279,9 +282,15 @@ private script_statement ::= var_statement
     | await_statement
     | PASS
 
-if_statement ::= IF expression COLON statement_or_block (LINE_BREAK* elif_statement)* [LINE_BREAK* else_statement]
-elif_statement ::= ELIF expression COLON statement_or_block
-else_statement ::= ELSE COLON statement_or_block
+if_statement ::= IF expression COLON statement_or_block (LINE_BREAK* elif_statement)* [LINE_BREAK* else_statement] {
+    pin=3
+}
+elif_statement ::= ELIF expression COLON statement_or_block {
+    pin = 3
+}
+else_statement ::= ELSE COLON statement_or_block {
+    pin = 2
+}
 
 for_statement ::= FOR id IN expression COLON statement_or_block
 

@@ -80,7 +80,7 @@ class GDScriptIDReference(private val id: GDScriptId) : PsiReferenceBase<GDScrip
 
         val surroundingFunction = id.getSurroundingFunction()
         if (surroundingFunction != null) {
-            variants.addAll(surroundingFunction.functionParameterList.map { it.parameterName.text })
+            variants.addAll(surroundingFunction.functionDeclarationParameters?.functionParameterList?.map { it.parameterName.text }!!)
             variants.addAll(surroundingFunction.variableDeclarations.map { it.localVarName.text })
         }
 

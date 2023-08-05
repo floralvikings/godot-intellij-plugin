@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface GDScriptInnerClassDeclaration extends PsiElement {
 
-  @NotNull
+  @Nullable
   GDScriptClassBlock getClassBlock();
 
   @Nullable

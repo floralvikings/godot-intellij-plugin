@@ -65,8 +65,8 @@ class GDScriptIDReferenceResolver(val id: GDScriptId) : CachedValueProvider<PsiE
                     return localVarDeclaration
                 }
             } else if (current is GDScriptFunctionDeclaration) {
-                val parameterDeclaration = current.functionParameterList
-                    .firstOrNull { it.parameterName.text == idText }
+                val parameterDeclaration = current.functionDeclarationParameters?.functionParameterList
+                    ?.firstOrNull { it.parameterName.text == idText }
                 if (parameterDeclaration != null) {
                     return parameterDeclaration
                 }

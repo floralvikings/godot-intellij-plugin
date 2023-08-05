@@ -39,12 +39,25 @@
                 implementationClass="com.github.floralvikings.godotea.language.gdscript.navigation.GDScriptFindUsagesProvider"
         />
         <additionalTextAttributes
-            scheme="Darcula"
-            file="colorSchemes/GDScriptDark.xml"
-            />
+                scheme="Darcula"
+                file="colorSchemes/GDScriptDark.xml"
+        />
         <additionalTextAttributes
                 scheme="Dark"
                 file="colorSchemes/GDScriptDark.xml"
+        />
+        <lang.formatter
+                language="GDScript"
+                implementationClass="com.github.floralvikings.godotea.language.gdscript.formatting.GDScriptFormattingModelBuilder"
+        />
+        <codeStyleSettingsProvider
+                implementation="com.github.floralvikings.godotea.language.gdscript.formatting.style.GDScriptCodeStyleSettingsProvider"
+        />
+        <langCodeStyleSettingsProvider
+                implementation="com.github.floralvikings.godotea.language.gdscript.formatting.style.GDScriptLanguageCodeStyleSettingsProvider"
+        />
+        <enterHandlerDelegate
+                implementation="com.github.floralvikings.godotea.language.gdscript.formatting.GDScriptDedentEnterHandler"
         />
     </extensions>
 </idea-plugin>
