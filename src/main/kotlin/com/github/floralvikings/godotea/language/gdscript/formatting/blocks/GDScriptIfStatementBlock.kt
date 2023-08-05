@@ -19,16 +19,12 @@ class GDScriptIfStatementBlock(
         if (newChildIndex > 0) {
             val prevBlock = this.subBlocks[newChildIndex - 1] as GDScriptBlock
             val prevType = prevBlock.node.elementType
-            if (prevType == GDScriptTypes.COLON) {
-                return ChildAttributes(Indent.getNormalIndent(), null)
-            } else if(prevType == GDScriptTypes.BLOCK) {
-                return getPostBlockChildAttributes(this)
-            } else if(prevType == GDScriptTypes.ELSE_STATEMENT) {
-                return getPostBlockChildAttributes(prevBlock)
-            } else if(prevType == GDScriptTypes.ELIF_STATEMENT) {
-                return getPostBlockChildAttributes(prevBlock)
-            }else if (prevType == TokenType.ERROR_ELEMENT) {
-                return getPostBlockChildAttributes(prevBlock)
+            when (prevType) {
+                GDScriptTypes.COLON -> return ChildAttributes(Indent.getNormalIndent(), null)
+                GDScriptTypes.BLOCK -> return getPostBlockChildAttributes(this)
+                GDScriptTypes.ELSE_STATEMENT -> return getPostBlockChildAttributes(this)
+                GDScriptTypes.ELIF_STATEMENT -> return getPostBlockChildAttributes(this)
+                TokenType.ERROR_ELEMENT -> return getPostBlockChildAttributes(this)
             }
         }
         return ChildAttributes(Indent.getNoneIndent(), null)
