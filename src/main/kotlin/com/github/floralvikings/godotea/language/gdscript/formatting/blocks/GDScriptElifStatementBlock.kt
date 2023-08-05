@@ -6,16 +6,16 @@ import com.intellij.lang.ASTNode
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.psi.TokenType
 
-class GDScriptIfStatementBlock(
+class GDScriptElifStatementBlock(
     node: ASTNode,
     wrap: Wrap?,
     alignment: Alignment?,
     spacingBuilder: SpacingBuilder
 ) : GDScriptBlock(node, wrap, alignment, spacingBuilder) {
-    private val log = Logger.getInstance(GDScriptIfStatementBlock::class.java)
+    private val log = Logger.getInstance(GDScriptElifStatementBlock::class.java)
 
     override fun getChildAttributes(newChildIndex: Int): ChildAttributes {
-        log.warn("Retrieving GDScriptIfStatementBlock child attributes")
+        log.warn("Retrieving GDScriptElifStatementBlock child attributes")
         if (newChildIndex > 0) {
             val prevBlock = this.subBlocks[newChildIndex - 1] as GDScriptBlock
             val prevType = prevBlock.node.elementType
@@ -24,8 +24,6 @@ class GDScriptIfStatementBlock(
             } else if(prevType == GDScriptTypes.BLOCK) {
                 return getPostBlockChildAttributes(this)
             } else if(prevType == GDScriptTypes.ELSE_STATEMENT) {
-                return getPostBlockChildAttributes(prevBlock)
-            } else if(prevType == GDScriptTypes.ELIF_STATEMENT) {
                 return getPostBlockChildAttributes(prevBlock)
             }else if (prevType == TokenType.ERROR_ELEMENT) {
                 return getPostBlockChildAttributes(prevBlock)

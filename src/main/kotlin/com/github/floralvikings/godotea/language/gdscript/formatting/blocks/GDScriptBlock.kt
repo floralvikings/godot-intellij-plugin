@@ -81,6 +81,13 @@ open class GDScriptBlock(
                         Alignment.createAlignment(),
                         spacingBuilder
                     )
+                    
+                    GDScriptTypes.ELIF_STATEMENT -> GDScriptElifStatementBlock(
+                        child,
+                        Wrap.createWrap(WrapType.NONE, false),
+                        Alignment.createAlignment(),
+                        spacingBuilder
+                    )
 
                     else -> GDScriptBlock(
                         child,
