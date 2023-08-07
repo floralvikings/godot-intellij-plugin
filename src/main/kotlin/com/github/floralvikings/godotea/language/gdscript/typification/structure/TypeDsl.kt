@@ -1,6 +1,6 @@
 package com.github.floralvikings.godotea.language.gdscript.typification.structure
 
-import com.github.floralvikings.godotea.language.gdscript.typification.builtins.basic.GDVoid
+import com.github.floralvikings.godotea.language.gdscript.typification.builtins.placeholder.GDvoid
 
 fun type(name: String, configure: TypeBuilder.() -> Unit): GDType = TypeBuilder(name).apply(configure).build()
 
@@ -64,7 +64,7 @@ class TypeBuilder internal constructor(val name: String) {
 }
 
 class FunctionBuilder internal constructor(val name: String) {
-    private var returnType:GDType = GDVoid
+    private var returnType:GDType = GDvoid
     private val parameters = mutableListOf<GDParameter>()
 
     fun returns(type: GDType) {

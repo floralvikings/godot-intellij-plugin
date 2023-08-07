@@ -2,6 +2,7 @@ package com.github.floralvikings.godotea.language.gdscript.typification
 
 import com.github.floralvikings.godotea.language.gdscript.typification.builtins.basic.*
 import com.github.floralvikings.godotea.language.gdscript.typification.builtins.functions.Print
+import com.github.floralvikings.godotea.language.gdscript.typification.builtins.placeholder.GDvoid
 import com.github.floralvikings.godotea.language.gdscript.typification.builtins.vector.GDVector2
 
 object GDScriptBuiltIns {
@@ -17,7 +18,7 @@ object GDScriptBuiltIns {
         "null" to GDNull,
         "String" to GDString,
         "StringName" to GDStringName,
-        "void" to GDVoid,
+        "void" to GDvoid,
         "Vector2" to GDVector2
     )
 
