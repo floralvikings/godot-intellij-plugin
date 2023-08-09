@@ -3,10 +3,11 @@ package com.github.floralvikings.godotea.language.gdscript.highlighter
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptClassNameDeclaration
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFunctionDeclaration
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptInvocationExpression
-import com.github.floralvikings.godotea.language.gdscript.typification.GDScriptBuiltIns
+import com.github.floralvikings.godotea.language.gdscript.typification.TypeInferenceService
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
+import com.intellij.openapi.components.service
 import com.intellij.psi.PsiElement
 
 class GDScriptAnnotator : Annotator {
@@ -35,7 +36,8 @@ class GDScriptAnnotator : Annotator {
     }
 
     private fun annotateInvocationExpression(element: GDScriptInvocationExpression, holder: AnnotationHolder) {
-        val isBuiltIn = GDScriptBuiltIns.functionNames.contains(element.id.text)
+        val typeInferenceService = element.project.service<TypeInferenceService>()
+        val isBuiltIn = typeInferenceService.globalFunctions.any { element.id.text == it.name } 
         if(isBuiltIn) {
             holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
                 .range(element.id.textRange)
@@ -43,7 +45,7 @@ class GDScriptAnnotator : Annotator {
                 .create()
         }
 
-        val isConstructor = GDScriptBuiltIns.constructorNames.contains(element.id.text)
+        val isConstructor = typeInferenceService.typeNames.contains(element.id.text)
         if(isConstructor) {
             holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
                 .range(element.id.textRange)

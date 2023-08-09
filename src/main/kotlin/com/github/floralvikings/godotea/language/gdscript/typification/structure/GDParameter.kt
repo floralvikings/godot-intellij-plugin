@@ -1,6 +1,8 @@
 package com.github.floralvikings.godotea.language.gdscript.typification.structure
 
-class GDParameter(val name: String, val type: GDType? = null) : GDDeclaration {
+import com.github.floralvikings.godotea.language.gdscript.typification.builtins.placeholder.GDUnknownType
+
+class GDParameter(val name: String, val type: String = GDUnknownType.name) : GDDeclaration {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -17,6 +19,6 @@ class GDParameter(val name: String, val type: GDType? = null) : GDDeclaration {
     }
 
     override fun toString(): String {
-        return "GDScriptParameter(name='$name', type=${type?.name})"
+        return "GDScriptParameter(name='$name', type=$type)"
     }
 }

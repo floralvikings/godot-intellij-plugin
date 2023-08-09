@@ -4,6 +4,6 @@ import com.github.floralvikings.godotea.language.gdscript.typification.builtins.
 import com.github.floralvikings.godotea.language.gdscript.typification.structure.GDFunction
 
 object Print : GDFunction("print", {
-    returns(GDvoid)
+    returns(GDvoid.name)
     "args"()
 })

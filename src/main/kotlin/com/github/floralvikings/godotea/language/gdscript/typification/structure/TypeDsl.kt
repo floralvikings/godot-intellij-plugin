@@ -1,5 +1,6 @@
 package com.github.floralvikings.godotea.language.gdscript.typification.structure
 
+import com.github.floralvikings.godotea.language.gdscript.typification.builtins.placeholder.GDUnknownType
 import com.github.floralvikings.godotea.language.gdscript.typification.builtins.placeholder.GDvoid
 
 fun type(name: String, configure: TypeBuilder.() -> Unit): GDType = TypeBuilder(name).apply(configure).build()
@@ -21,9 +22,9 @@ class TypeBuilder internal constructor(val name: String) {
     private val constructors = mutableListOf<GDConstructor>()
     private val functions = mutableListOf<GDFunction>()
     private val fields = mutableListOf<GDField>()
-    private var superType: GDType? = null
+    private var superType: String? = null
 
-    fun extends(type: GDType?) {
+    fun extends(type: String?) {
         this.superType = type
     }
 
@@ -44,7 +45,7 @@ class TypeBuilder internal constructor(val name: String) {
 
     fun field(
         name: String,
-        type: GDType? = null,
+        type: String = GDUnknownType.name,
         configure: FieldBuilder.() -> Unit = { }
     ): GDField {
         val field = FieldBuilder(name, type).apply(configure).build()
@@ -52,7 +53,7 @@ class TypeBuilder internal constructor(val name: String) {
         return field
     }
 
-    operator fun String.invoke(type: GDType? = null): GDField {
+    operator fun String.invoke(type: String = GDUnknownType.name): GDField {
         val field = field(this, type)
         fields.add(field)
         return field
@@ -64,14 +65,14 @@ class TypeBuilder internal constructor(val name: String) {
 }
 
 class FunctionBuilder internal constructor(val name: String) {
-    private var returnType:GDType = GDvoid
+    private var returnType: String = GDvoid.name
     private val parameters = mutableListOf<GDParameter>()
 
-    fun returns(type: GDType) {
+    fun returns(type: String) {
         this.returnType = type
     }
 
-    operator fun String.invoke(type: GDType? = null): GDParameter {
+    operator fun String.invoke(type: String = GDUnknownType.name): GDParameter {
         val param = GDParameter(this, type)
         parameters.add(param)
         return param
@@ -89,7 +90,7 @@ class FunctionBuilder internal constructor(val name: String) {
 class ConstructorBuilder internal constructor() {
     private val parameters = mutableListOf<GDParameter>()
 
-    operator fun String.invoke(type: GDType? = null): GDParameter {
+    operator fun String.invoke(type: String = GDUnknownType.name): GDParameter {
         val param = GDParameter(this, type)
         parameters.add(param)
         return param
@@ -100,6 +101,6 @@ class ConstructorBuilder internal constructor() {
     }
 }
 
-class FieldBuilder internal constructor(val name: String, val type: GDType?) {
+class FieldBuilder internal constructor(val name: String, val type: String) {
     fun build(): GDField = GDField(name, type)
 }

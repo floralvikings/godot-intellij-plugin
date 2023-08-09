@@ -5,7 +5,7 @@ import com.github.floralvikings.godotea.language.gdscript.typification.builtins.
 open class GDFunction(
     val name: String,
     val parameters: List<GDParameter>,
-    val returnType: GDType = GDvoid
+    val returnType: String = GDvoid.name
 ) : GDDeclaration {
     constructor(function: GDFunction) : this(function.name, function.parameters, function.returnType)
 

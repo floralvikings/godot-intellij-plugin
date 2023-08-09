@@ -1,118 +1,86 @@
 @file:DependsOn("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.15.2")
 @file:DependsOn("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
+@file:Import(
+    "../main/kotlin/com/github/floralvikings/godotea/language/gdscript/typification/structure/GDDeclaration.kt",
+    "../main/kotlin/com/github/floralvikings/godotea/language/gdscript/typification/structure/GDConstructor.kt",
+    "../main/kotlin/com/github/floralvikings/godotea/language/gdscript/typification/structure/GDField.kt",
+    "../main/kotlin/com/github/floralvikings/godotea/language/gdscript/typification/structure/GDFunction.kt",
+    "../main/kotlin/com/github/floralvikings/godotea/language/gdscript/typification/structure/GDParameter.kt",
+    "../main/kotlin/com/github/floralvikings/godotea/language/gdscript/typification/structure/GDType.kt",
+    "../main/kotlin/com/github/floralvikings/godotea/language/gdscript/typification/structure/TypeDsl.kt",
+    "../main/kotlin/com/github/floralvikings/godotea/language/gdscript/typification/builtins/placeholder/GDvoid.kt",
+    "../main/kotlin/com/github/floralvikings/godotea/language/gdscript/typification/builtins/placeholder/GDUnknownType.kt",
+)
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.github.floralvikings.godotea.language.gdscript.typification.structure.*
+import com.github.floralvikings.godotea.language.gdscript.typification.structure.GDType
 import java.io.File
 
-File("output/scrape/")
+val objectMapper = ObjectMapper()
+objectMapper.registerKotlinModule()
+
+val outputFile = File("output/json/builtins.json")
+if (outputFile.exists()) {
+    outputFile.delete()
+}
+outputFile.parentFile.mkdirs()
+outputFile.createNewFile()
+
+val types = File("output/scrape/")
     .listFiles()!!
     .asSequence()
     .map(::readGodotClass)
     .filter { it.name != "Type" }
-    .map(::convertGodotClassToObjectDeclaration)
-    .forEach { (godotClass, content) ->
-        val outputFile = File("output/generated/GD${godotClass.name}.kt")
-        if (outputFile.exists()) {
-            outputFile.delete()
-        }
-        outputFile.parentFile.mkdirs()
-        outputFile.createNewFile()
-        outputFile.writeText(content)
+    .map(::convertGodotClassToGDType)
+    .map { it.second }
 
-        godotClass.enumerations
-            .forEach {
-                val unrefinedType = it.name.replace(Regex("\\w+ "), "").replace(":", "")
-                if (unrefinedType != "Type") {
-                    val enumName = refineType(godotClass.name, unrefinedType)
-                    val enumOutputFile = File("output/generated/enums/$enumName.kt")
-                    if (enumOutputFile.exists()) {
-                        enumOutputFile.delete()
-                    }
-                    enumOutputFile.parentFile.mkdirs()
-                    enumOutputFile.createNewFile()
-                    enumOutputFile.writeText(generateEnumType(unrefinedType, enumName))
-                }
-            }
-    }
+objectMapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, types)
 
-fun generateEnumType(godotName: String, refinedName: String): String {
-    return """
-package com.github.floralvikings.godotea.language.gdscript.typification.builtins.generated.enums
-
-import com.github.floralvikings.godotea.language.gdscript.typification.structure.*
-
-object $refinedName : GDType("$godotName")
-"""
-}
 
 fun readGodotClass(file: File): GodotClass {
-    val objectMapper = ObjectMapper()
-    objectMapper.registerKotlinModule()
     return objectMapper.readValue(file, GodotClass::class.java)
 }
 
-fun convertGodotClassToObjectDeclaration(godotClass: GodotClass): Pair<GodotClass, String> {
-    val className = godotClass.name
-    val objectName = "GD$className"
-    val fields = godotClass.properties.joinToString("\n") {
-        """"${it.name}"(${refineType(className, it.type)})"""
+fun convertGodotClassToGDType(godotClass: GodotClass): Pair<GodotClass, GDType> {
+    return godotClass to GDType(godotClass.name) {
+        extends(godotClass.inherits)
+        
+        if(godotClass.constructors.isEmpty()) {
+            constructor { }
+        }
+        godotClass.constructors.forEach { constructor -> 
+            constructor {
+                val nameTypePairs = convertSignatureToNameTypePairs(constructor.signature)
+                nameTypePairs.forEach { (name, type) ->
+                    name(type)
+                }
+            }
+        }
+        
+        godotClass.properties.forEach { property ->
+            property.name(property.type)
+        }
+        
+        godotClass.methods.forEach { method ->
+            val nameRegex = Regex("""^[\w]+""")
+            val name = nameRegex.find(method.signature)!!
+                .groups[0]!!
+                .value
+            func(name) {
+                returns(method.returnType)
+                val nameTypePairs = convertSignatureToNameTypePairs(method.signature)
+                nameTypePairs.forEach { (name, type) ->
+                    name(type)
+                }
+            }
+        }
     }
-    val constructors = if (godotClass.constructors.isNotEmpty()) {
-        godotClass.constructors.joinToString("\n") { convertGodotConstructorToConstructorDSL(className, it) }
-    } else {
-        createDefaultConstructorDSL()
-    }
-    val functions = if (godotClass.methods.isNotEmpty()) {
-        godotClass.methods.joinToString("\n") { convertGodotMethodToFunctionDSL(className, it) }
-    } else {
-        ""
-    }
-
-    return godotClass to """
-package com.github.floralvikings.godotea.language.gdscript.typification.builtins.generated
-
-import com.github.floralvikings.godotea.language.gdscript.typification.structure.*
-import com.github.floralvikings.godotea.language.gdscript.typification.builtins.placeholder.*
-import com.github.floralvikings.godotea.language.gdscript.typification.builtins.generated.enums.*
-
-object $objectName: GDType("$className", {
-
-$fields
-$constructors
-$functions
-}){
-
-}"""
 }
 
-fun createDefaultConstructorDSL() = """constructor { }"""
-
-fun convertGodotConstructorToConstructorDSL(className: String, constructor: GodotConstructor): String {
-    val parameters = convertSignatureToParametersDSL(className, constructor.signature)
-
-    return """
-constructor {
-$parameters
-}"""
-}
-
-fun convertGodotMethodToFunctionDSL(className: String, it: GodotMethod): String {
-    val nameRegex = Regex("""^[\w]+""")
-    val name = nameRegex.find(it.signature)!!
-        .groups[0]!!
-        .value
-    val parameters = convertSignatureToParametersDSL(className, it.signature)
-    val returnType = refineType(className, it.returnType)
-    return """
-func("$name") {
-returns($returnType)
-$parameters
-}"""
-}
-
-fun convertSignatureToParametersDSL(className: String, signature: String): String {
+fun convertSignatureToNameTypePairs(signature: String): List<Pair<String, String>> {
     return Regex("""\((.*)\)""").find(signature)!!
         .groups[1]!!
         .value
@@ -123,47 +91,10 @@ fun convertSignatureToParametersDSL(className: String, signature: String): Strin
         .filter { it.size == 2 }
         .map {
             val unrefinedType = it[0]
-            val type = refineType(className, unrefinedType)
             val name = if (it[1].contains("=")) it[1].substring(0, it[1].indexOf("=")) else it[1]
-            """"$name"($type)"""
-        }.joinToString("\n")
-
-}
-
-fun refineType(className: String, unrefinedType: String): String {
-    val deTypedType = if (unrefinedType == "Type") {
-        "TypeEnum"
-    } else if(unrefinedType == "Parameter") {
-        "ParameterEnum"
-    } else if(unrefinedType == "Function") { 
-        // TODO Handle function parameters better?
-        "FunctionParameter"
-    } else {
-        unrefinedType
-    }
-    val deDottedType = deTypedType.replace(".", "")
-    if(deDottedType.contains("<")) {
-        // TODO Handle generics (are they even called generics in gdscript?)
-        return "GDUnknownType"
-    }
-    if(deDottedType.endsWith("*")) {
-        // TODO Handle pointer types
-        return "GDUnknownType"
-    }
-    return if (deDottedType.endsWith("[]")) {
-        val arrayType = deDottedType.substring(0, deDottedType.indexOf("["))
-        if (arrayType == className) {
-            "GDTypedArray(GDSameType::class)"
-        } else {
-            "GDTypedArray(GD$arrayType::class)"
+            name to unrefinedType
         }
-    } else {
-        if (deDottedType == className) {
-            "GDSameType"
-        } else {
-            "GD$deDottedType"
-        }
-    }
+
 }
 
 data class GodotClass(
