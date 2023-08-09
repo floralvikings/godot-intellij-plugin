@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.floralvikings.godotea.language.gdscript.psi.*
-import com.github.floralvikings.godotea.language.gdscript.typification.builtins.placeholder.GDSameType
 import com.github.floralvikings.godotea.language.gdscript.typification.builtins.placeholder.GDUnknownType
 import com.github.floralvikings.godotea.language.gdscript.typification.builtins.placeholder.GDvoid
 import com.github.floralvikings.godotea.language.gdscript.typification.structure.*
@@ -70,11 +69,7 @@ class TypeInferenceService {
         while (currentType != GDUnknownType && currentIndex <= index) {
             val currentElement = expression.children[currentIndex]
             currentType = if (currentElement is GDScriptInvocationExpression) {
-                val returnType = lookupType(currentType.functions.firstOrNull { it.name == currentElement.id.text }?.returnType)
-                if (returnType == GDSameType) {
-                    return inferDotQualifiedExpressionType(expression, index - 2)
-                }
-                returnType
+                lookupType(currentType.functions.firstOrNull { it.name == currentElement.id.text }?.returnType)
             } else {
                 typeMap[currentType.fields.firstOrNull { it.name == currentElement.text }?.type] ?: GDUnknownType
             }
