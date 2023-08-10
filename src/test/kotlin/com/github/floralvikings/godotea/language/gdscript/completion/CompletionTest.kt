@@ -7,7 +7,9 @@ class CompletionTest : BasePlatformTestCase() {
 
     fun test_class_var_completion() = doTest("class_var")
 
-    fun test_local_var_completion() = doTest("x")
+    fun test_local_var_completion() = doTest("test_local_var")
+    
+    fun test_global_function_completion() = doTest("print")
 
     fun test_built_in_member_reference_completion() = doTest("x", "y", "abs")
 

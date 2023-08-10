@@ -1,11 +1,11 @@
 package com.github.floralvikings.godotea.language.gdscript.typification.structure
 
-import com.github.floralvikings.godotea.language.gdscript.typification.builtins.basic.GDVoid
+import com.github.floralvikings.godotea.language.gdscript.typification.builtins.placeholder.GDvoid
 
 open class GDFunction(
     val name: String,
     val parameters: List<GDParameter>,
-    val returnType: GDType = GDVoid
+    val returnType: String = GDvoid.name
 ) : GDDeclaration {
     constructor(function: GDFunction) : this(function.name, function.parameters, function.returnType)
 

@@ -1,21 +1,24 @@
 package com.github.floralvikings.godotea.language.gdscript.reference
 
 import com.github.floralvikings.godotea.language.gdscript.cache.GDScriptIDReferenceResolver
-import com.github.floralvikings.godotea.language.gdscript.psi.*
-import com.github.floralvikings.godotea.language.gdscript.typification.GDScriptBuiltIns
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptDotQualifiedExpression
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptElementFactory
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFile
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptId
 import com.github.floralvikings.godotea.language.gdscript.typification.TypeInferenceService
-import com.github.floralvikings.godotea.language.gdscript.typification.structure.GDType
 import com.github.floralvikings.godotea.language.gdscript.util.*
+import com.intellij.openapi.components.service
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReferenceBase
 import com.intellij.psi.util.CachedValue
 import com.intellij.psi.util.CachedValuesManager
-import com.intellij.psi.util.childrenOfType
 import com.intellij.refactoring.suggested.startOffset
 
 class GDScriptIDReference(private val id: GDScriptId) : PsiReferenceBase<GDScriptId>(id, id.textRange) {
+    
+    val typeInferenceService = id.project.service<TypeInferenceService>()
 
     override fun resolve(): PsiElement? {
         return CachedValuesManager.getCachedValue(
@@ -69,8 +72,8 @@ class GDScriptIDReference(private val id: GDScriptId) : PsiReferenceBase<GDScrip
     private fun getBuiltInPrimaryReferenceVariants(): List<String> {
         val variants = mutableListOf<String>()
 
-        variants.addAll(GDScriptBuiltIns.functionNames)
-        variants.addAll(GDScriptBuiltIns.constructorNames)
+        variants.addAll(typeInferenceService.globalFunctions.map { it.name })
+        variants.addAll(typeInferenceService.typeNames)
 
         return variants
     }

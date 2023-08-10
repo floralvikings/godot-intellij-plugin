@@ -5,7 +5,7 @@ open class GDType(
     val constructors: List<GDConstructor> = listOf(GDConstructor()),
     val fields: List<GDField> = emptyList(),
     val functions: List<GDFunction> = emptyList(),
-    val superType: GDType? = null
+    val superType: String? = null
 ) : GDDeclaration {
     constructor(type: GDType): this(type.name, type.constructors, type.fields, type.functions, type.superType)
     constructor(name: String, configure: TypeBuilder.() -> Unit): this(TypeBuilder(name).apply(configure).build())

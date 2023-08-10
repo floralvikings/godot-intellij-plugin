@@ -2,4 +2,4 @@ package com.github.floralvikings.godotea.language.gdscript.typification.builtins
 
 import com.github.floralvikings.godotea.language.gdscript.typification.structure.GDType
 
-object GDSameType : GDType("<SAME>")
+object GDvoid : GDType("void")
