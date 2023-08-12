@@ -26,7 +26,7 @@ class GDScriptBlockBlock(node: ASTNode, wrap: Wrap?, alignment: Alignment?, spac
                 true
             }
         }
-        log.warn("Incomplete GDScriptBlockBlock: $incomplete")
+        log.debug("Incomplete GDScriptBlockBlock: $incomplete")
         return incomplete
     }
 }

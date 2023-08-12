@@ -55,6 +55,20 @@ class TypeInferenceService {
         }
     }
 
+    fun inferFunctionOwnerType(invocation: GDScriptInvocationExpression): GDType? {
+        val parent = invocation.parent
+        if (parent !is GDScriptDotQualifiedExpression) {
+            return null
+        }
+
+        val invocationIndex = parent.children.indexOf(invocation)
+        if(invocationIndex <= 0) {
+            return null
+        }
+        
+        return inferDotQualifiedExpressionType(parent, invocationIndex - 1)
+    }
+
     fun inferDotQualifiedExpressionType(
         expression: GDScriptDotQualifiedExpression,
         index: Int = expression.children.lastIndex

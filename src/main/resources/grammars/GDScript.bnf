@@ -412,7 +412,19 @@ lua_dictionary_entry ::= (key EQUAL expression) | DOT_DOT
 dot_qualified_expression ::= (invocation_expression | id) (DOT (invocation_expression | id))+
 
 invocation_expression ::= id call
-call ::= L_PAREN LINE_BREAK* expression? LINE_BREAK* (COMMA LINE_BREAK* expression LINE_BREAK*)* R_PAREN
+call ::= L_PAREN LINE_BREAK* expression_list R_PAREN {
+    pin=1
+    recoverWhile=call_recover
+}
+
+private expression_list ::= expression? LINE_BREAK* (COMMA LINE_BREAK* expression LINE_BREAK*)* {
+    pin = 1
+    recoverWhile=expression_list_recover
+}
+
+private expression_list_recover ::= COMMA
+
+private call_recover ::= R_PAREN
 
 lambda_expression ::= FUNC id? L_PAREN id? (COMMA id)* R_PAREN COLON (inline_statement | function_body)
 

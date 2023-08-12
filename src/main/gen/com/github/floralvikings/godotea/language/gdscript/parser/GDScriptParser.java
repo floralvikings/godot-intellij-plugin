@@ -501,20 +501,18 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // L_PAREN LINE_BREAK* expression? LINE_BREAK* (COMMA LINE_BREAK* expression LINE_BREAK*)* R_PAREN
+  // L_PAREN LINE_BREAK* expression_list R_PAREN
   public static boolean call(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "call")) return false;
-    if (!nextTokenIs(b, L_PAREN)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, CALL, "<call>");
     r = consumeToken(b, L_PAREN);
-    r = r && call_1(b, l + 1);
-    r = r && call_2(b, l + 1);
-    r = r && call_3(b, l + 1);
-    r = r && call_4(b, l + 1);
-    r = r && consumeToken(b, R_PAREN);
-    exit_section_(b, m, CALL, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, call_1(b, l + 1));
+    r = p && report_error_(b, expression_list(b, l + 1)) && r;
+    r = p && consumeToken(b, R_PAREN) && r;
+    exit_section_(b, l, m, r, p, GDScriptParser::call_recover);
+    return r || p;
   }
 
   // LINE_BREAK*
@@ -528,68 +526,10 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // expression?
-  private static boolean call_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "call_2")) return false;
-    expression(b, l + 1);
-    return true;
-  }
-
-  // LINE_BREAK*
-  private static boolean call_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "call_3")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!consumeToken(b, LINE_BREAK)) break;
-      if (!empty_element_parsed_guard_(b, "call_3", c)) break;
-    }
-    return true;
-  }
-
-  // (COMMA LINE_BREAK* expression LINE_BREAK*)*
-  private static boolean call_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "call_4")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!call_4_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "call_4", c)) break;
-    }
-    return true;
-  }
-
-  // COMMA LINE_BREAK* expression LINE_BREAK*
-  private static boolean call_4_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "call_4_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
-    r = r && call_4_0_1(b, l + 1);
-    r = r && expression(b, l + 1);
-    r = r && call_4_0_3(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // LINE_BREAK*
-  private static boolean call_4_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "call_4_0_1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!consumeToken(b, LINE_BREAK)) break;
-      if (!empty_element_parsed_guard_(b, "call_4_0_1", c)) break;
-    }
-    return true;
-  }
-
-  // LINE_BREAK*
-  private static boolean call_4_0_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "call_4_0_3")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!consumeToken(b, LINE_BREAK)) break;
-      if (!empty_element_parsed_guard_(b, "call_4_0_3", c)) break;
-    }
-    return true;
+  /* ********************************************************** */
+  // R_PAREN
+  static boolean call_recover(PsiBuilder b, int l) {
+    return consumeToken(b, R_PAREN);
   }
 
   /* ********************************************************** */
@@ -1726,6 +1666,90 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "expression_0")) return false;
     operator(b, l + 1);
     return true;
+  }
+
+  /* ********************************************************** */
+  // expression? LINE_BREAK* (COMMA LINE_BREAK* expression LINE_BREAK*)*
+  static boolean expression_list(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "expression_list")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = expression_list_0(b, l + 1);
+    p = r; // pin = 1
+    r = r && report_error_(b, expression_list_1(b, l + 1));
+    r = p && expression_list_2(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, GDScriptParser::expression_list_recover);
+    return r || p;
+  }
+
+  // expression?
+  private static boolean expression_list_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "expression_list_0")) return false;
+    expression(b, l + 1);
+    return true;
+  }
+
+  // LINE_BREAK*
+  private static boolean expression_list_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "expression_list_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, LINE_BREAK)) break;
+      if (!empty_element_parsed_guard_(b, "expression_list_1", c)) break;
+    }
+    return true;
+  }
+
+  // (COMMA LINE_BREAK* expression LINE_BREAK*)*
+  private static boolean expression_list_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "expression_list_2")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!expression_list_2_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "expression_list_2", c)) break;
+    }
+    return true;
+  }
+
+  // COMMA LINE_BREAK* expression LINE_BREAK*
+  private static boolean expression_list_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "expression_list_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && expression_list_2_0_1(b, l + 1);
+    r = r && expression(b, l + 1);
+    r = r && expression_list_2_0_3(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // LINE_BREAK*
+  private static boolean expression_list_2_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "expression_list_2_0_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, LINE_BREAK)) break;
+      if (!empty_element_parsed_guard_(b, "expression_list_2_0_1", c)) break;
+    }
+    return true;
+  }
+
+  // LINE_BREAK*
+  private static boolean expression_list_2_0_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "expression_list_2_0_3")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, LINE_BREAK)) break;
+      if (!empty_element_parsed_guard_(b, "expression_list_2_0_3", c)) break;
+    }
+    return true;
+  }
+
+  /* ********************************************************** */
+  // COMMA
+  static boolean expression_list_recover(PsiBuilder b, int l) {
+    return consumeToken(b, COMMA);
   }
 
   /* ********************************************************** */

@@ -31,7 +31,7 @@ class GDScriptClassBodyBlock(
                 true
             }
         }
-        log.warn("Incomplete GDScriptClassBodyBlock: $incomplete")
+        log.debug("Incomplete GDScriptClassBodyBlock: $incomplete")
         return incomplete
     }
 }

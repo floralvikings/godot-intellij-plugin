@@ -1,9 +1,6 @@
 package com.github.floralvikings.godotea.language.gdscript.typification
 
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptClassVarDeclaration
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptExpressionStatement
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFile
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFunctionDeclaration
+import com.github.floralvikings.godotea.language.gdscript.psi.*
 import com.github.floralvikings.godotea.language.gdscript.util.findTopLevelFunctionsNamed
 import com.github.floralvikings.godotea.language.gdscript.util.findTopLevelVarNamed
 import com.github.floralvikings.godotea.language.gdscript.util.findVariableDeclaration
@@ -70,6 +67,9 @@ class TypeInferenceServiceTest : BasePlatformTestCase() {
         val absVarDeclaration = functionDeclaration.findVariableDeclaration("v2_reassigned_abs")
         val absType = service.inferLocalVarDeclarationType(absVarDeclaration!!)
         assertEquals("Vector2", absType.name)
+        val invocation = (absVarDeclaration.expression as GDScriptDotQualifiedExpression).invocationExpressionList[0]
+        val absOwnerType = service.inferFunctionOwnerType(invocation)
+        assertEquals("Vector2", absOwnerType?.name)
     }
 
     private fun configFile(): GDScriptFile {
