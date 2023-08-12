@@ -15,7 +15,7 @@ class GDScriptFunctionDeclarationBlock(
     private val log = Logger.getInstance(GDScriptFunctionDeclarationBlock::class.java)
     
     override fun getChildAttributes(newChildIndex: Int): ChildAttributes {
-        log.warn("Retrieving GDScriptFunctionDeclarationBlock child attributes")
+        log.debug("Retrieving GDScriptFunctionDeclarationBlock child attributes")
         if (newChildIndex > 0) {
             val prevBlock = this.subBlocks[newChildIndex - 1] as GDScriptBlock
             val prevType = prevBlock.node.elementType
@@ -40,7 +40,7 @@ class GDScriptFunctionDeclarationBlock(
 
         val incomplete = lastBlock.node?.elementType != GDScriptTypes.BLOCK
 
-        log.warn("Incomplete GDScriptFunctionDeclarationBlock: $incomplete")
+        log.debug("Incomplete GDScriptFunctionDeclarationBlock: $incomplete")
         return incomplete
     }
 }

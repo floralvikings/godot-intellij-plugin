@@ -104,13 +104,13 @@ open class GDScriptBlock(
     }
 
     override fun getChildAttributes(newChildIndex: Int): ChildAttributes {
-        log.warn("Retrieving GDScriptBlock(${node.elementType}) child attributes")
+        log.debug("Retrieving GDScriptBlock(${node.elementType}) child attributes")
         return super.getChildAttributes(newChildIndex)
     }
 
     override fun isIncomplete(): Boolean {
         val incomplete = super.isIncomplete()
-        log.warn("Incomplete GDScriptBlock(${node.elementType}): $incomplete")
+        log.debug("Incomplete GDScriptBlock(${node.elementType}): $incomplete")
         return incomplete
     }
 

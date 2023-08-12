@@ -59,5 +59,9 @@
         <enterHandlerDelegate
                 implementation="com.github.floralvikings.godotea.language.gdscript.formatting.GDScriptDedentEnterHandler"
         />
+        <codeInsight.parameterInfo
+                language="GDScript"
+                implementationClass="com.github.floralvikings.godotea.language.gdscript.parameterinfo.GDScriptParameterInfoHandler"
+        />
     </extensions>
 </idea-plugin>
