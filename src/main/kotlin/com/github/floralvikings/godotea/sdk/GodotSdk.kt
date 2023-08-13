@@ -1,17 +1,13 @@
 package com.github.floralvikings.godotea.sdk
 
 import com.github.floralvikings.godotea.GodotIcons
-import com.github.floralvikings.godotea.language.gdscript.parser.GDScriptParserUtil
 import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.process.CapturingProcessHandler
 import com.intellij.execution.process.ProcessOutput
 import com.intellij.openapi.diagnostic.Logger
-import com.intellij.openapi.diagnostic.debug
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.projectRoots.*
-import com.intellij.openapi.util.SystemInfo
 import com.intellij.openapi.util.ThrowableComputable
-import com.intellij.util.IconUtil
 import com.intellij.util.containers.stream
 import org.jdom.Element
 import java.io.File
@@ -19,7 +15,6 @@ import javax.swing.Icon
 import javax.swing.SwingUtilities
 
 class GodotSdk : SdkType("Godot") {
-    private val log = Logger.getInstance(GodotSdk::class.java)
 
     override fun saveAdditionalData(additionalData: SdkAdditionalData, additional: Element) {
 
@@ -51,14 +46,10 @@ class GodotSdk : SdkType("Godot") {
     }
 
     override fun getVersionString(sdk: Sdk): String? {
-        val homePathFile = File(sdk.homePath!!)
-        val godotExecutablePath = homePathFile.listFiles()
-            ?.firstOrNull { it.name.lowercase().replace(".exe", "") == "godot" }
-            ?.absolutePath
-            ?: return null
+        val godotExecutablePath = getExecutablePath(sdk) ?: return null
 
         return try {
-            val godotVersionOutput = runGodotVersionCheck(godotExecutablePath)
+            val godotVersionOutput = runGodotVersionCheck(sdk)
             godotVersionOutput.stdout.trim()
         } catch (e: Exception) {
             log.warn("Exception running Godot version check", e)
@@ -85,28 +76,67 @@ class GodotSdk : SdkType("Godot") {
     override fun getPresentableName(): String = "Godot"
 
     override fun getDownloadSdkUrl(): String = "https://godotengine.org/download/"
-
-    private fun runGodotVersionCheck(godotExecutablePath: String): ProcessOutput {
-        val commandLine = GeneralCommandLine()
-            .withParentEnvironmentType(GeneralCommandLine.ParentEnvironmentType.CONSOLE)
-            .withExePath(godotExecutablePath)
-            .withParameters("--version")
-
-        log.debug { "Running command ${commandLine.commandLineString}" }
-
-        val processHandler = CapturingProcessHandler(commandLine)
-        val processOutput = if (SwingUtilities.isEventDispatchThread()) {
-            ProgressManager.getInstance()
-                .runProcessWithProgressSynchronously(
-                    ThrowableComputable { processHandler.runProcess(10000) },
-                    "Godot version check",
-                    false,
-                    null
-                )
-        } else {
-            processHandler.runProcess(10000)
+    
+    companion object {
+        private val log = Logger.getInstance(GodotSdk::class.java)
+        
+        fun getExecutablePath(sdk: Sdk): String? {
+            val homePathFile = File(sdk.homePath!!)
+            val godotExecutablePath = homePathFile.listFiles()
+                ?.firstOrNull { it.name.lowercase().replace(".exe", "") == "godot" }
+                ?.absolutePath
+            return godotExecutablePath
         }
-        log.debug("Version check output: ${processOutput.stdout.trim()}")
-        return processOutput
+        
+        fun runGodotCommand(sdk: Sdk, vararg parameters: String): Pair<String, String>? {
+            val executablePath = getExecutablePath(sdk)
+            val commandLine = GeneralCommandLine()
+                .withParentEnvironmentType(GeneralCommandLine.ParentEnvironmentType.CONSOLE)
+                .withExePath(executablePath!!)
+                .withParameters(*parameters)
+
+            val processHandler = CapturingProcessHandler(commandLine)
+            
+            val processOutput = if (SwingUtilities.isEventDispatchThread()) {
+                ProgressManager.getInstance()
+                    .runProcessWithProgressSynchronously(
+                        ThrowableComputable { processHandler.runProcess(10000) },
+                        commandLine.commandLineString,
+                        false,
+                        null
+                    )
+            } else {
+                processHandler.runProcess(10000)
+            }
+            
+            return processOutput.stdout to processOutput.stderr
+        }
+
+        fun runGodotVersionCheck(sdk: Sdk): ProcessOutput {
+            val executablePath = getExecutablePath(sdk)
+            return runGodotVersionCheck(executablePath!!)
+        }
+        
+        fun runGodotVersionCheck(executablePath: String): ProcessOutput {
+            val commandLine = GeneralCommandLine()
+                .withParentEnvironmentType(GeneralCommandLine.ParentEnvironmentType.CONSOLE)
+                .withExePath(executablePath)
+                .withParameters("--version")
+
+            val processHandler = CapturingProcessHandler(commandLine)
+            val processOutput = if (SwingUtilities.isEventDispatchThread()) {
+                ProgressManager.getInstance()
+                    .runProcessWithProgressSynchronously(
+                        ThrowableComputable { processHandler.runProcess(10000) },
+                        "Godot version check",
+                        false,
+                        null
+                    )
+            } else {
+                processHandler.runProcess(10000)
+            }
+            log.debug("Version check output: ${processOutput.stdout.trim()}")
+            return processOutput
+        }
     }
 }

@@ -24,6 +24,10 @@
         <annotator
                 language="GDScript"
                 implementationClass="com.github.floralvikings.godotea.language.gdscript.highlighter.GDScriptAnnotator"/>
+        <externalAnnotator
+                language="GDScript"
+                implementationClass="com.github.floralvikings.godotea.language.gdscript.highlighter.GDScriptExternalAnnotator"
+        />
         <colorSettingsPage
                 implementation="com.github.floralvikings.godotea.language.gdscript.highlighter.GDScriptColorSettingsPage"/>
         <lang.refactoringSupport
@@ -62,6 +66,12 @@
         <codeInsight.parameterInfo
                 language="GDScript"
                 implementationClass="com.github.floralvikings.godotea.language.gdscript.parameterinfo.GDScriptParameterInfoHandler"
+        />
+        <localInspection
+                language="GDScript"
+                implementationClass="com.github.floralvikings.godotea.language.gdscript.inspections.GDScriptCheckInspection"
+                displayName="GDScript CLI Check"
+                groupName="GDScript"
         />
     </extensions>
 </idea-plugin>
