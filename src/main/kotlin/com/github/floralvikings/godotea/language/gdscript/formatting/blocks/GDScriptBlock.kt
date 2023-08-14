@@ -1,11 +1,21 @@
 package com.github.floralvikings.godotea.language.gdscript.formatting.blocks
 
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFunctionDeclaration
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptIfStatement
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes
 import com.github.floralvikings.godotea.language.gdscript.util.containingFunctionDeclaration
 import com.github.floralvikings.godotea.language.gdscript.util.nextNonWhitespaceSibling
-import com.intellij.formatting.*
+import com.intellij.formatting.Alignment
+import com.intellij.formatting.Block
+import com.intellij.formatting.ChildAttributes
+import com.intellij.formatting.Indent
+import com.intellij.formatting.Spacing
+import com.intellij.formatting.SpacingBuilder
+import com.intellij.formatting.Wrap
+import com.intellij.formatting.WrapType
 import com.intellij.lang.ASTNode
 import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.diagnostic.debug
 import com.intellij.psi.TokenType
 import com.intellij.psi.formatter.common.AbstractBlock
 import com.intellij.psi.util.elementType
