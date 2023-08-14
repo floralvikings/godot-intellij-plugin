@@ -14,14 +14,18 @@ import java.util.zip.ZipInputStream
 class GodotDownloader {
     companion object {
         fun newFile(destinationDir: File, zipEntry: ZipEntry): File {
-            val destFile = File(destinationDir, zipEntry.getName())
+            val destFile = File(destinationDir, zipEntry.name)
             val destDirPath = destinationDir.canonicalPath
             val destFilePath = destFile.canonicalPath
             if (!destFilePath.startsWith(destDirPath + File.separator)) {
-                throw IOException("Entry is outside of the target dir: " + zipEntry.getName())
+                throw IOException("Entry is outside of the target dir: " + zipEntry.name)
             }
             return destFile
         }
+    }
+    
+    fun downloadStableGodotBinary(destination: String, version: String): String {
+        return downloadStableGodotBinary(destination, version, OS.detect())
     }
     
     fun downloadStableGodotBinary(destination: String, version: String, os: OS): String {
@@ -69,7 +73,7 @@ class GodotDownloader {
                 }
                 fos.close()
             }
-            zipEntry = zipStream.getNextEntry()
+            zipEntry = zipStream.nextEntry
         }
         zipStream.closeEntry()
         zipStream.close()
@@ -103,6 +107,19 @@ class GodotDownloader {
     enum class OS(val urlValue: String) {
         LINUX_X86_64("linux.x86_64"),
         MACOS_UNIVERSAL("macos.universal"),
-        WIN64("win64.exe")
+        WIN64("win64.exe");
+        
+        companion object {
+            fun detect(): OS {
+                val osName = System.getProperty("os.name")
+                return if(osName.contains("Mac")) {
+                    MACOS_UNIVERSAL
+                } else if(osName.contains("Windows")) {
+                    WIN64
+                } else {
+                    LINUX_X86_64
+                }
+            }
+        }
     }
 }
