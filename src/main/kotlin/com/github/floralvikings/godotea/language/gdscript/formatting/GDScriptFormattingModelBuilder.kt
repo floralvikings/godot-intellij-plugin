@@ -1,8 +1,7 @@
 package com.github.floralvikings.godotea.language.gdscript.formatting
 
 import com.github.floralvikings.godotea.language.gdscript.GDScriptLanguage
-import com.github.floralvikings.godotea.language.gdscript.formatting.blocks.GDScriptBlock
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes
+import com.github.floralvikings.godotea.language.gdscript.formatting.blocks.GDScriptFileBlock
 import com.github.floralvikings.godotea.language.gdscript.util.ASSIGNMENT_OPERATORS
 import com.intellij.formatting.*
 import com.intellij.psi.codeStyle.CodeStyleSettings
@@ -10,7 +9,7 @@ import com.intellij.psi.codeStyle.CodeStyleSettings
 class GDScriptFormattingModelBuilder : FormattingModelBuilder {
     override fun createModel(formattingContext: FormattingContext): FormattingModel {
         val settings = formattingContext.codeStyleSettings
-        val block = GDScriptBlock(
+        val block = GDScriptFileBlock(
             formattingContext.node,
             Wrap.createWrap(WrapType.NONE, false),
             Alignment.createAlignment(),

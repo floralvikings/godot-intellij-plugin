@@ -411,7 +411,7 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // <<indented <<listOf (&INDEQ script_statement) end_of_block_statement>>>>
+  // <<indented <<listOf (&INDEQ script_statement) end_of_block_statement+>>>>
   public static boolean block(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "block")) return false;
     boolean r;
@@ -439,6 +439,21 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _AND_);
     r = indEq(b, l + 1);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // end_of_block_statement+
+  private static boolean block_0_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "block_0_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = end_of_block_statement(b, l + 1);
+    while (r) {
+      int c = current_position_(b);
+      if (!end_of_block_statement(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "block_0_0_1", c)) break;
+    }
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -3409,6 +3424,6 @@ public class GDScriptParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  private static final Parser block_0_0_parser_ = listOf_$(GDScriptParser::block_0_0_0, GDScriptParser::end_of_block_statement);
+  private static final Parser block_0_0_parser_ = listOf_$(GDScriptParser::block_0_0_0, GDScriptParser::block_0_0_1);
   private static final Parser class_block_0_0_parser_ = listOf_$(GDScriptParser::class_block_0_0_0, GDScriptParser::end_of_block_statement);
 }

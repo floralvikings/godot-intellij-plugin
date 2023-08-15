@@ -1,21 +1,11 @@
 package com.github.floralvikings.godotea.language.gdscript.formatting.blocks
 
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptFunctionDeclaration
-import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptIfStatement
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes
 import com.github.floralvikings.godotea.language.gdscript.util.containingFunctionDeclaration
 import com.github.floralvikings.godotea.language.gdscript.util.nextNonWhitespaceSibling
-import com.intellij.formatting.Alignment
-import com.intellij.formatting.Block
-import com.intellij.formatting.ChildAttributes
-import com.intellij.formatting.Indent
-import com.intellij.formatting.Spacing
-import com.intellij.formatting.SpacingBuilder
-import com.intellij.formatting.Wrap
-import com.intellij.formatting.WrapType
+import com.intellij.formatting.*
 import com.intellij.lang.ASTNode
 import com.intellij.openapi.diagnostic.Logger
-import com.intellij.openapi.diagnostic.debug
 import com.intellij.psi.TokenType
 import com.intellij.psi.formatter.common.AbstractBlock
 import com.intellij.psi.util.elementType
@@ -41,64 +31,57 @@ open class GDScriptBlock(
         val blocks: MutableList<Block> = ArrayList()
         var child = myNode.firstChildNode
         while (child != null) {
-            if (child.elementType !== TokenType.WHITE_SPACE && child.elementType !== GDScriptTypes.LINE_BREAK) {
-                val block = when (child.elementType) {
-                    TokenType.ERROR_ELEMENT -> GDScriptErrorBlock(
+            val elementType = child.elementType
+            if (elementType !== TokenType.WHITE_SPACE && elementType !== GDScriptTypes.LINE_BREAK) {
+                val block = when {
+                    elementType == TokenType.ERROR_ELEMENT -> GDScriptErrorBlock(
                         child,
                         Wrap.createWrap(WrapType.NONE, false),
                         Alignment.createAlignment(),
                         spacingBuilder
                     )
-
-                    GDScriptTypes.FUNCTION_DECLARATION -> GDScriptFunctionDeclarationBlock(
+                    elementType == GDScriptTypes.FUNCTION_DECLARATION -> GDScriptFunctionDeclarationBlock(
                         child,
                         Wrap.createWrap(WrapType.NONE, false),
                         Alignment.createAlignment(),
                         spacingBuilder
                     )
-
-                    GDScriptTypes.BLOCK -> GDScriptBlockBlock(
+                    elementType == GDScriptTypes.BLOCK -> GDScriptBlockBlock(
                         child,
                         Wrap.createWrap(WrapType.NONE, false),
                         Alignment.createAlignment(),
                         spacingBuilder
                     )
-
-                    GDScriptTypes.INNER_CLASS_DECLARATION -> GDScriptClassDeclarationBlock(
+                    elementType == GDScriptTypes.INNER_CLASS_DECLARATION -> GDScriptClassDeclarationBlock(
                         child,
                         Wrap.createWrap(WrapType.NONE, false),
                         Alignment.createAlignment(),
                         spacingBuilder
                     )
-
-                    GDScriptTypes.CLASS_BLOCK -> GDScriptClassBodyBlock(
+                    elementType == GDScriptTypes.CLASS_BLOCK -> GDScriptClassBodyBlock(
                         child,
                         Wrap.createWrap(WrapType.NONE, false),
                         Alignment.createAlignment(),
                         spacingBuilder
                     )
-
-                    GDScriptTypes.IF_STATEMENT -> GDScriptIfStatementBlock(
+                    elementType == GDScriptTypes.IF_STATEMENT -> GDScriptIfStatementBlock(
                         child,
                         Wrap.createWrap(WrapType.NONE, false),
                         Alignment.createAlignment(),
                         spacingBuilder
                     )
-                    
-                    GDScriptTypes.ELSE_STATEMENT -> GDScriptElseStatementBlock(
-                        child, 
-                        Wrap.createWrap(WrapType.NONE, false),
-                        Alignment.createAlignment(),
-                        spacingBuilder
-                    )
-                    
-                    GDScriptTypes.ELIF_STATEMENT -> GDScriptElifStatementBlock(
+                    elementType == GDScriptTypes.ELSE_STATEMENT -> GDScriptElseStatementBlock(
                         child,
                         Wrap.createWrap(WrapType.NONE, false),
                         Alignment.createAlignment(),
                         spacingBuilder
                     )
-
+                    elementType == GDScriptTypes.ELIF_STATEMENT -> GDScriptElifStatementBlock(
+                        child,
+                        Wrap.createWrap(WrapType.NONE, false),
+                        Alignment.createAlignment(),
+                        spacingBuilder
+                    )
                     else -> GDScriptBlock(
                         child,
                         Wrap.createWrap(WrapType.NONE, false),

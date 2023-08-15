@@ -12,8 +12,4 @@ class GDScriptErrorBlock(
     alignment: Alignment?,
     spacingBuilder: SpacingBuilder,
     indent: Indent = Indent.getNoneIndent()
-) : GDScriptBlock(node, wrap, alignment, spacingBuilder, indent) {
-    override fun isIncomplete(): Boolean {
-        return false
-    }
-}
+) : GDScriptBlock(node, wrap, alignment, spacingBuilder, indent) 

@@ -7,8 +7,8 @@ import com.intellij.formatting.Wrap
 import com.intellij.lang.ASTNode
 import com.intellij.openapi.diagnostic.Logger
 
-class GDScriptBlockBlock(node: ASTNode, wrap: Wrap?, alignment: Alignment?, spacingBuilder: SpacingBuilder) :
+class GDScriptFileBlock(node: ASTNode, wrap: Wrap?, alignment: Alignment?, spacingBuilder: SpacingBuilder) :
     GDScriptBlock(node, wrap, alignment, spacingBuilder, Indent.getNormalIndent()) {
-    private val log = Logger.getInstance(GDScriptBlockBlock::class.java)
         
+    private val log = Logger.getInstance(GDScriptFileBlock::class.java)
 }
