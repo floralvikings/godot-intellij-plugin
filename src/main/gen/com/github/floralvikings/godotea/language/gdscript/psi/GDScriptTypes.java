@@ -34,7 +34,6 @@ public interface GDScriptTypes {
   IElementType DOT_QUALIFIED_EXPRESSION = new GDScriptElementType("DOT_QUALIFIED_EXPRESSION");
   IElementType ELIF_STATEMENT = new GDScriptElementType("ELIF_STATEMENT");
   IElementType ELSE_STATEMENT = new GDScriptElementType("ELSE_STATEMENT");
-  IElementType END_OF_BLOCK_STATEMENT = new GDScriptElementType("END_OF_BLOCK_STATEMENT");
   IElementType ENUM_DECLARATION = new GDScriptElementType("ENUM_DECLARATION");
   IElementType ENUM_ENTRY = new GDScriptElementType("ENUM_ENTRY");
   IElementType EXPRESSION = new GDScriptElementType("EXPRESSION");
@@ -199,6 +198,7 @@ public interface GDScriptTypes {
   IElementType VAR = new GDScriptTokenType("var");
   IElementType VOID = new GDScriptTokenType("void");
   IElementType WHILE = new GDScriptTokenType("while");
+  IElementType WHITE_SPACE = new GDScriptTokenType("WHITE_SPACE");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {
@@ -280,9 +280,6 @@ public interface GDScriptTypes {
       }
       else if (type == ELSE_STATEMENT) {
         return new GDScriptElseStatementImpl(node);
-      }
-      else if (type == END_OF_BLOCK_STATEMENT) {
-        return new GDScriptEndOfBlockStatementImpl(node);
       }
       else if (type == ENUM_DECLARATION) {
         return new GDScriptEnumDeclarationImpl(node);
