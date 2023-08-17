@@ -266,7 +266,7 @@ private inner_class_body ::= LINE_BREAK*  class_block
 
 
 block        ::= <<indented <<listOf (&INDEQ script_statement) (end_of_statement? LINE_BREAK*)>>>> end_of_statement? LINE_BREAK*
-class_block  ::= <<indented <<listOf (&INDEQ class_statement) (end_of_statement? LINE_BREAK*)>>>>
+class_block  ::= <<indented <<listOf (&INDEQ class_statement) (end_of_statement? LINE_BREAK*)>>>> end_of_statement? LINE_BREAK*
 
 private script_statement ::= var_statement
     | const_statement
@@ -446,4 +446,4 @@ string ::= SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING
 private multiline_string ::= MULTILINE_SINGLE_QUOTED_STRING | MULTILINE_DOUBLE_QUOTED_STRING
 
 // TODO Handle line continuation; currently doesn't work
-private end_of_statement ::= (<<eof>> | SEMICOLON+)
+private inner end_of_statement ::= (<<eof>> | SEMICOLON+)

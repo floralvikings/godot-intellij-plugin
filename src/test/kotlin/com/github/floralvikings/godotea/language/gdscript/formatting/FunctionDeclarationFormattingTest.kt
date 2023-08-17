@@ -4,7 +4,7 @@ class FunctionDeclarationFormattingTest : GDScriptFormattingTestBase() {
 
     fun test_new_line_after_function_declaration() = doInsertTextTest("\n")
     
-    fun test_new_line_after_function_body() = doInsertTextTest("\n")
+    fun test_new_line_after_function_body_eof() = doInsertTextTest("\n")
 
     fun test_new_line_before_function_body() = doInsertTextTest("\n")
 
