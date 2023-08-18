@@ -15,7 +15,7 @@ class GDScriptFunctionDeclarationBlock(
     wrap: Wrap?,
     alignment: Alignment?,
     spacingBuilder: SpacingBuilder
-) : GDScriptBlock(node, wrap, alignment, spacingBuilder) {
+) : GDScriptBlock(node, wrap, alignment, spacingBuilder, Indent.getNormalIndent()) {
   private val log = Logger.getInstance(GDScriptFunctionDeclarationBlock::class.java)
     override fun getChildAttributes(newChildIndex: Int): ChildAttributes {
       log.debug("Retrieving GDScriptFunctionDeclarationBlock child attributes")
