@@ -111,10 +111,6 @@ public class GDScriptVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitEndOfBlockStatement(@NotNull GDScriptEndOfBlockStatement o) {
-    visitPsiElement(o);
-  }
-
   public void visitEnumDeclaration(@NotNull GDScriptEnumDeclaration o) {
     visitPsiElement(o);
   }

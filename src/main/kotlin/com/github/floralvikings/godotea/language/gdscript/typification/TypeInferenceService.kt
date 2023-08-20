@@ -24,7 +24,6 @@ class TypeInferenceService {
     init {
         registerType(GDvoid)
         registerType(GDUnknownType)
-        // TODO Register built-in types from json resource instead of like this
         registerBuiltInTypes()
     }
     

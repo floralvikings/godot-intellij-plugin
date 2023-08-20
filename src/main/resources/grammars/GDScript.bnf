@@ -156,8 +156,11 @@
     ]
 }
 
-root ::= LINE_BREAK* (top_level_annotation end_of_statement?)*
-    LINE_BREAK* ((class_name_declaration | extends_declaration) end_of_statement LINE_BREAK*)* (LINE_BREAK | (top_level_statement end_of_statement))*
+root ::= LINE_BREAK* (top_level_annotation end_of_statement? LINE_BREAK*)*
+    ((class_name_declaration | extends_declaration) end_of_statement? LINE_BREAK*)* 
+    (top_level_statement)*
+
+private inner consume_blank_lines ::= (LINE_BREAK WHITE_SPACE*)* 
 
 private meta listOf ::= <<p1>> (<<p2>> <<p1>>)*
 
@@ -166,12 +169,12 @@ external INDLT ::= indLt
 external INDGT ::= indGt
 external INDNONE ::= indNone
 
-private top_level_statement ::= class_var_declaration
+private top_level_statement ::= (class_var_declaration
     | class_const_declaration
     | signal_declaration
     | enum_declaration
     | function_declaration
-    | inner_class_declaration
+    | inner_class_declaration) end_of_statement? LINE_BREAK*
 
 private class_statement ::= class_var_declaration
     | class_const_declaration
@@ -187,7 +190,7 @@ class_name_declaration ::= CLASS_NAME id
 
 class_var_declaration ::= ((var_export LINE_BREAK*) | (AT_ONREADY LINE_BREAK*))* VAR class_var_name (
     (COLON(type(
-        ((LINE_BREAK (block_get|block_set))+)
+        ((LINE_BREAK* (block_get|block_set))+)
         | ([(EQUAL|INFER) expression])
     )))
     | (COLON set_get)
@@ -262,10 +265,8 @@ inner_class_declaration ::= CLASS id extends_declaration? COLON inner_class_body
 private inner_class_body ::= LINE_BREAK*  class_block
 
 
-block        ::= <<indented <<listOf (&INDEQ script_statement) end_of_block_statement>>>>
-class_block  ::= <<indented <<listOf (&INDEQ class_statement) end_of_block_statement>>>>
-
-end_of_block_statement ::= end_of_statement (((&INDNONE | &INDEQ) LINE_BREAK+)+ | (&INDEQ))
+block        ::= <<indented <<listOf (&INDEQ script_statement) (end_of_statement? LINE_BREAK*)>>>> end_of_statement? LINE_BREAK*
+class_block  ::= <<indented <<listOf (&INDEQ class_statement) (end_of_statement? LINE_BREAK*)>>>> end_of_statement? LINE_BREAK*
 
 private script_statement ::= var_statement
     | const_statement
@@ -316,7 +317,7 @@ dict_pattern ::= L_BRACE [key_value_pattern [(COMMA key_value_pattern)+] (COMMA 
 key_value_pattern ::= string [COLON pattern]
 
 private statement_or_block ::= inline_statement | new_line_block
-private inline_statement ::= script_statement end_of_statement
+private inline_statement ::= script_statement end_of_statement? LINE_BREAK*
 private new_line_block ::= LINE_BREAK* block
 
 return_statement ::= RETURN expression
@@ -445,4 +446,4 @@ string ::= SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING
 private multiline_string ::= MULTILINE_SINGLE_QUOTED_STRING | MULTILINE_DOUBLE_QUOTED_STRING
 
 // TODO Handle line continuation; currently doesn't work
-private end_of_statement ::= (LINE_BREAK |  <<eof>> | SEMICOLON+)
+private inner end_of_statement ::= (<<eof>> | SEMICOLON+)

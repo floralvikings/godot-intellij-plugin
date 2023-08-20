@@ -3,6 +3,9 @@ package com.github.floralvikings.godotea.language.gdscript.formatting
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptElifStatement
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptElseStatement
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptIfStatement
+import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes
+import com.github.floralvikings.godotea.language.gdscript.util.prevNonWhitespaceSibling
+import com.intellij.application.options.CodeStyle
 import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegate
 import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegateAdapter
 import com.intellij.openapi.actionSystem.DataContext
@@ -10,6 +13,8 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.actionSystem.EditorActionHandler
 import com.intellij.openapi.util.Ref
 import com.intellij.psi.PsiFile
+import com.intellij.psi.codeStyle.CodeStyleSettingsManager
+import com.intellij.psi.util.elementType
 import com.intellij.refactoring.suggested.startOffset
 
 class GDScriptDedentEnterHandler : EnterHandlerDelegateAdapter() {
@@ -21,8 +26,8 @@ class GDScriptDedentEnterHandler : EnterHandlerDelegateAdapter() {
         dataContext: DataContext,
         originalHandler: EditorActionHandler?
     ): EnterHandlerDelegate.Result {
-        val element = file.findElementAt(caretOffset.get() - 1)
-        val parent = element?.parent
+        val prevElement = file.findElementAt(caretOffset.get() - 1)
+        val parent = prevElement?.parent
         
         if (parent is GDScriptElseStatement || parent is GDScriptElifStatement) {
             val ifStatement = parent.parent as GDScriptIfStatement

@@ -1,7 +1,11 @@
 package com.github.floralvikings.godotea.language.gdscript.formatting.blocks
 
 import com.github.floralvikings.godotea.language.gdscript.psi.GDScriptTypes
-import com.intellij.formatting.*
+import com.intellij.formatting.Alignment
+import com.intellij.formatting.ChildAttributes
+import com.intellij.formatting.Indent
+import com.intellij.formatting.SpacingBuilder
+import com.intellij.formatting.Wrap
 import com.intellij.lang.ASTNode
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.psi.TokenType
@@ -11,36 +15,21 @@ class GDScriptFunctionDeclarationBlock(
     wrap: Wrap?,
     alignment: Alignment?,
     spacingBuilder: SpacingBuilder
-) : GDScriptBlock(node, wrap, alignment, spacingBuilder) {
-    private val log = Logger.getInstance(GDScriptFunctionDeclarationBlock::class.java)
-    
+) : GDScriptBlock(node, wrap, alignment, spacingBuilder, Indent.getNormalIndent()) {
+  private val log = Logger.getInstance(GDScriptFunctionDeclarationBlock::class.java)
     override fun getChildAttributes(newChildIndex: Int): ChildAttributes {
-        log.debug("Retrieving GDScriptFunctionDeclarationBlock child attributes")
-        if (newChildIndex > 0) {
-            val prevBlock = this.subBlocks[newChildIndex - 1] as GDScriptBlock
-            val prevType = prevBlock.node.elementType
-            if (prevType == GDScriptTypes.FUNCTION_RETURN_TYPE || prevType == GDScriptTypes.COLON) {
-                return ChildAttributes(Indent.getNormalIndent(), null)
-            } else if (prevType == TokenType.ERROR_ELEMENT) {
-                // If text immediately preceding previous node is two blank lines, don't indent
-                return getPostBlockChildAttributes(prevBlock)
-            }
-        }
-        return ChildAttributes(Indent.getNoneIndent(), null)
-    }
+      log.debug("Retrieving GDScriptFunctionDeclarationBlock child attributes")
+      if (newChildIndex <= 0) {
+        return ChildAttributes(Indent.getNoneIndent(), Alignment.createAlignment())
+      }
+      val prevBlock = subBlocks[newChildIndex - 1] as GDScriptBlock
+      if (prevBlock.node.elementType == GDScriptTypes.COLON ||
+        prevBlock.node.elementType == GDScriptTypes.FUNCTION_RETURN_TYPE ||
+        prevBlock.node.elementType == TokenType.ERROR_ELEMENT
+      ) {
+        return ChildAttributes(Indent.getNormalIndent(), Alignment.createAlignment())
+      }  
 
-
-    override fun isIncomplete(): Boolean {
-        val lastOrNull = this.subBlocks.lastOrNull()
-        val lastBlock = if (lastOrNull is ASTBlock) {
-            lastOrNull
-        } else {
-            return true
-        }
-
-        val incomplete = lastBlock.node?.elementType != GDScriptTypes.BLOCK
-
-        log.debug("Incomplete GDScriptFunctionDeclarationBlock: $incomplete")
-        return incomplete
+      return ChildAttributes(Indent.getNormalIndent(), Alignment.createAlignment())
     }
 }

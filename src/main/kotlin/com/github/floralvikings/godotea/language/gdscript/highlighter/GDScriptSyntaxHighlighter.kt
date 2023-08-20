@@ -19,7 +19,7 @@ class GDScriptSyntaxHighlighter : SyntaxHighlighterBase() {
         val keywords = setOf(
             VAR, CONST, CLASS, ENUM, FUNC, IF, ELIF, ELSE, FOR, WHILE, CONTINUE, PASS, RETURN, MATCH, ASSERT, AWAIT,
             BREAKPOINT, EXTENDS, SUPER, SELF, SIGNAL, STATIC, SET, GET, TRUE, FALSE, NULL, AND, OR, NOT,
-            INT, FLOAT, BOOL, VOID, IN, IS, AS
+            INT, FLOAT, BOOL, VOID, IN, IS, AS, GDScriptTypes.CLASS_NAME
         )
         val stringLiterals = setOf(
             DOUBLE_QUOTED_STRING, SINGLE_QUOTED_STRING, MULTILINE_DOUBLE_QUOTED_STRING, MULTILINE_SINGLE_QUOTED_STRING
